@@ -14,6 +14,7 @@ disableEveryone: true
 client.commands = new Collection();
 client.aliases = new Collection();
 client.queue = new Map();
+client.coolDowns = new Set();
 //Command Folder location
 client.categories = fs.readdirSync("./commands/");
 ["command"].forEach(handler => {
@@ -54,6 +55,7 @@ client.on("message", async message => {
         }
     }
     await functions.sendAutoResponse(message);
+    await functions.levelUser(message, client);
     //Checks if the command starts with a prefix
     if (!message.content.startsWith(prefix)) return;
     //Makes sure bot wont respond to other bots including itself
@@ -67,8 +69,9 @@ client.on("message", async message => {
     let command = client.commands.get(cmd);
     if (!command) command = client.commands.get(client.aliases.get(cmd));
 
-    if (command) 
+    if (command){
         command.run(client, message, args);
+    }
 });
 
 //Log into discord using the token in config.json

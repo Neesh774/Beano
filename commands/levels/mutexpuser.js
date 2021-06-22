@@ -17,7 +17,8 @@ module.exports = {
         let user = message.mentions.members.first() || message.guild.members.cache.fetch(args[0]);
         if (!user) return message.channel.send(`:x: | **User Not Found**`);
         
-        let member = mSchema.findOne({userID: user});
+        let member = await mSchema.findOne({userID: user.id});
+        console.log(member);
         if(member.muted){
             member.muted = false;
             await member.save();

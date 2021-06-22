@@ -1,7 +1,10 @@
 const config = require('./config.json');
-const { MessageEmbed } = require('discord.js');
+const Discord = require('discord.js');
 const ms = require('ms');
 const wSchema = require('./models/warnSchema.js');
+const mSchema = require('./models/memberschema.js');
+const mcSchema = require('./models/mchannelschema.js');
+const lrSchema = require('./models/levelroleschema.js');
 module.exports = {
     getMember: function(message, toFind = '') {
         toFind = toFind.toLowerCase();
@@ -68,7 +71,7 @@ module.exports = {
         await wModel.save();
         if(wModel.numberWarns == 1){
             member.send(`You have been warned for the first time in **${guild.name}** for ${reason || "N/A"}. If you get warned again you will be muted for 2 hours.`)
-            let embed = new MessageEmbed()
+            let embed = new Discord.MessageEmbed()
                 .setColor(config.embedColor)
                 .setThumbnail(member.user.avatarURL())
                 .setTitle(`${member.username} was warned`)
@@ -83,7 +86,7 @@ module.exports = {
             setTimeout(function(){
                 member.roles.remove(mute);
             }, (2 * 60 * 60 * 1000));
-            let embed = new MessageEmbed()
+            let embed = new Discord.MessageEmbed()
                 .setColor(config.embedColor)
                 .setThumbnail(member.user.avatarURL())
                 .setTitle(`${member.user.username} was warned`)
@@ -93,7 +96,7 @@ module.exports = {
         }
         else if(wModel.numberWarns == 3){
             member.send(`You have been warned in **${guild.name}** for ${reason}. If you get warned again you will be kicked.`);
-            let embed = new MessageEmbed()
+            let embed = new Discord.MessageEmbed()
                 .setColor(config.embedColor)
                 .setThumbnail(member.user.avatarURL())
                 .setTitle(`${member.username} was warned`)
@@ -102,7 +105,7 @@ module.exports = {
             channel.send(`**${member.user.username}** was warned for the third time for reason: ${reason}.`)
         }
         else if(wModel.numberWarns == 4){
-            const sembed2 = new MessageEmbed()
+            const sembed2 = new Discord.MessageEmbed()
                     .setColor(config.embedColor)
                     .setDescription(`You Have Been Kicked From **${guild.name}** for - ${reason || "N/A"}`)
                     .setFooter(message.guild.name, message.guild.iconURL())
@@ -115,7 +118,7 @@ module.exports = {
                         channel.send("Couldn't kick that user, they were still warned.");
                     }
                 })
-                let embed = new MessageEmbed()
+                let embed = new Discord.MessageEmbed()
                 .setColor(config.embedColor)
                 .setThumbnail(member.user.avatarURL())
                 .setTitle(`${member.username} was warned`)
@@ -180,11 +183,11 @@ module.exports = {
         profile.coolDown = false;
         await profile.save();
     },
-    getXP: async function(level){
-        return Math.floor(Math.log10(level**2)*100);
+    getXP: async function(level){ 
+        return Math.floor(50*level); 
     },
     getLevel: async function(xp){
-        return Math.floor(Math.sqrt(10**xp));
+        return Math.floor(xp/50);
     },  
     getTime: function(time, hoffset, moffset){
         let hour = parseInt(time.substring(0, 2));
@@ -210,5 +213,57 @@ module.exports = {
             time = `${hour}:${minute} AM`
         }
         return time;
+    },
+    levelUser: async function(message, client){
+        const mc = await mcSchema.findOne({channel: message.channel.id});
+        let og = await mSchema.exists({userID: message.author.id});
+        if(message.author.bot || mc){
+            return;
+        }
+        if(!og){
+            let ms = new mSchema({
+                name: message.author.username,
+                userID: message.author.id,
+                level: 1,
+                xp: 0,
+                muted: false,
+                starboards: 0
+            });
+            await ms.save();
+        }
+        let profile = await mSchema.findOne({userID: message.author.id});
+        if(profile.muted){
+            return;
+        }
+        if(!client.coolDowns.has(profile.userID)){
+            let ranXP = Math.floor((Math.random()*5) + 1);
+            let nextLevelXP = await this.getXP(profile.level + 1);
+            let currentLevelXP = await this.getXP(profile.level);
+            let nextLevel = profile.level + 1;
+            let levelXP = profile.xp - currentLevelXP;
+            profile.xp += ranXP;
+            await profile.save();
+            if(ranXP + profile.xp > nextLevelXP){ //level up
+                profile.level ++;
+                let lr = await lrSchema.findOne({level: nextLevel});
+                let field;
+                let embed = new Discord.MessageEmbed()
+                    .setColor(config.embedColor)
+                    .setTitle("CONGRATS!")
+                    .setDescription(`${message.author.toString()} just leveled up to level ${nextLevel}!`)
+                    .setImage("https://octoperf.com/img/blog/minor-version-major-features/level-up.gif");
+                if(lr){
+                    await message.member.roles.add(lr.roleID);
+                    let guild = await client.guilds.fetch(config.AC);
+                    let role = await guild.roles.fetch(lr.roleID);
+                    let lrPing = role.toString();
+                    embed.addField("Awarded Roles", lrPing);
+                }
+                message.channel.send(embed);
+            }
+            await profile.save();
+            client.coolDowns.add(profile.userID);
+            setTimeout(() => {client.coolDowns.delete(profile.userID)}, 60 * 1000);
+        }
     }
 };

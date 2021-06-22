@@ -13,7 +13,9 @@ module.exports = {
             return b.xp - a.xp;
         });
         let fields = [];
-        for(var i = 0;i < 10; i ++){
+        let num = 10;
+        if(list.length < 10) num = list.length;
+        for(var i = 0;i < num; i ++){
             fields.push({"name":`#${i+1}: ${list[i].name}`, "value":`Level: ${list[i].level+1}, XP: ${list[i].xp}`})
         }
         let embed = new Discord.MessageEmbed()

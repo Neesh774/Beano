@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const config = require("../../config.json");
 const mSchema = require('../../models/memberschema.js');
 const canvacord = require('canvacord');
+const functions = require("../../functions.js");
 module.exports = {
     name: "rank",
     category: "levels",
@@ -25,10 +26,12 @@ module.exports = {
         catch(e){
             return message.reply("I can't find that user.");
         }
+        let currentlevelXP = await functions.getXP(member.level);
+        let nextLevelXP = await functions.getXP(member.level + 1);
         const rank = new canvacord.Rank()
-            .setAvatar(user.displayAvatarURL({dynamic: true}))
-            .setCurrentXP(member.levelxp)
-            .setRequiredXP(member.levelxp + member.toNextLevel)
+            .setAvatar(user.displayAvatarURL({format: "png", dynamic: "false"}))
+            .setCurrentXP(member.xp - currentlevelXP)
+            .setRequiredXP(nextLevelXP - currentlevelXP)
             .setStatus(user.presence.status)
             .renderEmojis(true)
             .setProgressBar("#3eafa7", "COLOR")
