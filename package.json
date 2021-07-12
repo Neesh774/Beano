@@ -4,20 +4,23 @@
   "description": "A multipurpose Discord bot with fun commands as well as utility, moderation SFW commands and more.",
   "main": "index.js",
   "dependencies": {
+    "@cxllm/reddit": "^1.0.1-10",
     "@dacoto/timezone.js": "^1.1.1",
     "@discordjs/opus": "^0.5.0",
+    "@discordjs/voice": "^0.5.3",
     "ascii-table": "^0.0.9",
     "booru": "^2.4.0",
     "canvacord": "^5.2.1",
     "cheerio": "*",
     "common-tags": "^1.8.0",
     "cpu-stat": "^2.0.1",
+    "dayjs": "^1.10.6",
     "discord-economy": "^1.2.2",
     "discord-rpc": "^3.2.0",
-    "discord-starboards": "^2.2.3",
     "discord-ytdl-core": "^5.0.3",
-    "discord.js": "^12.5.3",
+    "discord.js": "^13.0.0-dev.1816a93b1b1b2bae47e8651e76fa53699de8421d",
     "duration-format": "^0.0.2",
+    "ffmpeg": "0.0.4",
     "ffmpeg-static": "^4.3.0",
     "figlet": "^1.5.0",
     "got": "^11.8.2",
@@ -34,10 +37,11 @@
     "node-fetch": "^2.6.1",
     "node-osu": "^2.2.1",
     "node-time": "^0.1.0",
+    "opusscript": "0.0.8",
     "puppeteer": "^10.0.0",
     "random-puppy": "^1.1.0",
-    "reaction-role": "^4.1.0",
     "request-promise-native": "^1.0.9",
+    "spdl-core": "^2.0.2",
     "sqlite3": "^5.0.2",
     "urban.js": "^2.4.3",
     "ws": "^7.4.5",
@@ -66,5 +70,8 @@
     "utility"
   ],
   "author": "Neesh",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.29.0"
+  }
 }

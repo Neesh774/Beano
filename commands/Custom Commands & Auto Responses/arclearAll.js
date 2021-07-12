@@ -1,25 +1,25 @@
-const Discord = require("discord.js")
-const config = require("../../config.json");
-const arSchema = require("../../models/arschema.js");
+const Discord = require('discord.js')
+const config = require('../../config.json');
+const arSchema = require('../../models/arschema.js');
 module.exports = {
-    name: "arclearall",
-    category: "Custom Commands and Auto Reponses",
-    description: "Clears all auto responders",
+    name: 'arclearall',
+    category: 'Custom Commands and Auto Reponses',
+    description: 'Clears all auto responders',
     usage: `${config.prefix}arclearall`,
     run: async (client, message, args) => {
-        if(!message.member.hasPermission("MANAGE_MESSAGES")){
-            return message.reply("You don't have permissions for that :/");
+        if(!message.member.permissions.has('MANAGE_MESSAGES')){
+            return message.reply('You don\'t have permissions for that :/');
         }
         await arSchema.deleteMany();
-        const AC = await client.guilds.fetch(config.AC); 
+        const AC = await client.guilds.fetch(config.AC);
         const logs = await AC.channels.cache.get(config.logs);
-        let embed = new Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
             .setColor(config.embedColor)
-            .setTitle("Responders were cleared")
+            .setTitle('Responders were cleared')
             .setTimestamp()
-            .setDescription("Responders were cleared by user " + message.author.tag);
-        logs.send(embed);
-        return message.reply("Successfully cleared the responders list!");
-        
-    }
+            .setDescription('Responders were cleared by user ' + message.author.tag);
+        logs.send({ embeds: [embed] });
+        return message.reply('Successfully cleared the responders list!');
+
+    },
 };

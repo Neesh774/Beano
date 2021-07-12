@@ -1,25 +1,25 @@
-const Discord = require("discord.js")
-const config = require("../../config.json");
-const ccSchema = require("../../models/ccschema.js");
+const Discord = require('discord.js')
+const config = require('../../config.json');
+const ccSchema = require('../../models/ccschema.js');
 module.exports = {
-    name: "ccclearall",
-    category: "Custom Commands and Auto Reponses",
-    description: "Clears all custom commands",
+    name: 'ccclearall',
+    category: 'Custom Commands and Auto Reponses',
+    description: 'Clears all custom commands',
     usage: `${config.prefix}ccclearall`,
     run: async (client, message, args) => {
-        if(!message.member.hasPermission("MANAGE_MESSAGES")){
-            return message.reply("You don't have permissions for that :/");
+        if(!message.member.permissions.has('MANAGE_MESSAGES')){
+            return message.reply('You don\'t have permissions for that :/');
         }
         await ccSchema.deleteMany();
-        const AC = await client.guilds.fetch(config.AC); 
+        const AC = await client.guilds.fetch(config.AC);
         const logs = await AC.channels.cache.get(config.logs);
-        let embed = new Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
             .setColor(config.embedColor)
-            .setTitle("Commands were cleared")
+            .setTitle('Commands were cleared')
             .setTimestamp()
-            .setDescription("Commands were cleared by user " + message.author.tag);
-        logs.send(embed);
-        return message.reply("Successfully cleared the commands list!");
-        
-    }
+            .setDescription('Commands were cleared by user ' + message.author.tag);
+        logs.send({ embeds: [embed] });
+        return message.reply('Successfully cleared the commands list!');
+
+    },
 };

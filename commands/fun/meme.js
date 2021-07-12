@@ -1,23 +1,23 @@
-const { MessageEmbed } = require("discord.js");
-const randomPuppy = require("random-puppy");
-const config = require("../../config.json");
+const { MessageEmbed } = require('discord.js');
+const Reddit = require('@cxllm/reddit')
+const config = require('../../config.json');
 
 module.exports = {
-    name: "meme",
-    category: "fun",
-    description: "Sends a random meme from Reddit",
+    name: 'meme',
+    category: 'fun',
+    description: 'Sends a random meme from Reddit',
     usage: `${config.prefix}meme`,
     run: async (client, message, args) => {
-        const subReddits = ["dankmemes"];
-        const random = subReddits[Math.floor(Math.random() * subReddits.length)];
+        const sub = 'dankmemes';
 
-        const img = await randomPuppy(random);
+        const post = await Reddit.top(sub);
         const embed = new MessageEmbed()
             .setColor(config.embedColor)
-            .setImage(img)
-            .setTitle(`From /r/${random}`)
-            .setURL(`https://reddit.com/r/${random}`);
+            .setImage(post.image)
+            .setTitle(`${post.title}`)
+            .setFooter(`${post.upvotes} 👍 | Created by ${post.author} | From /r/${sub}`)
+            .setURL(post.url);
 
-        message.channel.send(embed);
-    }
+        message.channel.send({ embeds: [embed] });
+    },
 }

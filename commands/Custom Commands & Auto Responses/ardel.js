@@ -1,39 +1,39 @@
-const Discord = require("discord.js")
-const config = require("../../config.json");
-const arSchema = require("../../models/arschema.js");
+const Discord = require('discord.js')
+const config = require('../../config.json');
+const arSchema = require('../../models/arschema.js');
 module.exports = {
-    name: "ardel",
-    category: "Custom Commands and Auto Reponses",
-    description: "Delete a certain auto responder",
+    name: 'ardel',
+    category: 'Custom Commands and Auto Reponses',
+    description: 'Delete a certain auto responder',
     usage: `${config.prefix}ardel <responder ID>`,
     run: async (client, message, args) => {
-    //responder
+    // responder
     const numResponders = await arSchema.countDocuments({});
-    let fields = [];
-        if(!message.member.hasPermission("MANAGE_MESSAGES")){
-            return message.reply("You don't have permissions for that :/");
+    const fields = [];
+        if(!message.member.permissions.has('MANAGE_MESSAGES')){
+            return message.reply('You don\'t have permissions for that :/');
         }
         if(!args[0]){
-            return message.reply("Which responder should I delete?");
+            return message.reply('Which responder should I delete?');
         }
         if(args[0] > numResponders){
-            return message.reply("That responder doesn't exist!");
+            return message.reply('That responder doesn\'t exist!');
         }
-        const responder= await arSchema.findOne({id: args[0]});
-        await arSchema.deleteOne({id: args[0]});
-        for(var i = responder.id + 1;i < numResponders + 1; i ++){
-            const nextResponse = await arSchema.findOne({id:i});
-            nextResponse.id --;
+        const responder = await arSchema.findOne({ id: args[0] });
+        await arSchema.deleteOne({ id: args[0] });
+        for(var i = responder.id + 1;i < numResponders + 1; i++){
+            const nextResponse = await arSchema.findOne({ id:i });
+            nextResponse.id--;
             await nextResponse.save();
         }
         message.reply(`Responder with trigger ${responder.trigger} successfully deleted!`);
-        const AC = await client.guilds.fetch(config.AC); 
+        const AC = await client.guilds.fetch(config.AC);
         const logs = await AC.channels.cache.get(config.logs);
-        let embed = new Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
             .setColor(config.embedColor)
-            .setTitle("Responder Deleted")
+            .setTitle('Responder Deleted')
             .setTimestamp()
             .setDescription(`Responder with trigger ${responder.trigger} was cleared by user ` + message.author.tag);
-        return logs.send(embed);
-    }
+        return logs.send({ embeds: [embed] });
+    },
 };

@@ -258,8 +258,8 @@ module.exports = {
                     let role = await guild.roles.fetch(lr.roleID);
                     let lrPing = role.toString();
                     embed.addField("Awarded Roles", lrPing);
+                    message.channel.send(embed);
                 }
-                message.channel.send(embed);
             }
             await profile.save();
             client.coolDowns.add(profile.userID);

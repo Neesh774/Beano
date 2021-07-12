@@ -1,37 +1,41 @@
-const Discord = require("discord.js")
-const config = require("../../config.json");
+const Discord = require('discord.js')
+const config = require('../../config.json');
 const sSchema = require('../../models/suggestschema');
 module.exports = {
-    name: "suggest",
-    category: "suggestions",
-    description: "Suggest something in the suggestions channel!",
+    name: 'suggest',
+    category: 'suggestions',
+    description: 'Suggest something in the suggestions channel!',
     usage: `${config.prefix}suggest <suggestion>`,
     run: async (client, message, args) => {
-    //command
+    // command
     const numSuggest = await sSchema.countDocuments({});
-        let embed = new Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
             .setColor(config.embedColor)
             .setTitle(`Suggestion #${numSuggest + 1}`)
-            .setDescription(args.join(" "));
-        const AC = await client.guilds.fetch(config.AC); 
+            .setDescription(args.join(' '));
+        const AC = await client.guilds.fetch(config.AC);
         const suggest = await AC.channels.cache.get(config.suggestions);
-        message.delete().then(msg =>{
-            suggest.send(embed).then(msgtwo =>{
-                const sSuggest = new sSchema({
-                    id: numSuggest + 1,
-                    suggestion: args.join(" "),
-                    createdBy: message.author.tag,
-                    createdByIcon: message.author.avatarURL(),
-                    createdByID: message.author.id,
-                    createdAt: message.createdAt.toUTCString(),
-                    messageID: msgtwo.id,
-                    status: "Unread",
-                    reason: "N/A"
-                })
-                sSuggest.save().catch(err => console.log(err));
-                msgtwo.react(config.upvote);
-                msgtwo.react(config.downvote);
-            })
+        let msg;
+        message.delete().then(messg =>{
+            msg = messg;
         });
-    }
+        await suggest.send({ embeds: [embed] }).then(msgtwo =>{
+            const sSuggest = new sSchema({
+                id: numSuggest + 1,
+                suggestion: args.join(' '),
+                createdBy: message.author.tag,
+                createdByIcon: message.author.avatarURL(),
+                createdByID: message.author.id,
+                createdAt: message.createdAt.toUTCString(),
+                messageID: msgtwo.id,
+                status: 'Unread',
+                reason: 'N/A',
+                upvotes: 0,
+                downvotes: 0,
+            })
+            sSuggest.save().catch(err => console.log(err));
+            msgtwo.react(config.upvote).catch(err => msgtwo.react('👍'));
+            msgtwo.react(config.downvote).catch(err => msgtwo.react('👎'));
+        })
+    },
 };
