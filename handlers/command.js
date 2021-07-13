@@ -27,8 +27,5 @@ module.exports = (client) => {
 		}
 	});
 	console.log(table.toString());
-	console.log('Welcome to [ BeanoBot ] // Discord: 🧀♅ツNeeshツ♅🧀#7740');
-
-	console.log('Logging into Bot User...');
 
 };

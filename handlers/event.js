@@ -11,12 +11,12 @@ module.exports = (client) => {
             client.once(event.name, (...args) => event.execute(...args, client));
         }
         else {
-            client.on(event.name, (...args) => {
-                console.log(event.name)
-                event.execute(...args, client)
-            });
+            client.on(event.name, (...args) => event.execute(...args, client));
         }
         table.addRow(file, 'Ready', event.once? "Once" : "On");
 	});
 	console.log(table.toString());
+    console.log('Welcome to [ BeanoBot ] // Discord: 🧀♅ツNeeshツ♅🧀#7740');
+
+	console.log('Logging into Bot User...');
 };
