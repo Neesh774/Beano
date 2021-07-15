@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const config = require('../config.json');
 
 module.exports = {
-    name: 'interaction',
+    name: 'interactionCreate',
     async execute(interaction, client){
         if(interaction.isCommand()){
             let command = client.slashcommands.get(interaction.commandName);

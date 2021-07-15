@@ -35,6 +35,6 @@ module.exports = {
             .setTitle(`${member.username} has joined the server!`)
             .setThumbnail(member.user.avatarURL())
             .setTimestamp();
-        return logs.send(embed);
+        return logs.send({embeds: [embed]});
     }
 }

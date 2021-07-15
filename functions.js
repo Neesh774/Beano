@@ -76,7 +76,7 @@ module.exports = {
                 .setThumbnail(member.user.avatarURL())
                 .setTitle(`${member.username} was warned`)
                 .setDescription(`**${member.user.username}** was warned in ${channel.name} for reason ${reason}. They now have 1 warning.`)
-            logs.send(embed);
+            logs.send({embeds: [embed]});
             channel.send(`**${member.user.username}** was warned for the first time for reason: ${reason}.`)
         }
         if(wModel.numberWarns == 2){
@@ -91,7 +91,7 @@ module.exports = {
                 .setThumbnail(member.user.avatarURL())
                 .setTitle(`${member.user.username} was warned`)
                 .setDescription(`**${member.user.username}** was warned for the second time in ${channel.name} for reason ${reason}.`)
-            logs.send(embed);
+            logs.send({embeds: [embed]});
             channel.send(`**${member.user.username}** was warned for the second time for reason: ${reason}. They were muted for 2 hours.`)
         }
         else if(wModel.numberWarns == 3){
@@ -101,7 +101,7 @@ module.exports = {
                 .setThumbnail(member.user.avatarURL())
                 .setTitle(`${member.username} was warned`)
                 .setDescription(`**${member.user.username}** was warned in ${channel.name} for reason ${reason}. They now have 3 warnings.`)
-            logs.send(embed);
+            logs.send({embeds: [embed]});
             channel.send(`**${member.user.username}** was warned for the third time for reason: ${reason}.`)
         }
         else if(wModel.numberWarns == 4){
@@ -123,7 +123,7 @@ module.exports = {
                 .setThumbnail(member.user.avatarURL())
                 .setTitle(`${member.username} was warned`)
                 .setDescription(`**${member.user.username}** was warned in ${channel.name} for reason ${reason}. They now have 4 warnings. They were kicked.`)
-                logs.send(embed);
+                logs.send({embeds: [embed]});
         }
     },
     sendCustomCommand: async function(message){
@@ -258,7 +258,7 @@ module.exports = {
                     let role = await guild.roles.fetch(lr.roleID);
                     let lrPing = role.toString();
                     embed.addField("Awarded Roles", lrPing);
-                    message.channel.send(embed);
+                    message.channel.send({embeds: [embed]});
                 }
             }
             await profile.save();

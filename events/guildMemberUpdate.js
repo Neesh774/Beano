@@ -42,6 +42,6 @@ module.exports = {
                 .setTimestamp();
             updated = true;
         }
-        if(updated) logs.send(embed);
+        if(updated) logs.send({embeds: [embed]});
     }
 }

@@ -8,7 +8,7 @@ const badwords = require('./nonowords.json');
 const client = new Client({
 // Stops the bot from mentioning @everyone
 	allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
-	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
+	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_BANS, Intents.FLAGS.GUILD_MEMBERS],
 });
 
 // Command Handler
