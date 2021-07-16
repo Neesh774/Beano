@@ -14,7 +14,10 @@ module.exports = {
         await message.reply("Pulling git changes and restarting bot.");
         client.guilds.cache.get(config.AC).channels.cache.get(config.logs).send("Pulling changes...");
         git().pull('origin', 'master', {}, async (err, result) => {
-            if(err) return console.log(err);
+            if(err){
+                message.reply("There was an error. Please try again later")
+                return console.log(err);
+            }
             if (result.summary.changes === 0 && result.summary.insertions === 0 && result.summary.deletions === 0) {
                 await client.guilds.cache.get(config.AC).channels.cache.get(config.logs).send("The bot is up to date.");
             } else {
