@@ -2,10 +2,8 @@ const { MessageEmbed } = require('discord.js');
 const { stripIndents } = require('common-tags');
 const config = require('../../config.json');
 
-
 module.exports = {
     name: 'help',
-    aliases: ['h'],
     category: 'info',
     description: 'Returns all commands, or one specific command info',
     usage: `${config.prefix}help [command]`,
