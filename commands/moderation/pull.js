@@ -5,7 +5,7 @@ const {execSync} = require('child_process');
 module.exports = {
     name: 'pull',
     category: 'moderation',
-    description: 'Beano will pull changes from the Github repo.',
+    description: 'Beano will pull changes from the Github repository.',
     usage: `${config.prefix}pull`,
     run: async (client, message, args) => {
         if(message.author.id !== config.neesh){
