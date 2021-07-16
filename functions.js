@@ -266,5 +266,28 @@ module.exports = {
             client.coolDowns.add(profile.userID);
             setTimeout(() => {client.coolDowns.delete(profile.userID)}, 60 * 1000);
         }
-    }
+    },
+    cacheMessages: async function(client){
+        const reactionRoles = await rrschema.find({});
+        reactionRoles.forEach((rr) => {
+            client.channels.fetch(rr.channelID).then(async (channel) =>{
+                await channel.messages.fetch(rr.messageID);
+            })
+        });
+        console.log("Cached all reaction roles!");
+        const suggestions = await sSchema.find({});
+        const AC = await client.guilds.fetch(config.AC);
+        const suggest = await AC.channels.cache.get(config.suggestions);
+        suggestions.forEach((s) => {
+            suggest.messages.fetch(s.messageID)
+        });
+        console.log("Cached all suggestions!");
+        const starboards = await sbSchema.find({});
+        starboards.forEach((sb) => {
+            client.channels.fetch(sb.channelID).then(async (channel) =>{
+                await channel.messages.fetch(sb.messageID);
+            })
+        });
+        console.log("Cached all starboards!");
+}
 };
