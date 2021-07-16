@@ -1,4 +1,5 @@
 const config = require('./config.json');
+const token = require("./token.json");
 const Discord = require('discord.js');
 const ms = require('ms');
 const wSchema = require('./models/warnSchema.js');
@@ -146,7 +147,7 @@ module.exports = {
         }
     },
     connectMongoose: async function(mongoose){
-        await mongoose.connect(config.mongoURI, {
+        await mongoose.connect(token.mongoURI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useFindAndModify: false,

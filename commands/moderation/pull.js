@@ -8,6 +8,9 @@ module.exports = {
     description: 'Beano will pull changes from the Github repo.',
     usage: `${config.prefix}pull`,
     run: async (client, message, args) => {
+        if(message.author.id !== config.neesh){
+            return;
+        }
         await message.reply("Pulling git changes and restarting bot.");
         client.guilds.cache.get(config.AC).channels.cache.get(config.logs).send("Pulling changes...");
         git().pull('origin', 'master', {}, async (err, result) => {

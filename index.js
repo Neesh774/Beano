@@ -2,6 +2,7 @@
 const { Client, Collection, Intents } = require('discord.js');
 const functions = require('./functions.js');
 const config = require('./config.json');
+const token = require('./token.json');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const badwords = require('./nonowords.json');
@@ -88,4 +89,4 @@ client.on('messageCreate', async message => {
 });
 
 // Log into discord using the token in config.json
-client.login(config.token);
+client.login(token.token);
