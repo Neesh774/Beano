@@ -32,7 +32,7 @@ module.exports = {
         const logs = await AC.channels.cache.get(config.logs);
         const embed = new Discord.MessageEmbed()
             .setColor(config.embedColor)
-            .setTitle(`${member.username} has joined the server!`)
+            .setTitle(`${member.user.username} has joined the server!`)
             .setThumbnail(member.user.avatarURL())
             .setTimestamp();
         return logs.send({embeds: [embed]});
