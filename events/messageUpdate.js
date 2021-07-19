@@ -1,9 +1,17 @@
 const Discord = require('discord.js');
 const config = require('../config.json');
-
+const badwords = require('../nonowords.json');
 module.exports = {
     name: 'messageUpdate',
     async execute(oldMessage, newMessage, client){
+        for(var i = 0;i < badwords.badwords.length;i++){
+            if(newMessage.content.toLowerCase().includes(badwords.badwords[i].toLowerCase())){
+                newMessage.delete().then(msg =>{
+                    functions.warn(newMessage.member, newMessage.guild, newMessage.channel, 'no no word', client);
+                    msg.channel.send({ content: 'SMH MY HEAD NO NO WORD' });
+                })
+            }
+        }
         const AC = await client.guilds.fetch(config.AC);
         const logs = await AC.channels.cache.get(config.logs);
 
