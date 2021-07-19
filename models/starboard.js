@@ -5,7 +5,8 @@ const sbSchema = mongoose.Schema({
     channelID: String,
     author: String,
     authorID: String,
-    authorAvatar: String
+    authorAvatar: String,
+    id: Number
 });
 
 module.exports = mongoose.model("Starboard entries", sbSchema);

@@ -8,14 +8,20 @@ module.exports = {
             let command = client.slashcommands.get(interaction.commandName);
             if (!command) command = client.slashcommands.get(client.aliases.get(interaction.commandName));
             const args = [];
-            interaction.options.each(option => {
-                if(option.options){
-                    option.options.each(op => {
-                        args.push(op.value.toString());
+            try{
+                if(command.options){
+                    command.options.forEach(option => {
+                        const value = interaction.options.get(option.name);
+                        if(value){
+                            args.push(value.value.toString());
+                        }
                     })
                 }
-                else{args.push(option.value.toString())}
-            })
+            }
+            catch(e){
+                console.log(e);
+                interaction.reply("There was an error. Please try that again later.")
+            } 
             if (command){
                 command.run(client, interaction, args);
             }

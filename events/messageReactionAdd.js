@@ -36,6 +36,7 @@ module.exports = {
                 author: message.author.username,
                 authorID: message.author.id,
                 authorAvatar: message.author.avatarURL(),
+                id: sbSchema.countDocuments()
             })
             sb.save();
 
