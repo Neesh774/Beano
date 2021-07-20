@@ -20,6 +20,8 @@ client.queue = new Map();
 client.coolDowns = new Set();
 client.autoResponseCoolDowns = new Set();
 client.ccCoolDowns = new Set();
+client.lockedChannels = new Set();
+client.lockDown = false;
 // Command Folder location
 client.categories = fs.readdirSync('./commands/');
 ['command', 'slashcommands', 'event'].forEach(handler => {
@@ -52,6 +54,7 @@ client.on('ready', async () => {
 	console.log(`Bot User ${client.user.username} has been logged in and is ready to use!`);
 	client.user.setActivity('!bhelp', { type: 'WATCHING' });
 	functions.connectMongoose(mongoose);
+    await functions.cacheMessages(client);
 });
 
 client.on('messageCreate', async message => {

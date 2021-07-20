@@ -23,5 +23,5 @@ module.exports = {
             .setDescription('Suggestions were cleared by user ' + message.user.username);
         logs.send({ embeds: [embed] });
         return message.reply('Successfully cleared the suggestions list!');
-    },
+    },  
 };

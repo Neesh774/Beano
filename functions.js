@@ -6,6 +6,9 @@ const wSchema = require('./models/warnSchema.js');
 const mSchema = require('./models/memberschema.js');
 const mcSchema = require('./models/mchannelschema.js');
 const lrSchema = require('./models/levelroleschema.js');
+const rrSchema = require('./models/rrschema');
+const sSchema = require('./models/suggestschema');
+const sbSchema = require('./models/starboard');
 module.exports = {
     getMember: function(message, toFind = '') {
         toFind = toFind.toLowerCase();
@@ -127,24 +130,28 @@ module.exports = {
                 logs.send({embeds: [embed]});
         }
     },
-    sendCustomCommand: async function(message){
-        let prefix = config.prefix;
-        const args = message.content.slice(prefix.length).trim().split(/ +/g);
-        const cmd = args.shift().toLowerCase();
-        const ccSchema = require("./models/ccschema");
-        const schema = await ccSchema.findOne({trigger: cmd});
-        if(!schema){
-            return false;
-        }
-        let responses = schema.responsesArray;
-        let ranInt = Math.floor(Math.random() * responses.length);
-        try{
-            return message.channel.send(responses[ranInt]);
-        }
-        catch(e){
-            console.log(e.stack);
-            return message.channel.send(":x: There was an error. Please make sure you're using the proper arguments and try again.");
-        }
+    sendCustomCommand: async function(message, client){
+        const prefix = config.prefix;
+		const args = message.content.slice(prefix.length).trim().split(/ +/g);
+		const cmd = args.shift().toLowerCase();
+		const ccSchema = require('./models/ccschema');
+		const schema = await ccSchema.findOne({ trigger: cmd });
+		if(!schema) {
+			return false;
+		}
+        if(client.ccCoolDowns.has(schema.id)) {
+			return message.reply('That command is on cooldown!').then(msg => msg.delete({ timeout: 5000 }));
+		}
+		const responses = schema.responsesArray;
+		const ranInt = Math.floor(Math.random() * responses.length);
+		try{
+            client.ccCoolDowns.add(schema.id);
+			setTimeout(() => {client.ccCoolDowns.delete(schema.id);}, 5 * 1000);
+			return message.reply({ content: responses[ranInt], allowedMentions: { repliedUser: false } });
+		}
+		catch(e) {
+			console.log(e.stack);
+		}
     },
     connectMongoose: async function(mongoose){
         await mongoose.connect(token.mongoURI, {
@@ -155,20 +162,24 @@ module.exports = {
           });
     },
     sendAutoResponse: async function(message){
-        const arSchema = require("./models/arschema");
-        const schema = await arSchema.findOne({trigger: message});
-        if(!schema){
-            return false;
-        }
-        let responses = schema.responsesArray;
-        let ranInt = Math.floor(Math.random() * responses.length);
-        try{
-            return message.channel.send(responses[ranInt]);
-        }
-        catch(e){
-            console.log(e.stack);
-            return message.channel.send(":x: There was an error. Please make sure you're using the proper arguments and try again.");
-        }
+        const arSchema = require('./models/arschema');
+		const schema = await arSchema.findOne({ trigger: message });
+		if(!schema) {
+			return false;
+		}
+        if(client.autoResponseCoolDowns.has(schema.id)) {
+			return message.reply('That auto response is on cooldown!').then(msg => msg.delete({ timeout: 5000 }));
+		}
+		const responses = schema.responsesArray;
+		const ranInt = Math.floor(Math.random() * responses.length);
+		try{
+            client.autoResponseCoolDowns.add(schema.id);
+			setTimeout(() => {client.autoResponseCoolDowns.delete(schema.id);}, 5 * 1000);
+			return message.reply({ content: responses[ranInt], allowedMentions: { repliedUser: false } });
+		}
+		catch(e) {
+			console.log(e.stack);
+		}
     },
     setReminder: async function(message, time, content){
         if (!time) return message.reply("When should I remind you?");
@@ -243,7 +254,7 @@ module.exports = {
         }
     },
     cacheMessages: async function(client){
-        const reactionRoles = await rrschema.find({});
+        const reactionRoles = await rrSchema.find({});
         reactionRoles.forEach((rr) => {
             client.channels.fetch(rr.channelID).then(async (channel) =>{
                 await channel.messages.fetch(rr.messageID);
