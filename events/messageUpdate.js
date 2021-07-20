@@ -23,7 +23,7 @@ module.exports = {
             .setTitle('Message Edited')
             .setColor('#f5c842')
             .addField('Author', `${oldMessage.author.toString()} | ${oldMessage.author.id}`)
-            .addField('Edited in', `<#${newMessage.channel.toString()}> | ${newMessage.channel.id}`)
+            .addField('Edited in', `${newMessage.channel.toString()} | ${newMessage.channel.id}`)
             .addField('Jump!', `[Click here](${newMessage.url})`)
             .addField('Old', `${oldMessage.content}`)
             .addField('New', `${newMessage.content}`)
