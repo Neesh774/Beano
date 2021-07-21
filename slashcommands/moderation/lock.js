@@ -11,6 +11,9 @@ module.exports = {
         if(client.lockedChannels.has(message.channel.id)){
             message.channel.permissionOverwrites.edit(message.guild.roles.everyone, {
                 SEND_MESSAGES: true
+            },
+            {
+                reason: `Unlock by ${message.user.username}`
             })
             client.lockedChannels.delete(message.channel.id);
             console.log(client.lockedChannels);
@@ -22,6 +25,9 @@ module.exports = {
         else{
             message.channel.permissionOverwrites.edit(message.guild.roles.everyone, {
                 SEND_MESSAGES: false
+            },
+            {
+                reason: `Lock by ${message.author.username}`
             })
             client.lockedChannels.add(message.channel.id);
             console.log(client.lockedChannels);

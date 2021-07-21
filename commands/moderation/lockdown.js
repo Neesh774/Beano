@@ -13,6 +13,9 @@ module.exports = {
             channels.forEach(channel => {
                 channel.permissionOverwrites.edit(message.guild.roles.everyone, {
                     SEND_MESSAGES: false
+                },
+                {
+                    reason: `Lockdown by ${message.author.username}`
                 })
             })
             client.lockDown = true;
@@ -25,6 +28,9 @@ module.exports = {
             channels.forEach(channel => {
                 channel.permissionOverwrites.edit(message.guild.roles.everyone, {
                     SEND_MESSAGES: true
+                },
+                {
+                    reason: `Unlocking lockdown by ${message.author.username}`
                 })
             })
             client.lockDown = false;
