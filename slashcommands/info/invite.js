@@ -7,6 +7,6 @@ module.exports = {
     usage: `${config.prefix}invite`,
     options: [],
     run: async (client, message, args) => {
-        return message.channel.send(`Here's your invite link to Arcade Cafe! \n${config.invite}`);
+        return message.reply(`Here's your invite link to Arcade Cafe! \n${config.invite}`);
     },
 }

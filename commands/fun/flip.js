@@ -9,12 +9,7 @@ module.exports = {
     run: async (client, message, args) => {
         var result = Math.round(Math.random());
         var string = '';
-        if(result == 1){
-            string = 'Heads';
-        }
-        else{
-            string = 'Tails';
-        }
+        string = (result === 1) ? 'Heads' : 'Tails';
         const embed = new MessageEmbed()
             .setColor(config.embedColor)
             .setDescription(`You got a ${string}!`)
