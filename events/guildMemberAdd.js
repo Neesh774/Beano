@@ -26,7 +26,7 @@ module.exports = {
         let message = welcomes[ranInt];
         message = message.replace("NAME", member.user.toString());
         message = message.replace("COUNT", member.guild.memberCount);
-        let general = member.guild.channels.cache.get(config.general);
+        let general = await member.guild.channels.fetch(config.general);
         general.send(message);
 
         const logs = await AC.channels.cache.get(config.logs);
