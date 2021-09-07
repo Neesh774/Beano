@@ -17,10 +17,10 @@
     run: async (client, message, args) => {
         const AC = await client.guilds.fetch(config.AC);
         let user = await AC.members.fetch(args[0]);
+        user = user.user;
         if(!args[0]){
             user = message.user;
         }
-        user = user.user;
         const person = new Discord.MessageEmbed()
             .setTitle('User Info:')
             .addField('Full Username', `${user.tag}`)

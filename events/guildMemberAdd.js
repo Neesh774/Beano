@@ -6,7 +6,7 @@ const welcomes = require('../welcomes.json');
 module.exports = {
     name: 'guildMemberAdd',
     async execute(member, client){
-        if(member.guild.id != config.guildID) return;
+        if(member.guild.id != config.AC) return;
         const AC = await client.guilds.fetch(config.AC); 
         const ms = new mSchema({
             rank: AC.memberCount + 1,

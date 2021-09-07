@@ -257,21 +257,33 @@ module.exports = {
         const reactionRoles = await rrSchema.find({});
         reactionRoles.forEach((rr) => {
             client.channels.fetch(rr.channelID).then(async (channel) =>{
-                await channel.messages.fetch(rr.messageID);
+                await channel.messages.fetch(rr.messageID).catch(async(err) => {
+                    console.log(`Failed to fetch reaction role with ID ${rr.messageID}`)
+                    await rr.remove()
+                });
+            }).catch(async(err) => {
+                console.log(`Failed to fetch channel with ID ${rr.channelID}`)
+                await rr.remove()
             })
         });
         console.log("Cached all reaction roles!");
         const suggestions = await sSchema.find({});
         const AC = await client.guilds.fetch(config.AC);
         const suggest = await AC.channels.cache.get(config.suggestions);
-        suggestions.forEach((s) => {
-            suggest.messages.fetch(s.messageID)
+        suggestions.forEach(async(s) => {
+            await suggest.messages.fetch(s.messageID).catch(async (err) => {
+                console.log(`Failed to fetch suggestion with ID ${s.messageID}`)
+                await s.remove()
+            })
         });
         console.log("Cached all suggestions!");
         const starboards = await sbSchema.find({});
         starboards.forEach((sb) => {
             client.channels.fetch(sb.channelID).then(async (channel) =>{
-                await channel.messages.fetch(sb.messageID);
+                await channel.messages.fetch(sb.messageID).catch(async (err) => {
+                    console.log(`Failed to fetch starboard with ID ${sb.messageID}`)
+                    await sb.remove()
+                });
             })
         });
         console.log("Cached all starboards!");

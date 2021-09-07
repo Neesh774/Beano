@@ -43,5 +43,6 @@ module.exports = {
 			msgtwo.react(config.upvote).catch(err => msgtwo.react('👍'));
 			msgtwo.react(config.downvote).catch(err => msgtwo.react('👎'));
 		});
+		message.editReply({content: 'Your suggestion has been sent!', ephemeral: true});
 	},
 };

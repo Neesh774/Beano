@@ -4,7 +4,7 @@ const config = require('../config.json');
 module.exports = {
     name: 'messageDelete',
     async execute(message, client){
-        if(message.guildId != config.guildID) return;
+        if(message.guild.id != config.AC) return;
         const AC = await client.guilds.fetch(config.AC);
         const logs = await AC.channels.cache.get(config.logs);
         if(!message.author) return;

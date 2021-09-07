@@ -34,8 +34,12 @@ module.exports = {
             nextSuggest.id--;
             await nextSuggest.save();
         }
-        message.editReply(`Suggestion with content ${suggest.suggestion} successfully deleted!`);
         const AC = await client.guilds.fetch(config.AC);
+        const suggestChannel = await AC.channels.cache.get(config.suggestions);
+
+        const sMessage = await suggestChannel.messages.fetch(suggest.messageID);
+        await sMessage.delete()
+        message.editReply(`Suggestion with content ${suggest.suggestion} successfully deleted!`);
         const logs = await AC.channels.cache.get(config.logs);
         const embed = new Discord.MessageEmbed()
             .setColor(config.embedColor)

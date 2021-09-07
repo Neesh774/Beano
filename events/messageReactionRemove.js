@@ -5,7 +5,7 @@ const sSchema = require('../models/suggestschema.js');
 module.exports = {
     name: 'messageReactionRemove',
     async execute(messageReaction, user, client){
-        if(messageReaction.message.guildId != config.guildID) return;
+        if(messageReaction.message.guild.id != config.AC) return;
         const message = messageReaction.message;
         const schema = await rrSchema.findOne({ channelID: message.channel.id, messageID: message.id, reactionID: messageReaction.emoji.id })
         if(schema){
