@@ -17,16 +17,16 @@ module.exports = {
   ],
   run: async (client, message, args) => {
     if(!message.member.permissions.has("MANAGE_MESSAGES")){
-        return message.reply("You don't have permissions for that :/");
+        return message.editReply("You don't have permissions for that :/");
     }
     if(!args[1]){
-        return message.reply("You didn't tell me which channel I should be looking in!");
+        return message.editReply("You didn't tell me which channel I should be looking in!");
     }
     const msg = await sbSchema.findOne({id: args[0]});
     if(!msg){
-        return message.reply("Sorry, I don't think that message is a starboard");
+        return message.editReply("Sorry, I don't think that message is a starboard");
     }
-    await sbSchema.deleteOne({id: args[0]}).catch((e) => {return message.reply("There was an error. Please try that again.")});
-    return message.reply("Successfully deleted that starboard.");
+    await sbSchema.deleteOne({id: args[0]}).catch((e) => {return message.editReply("There was an error. Please try that again.")});
+    return message.editReply("Successfully deleted that starboard.");
   }
 };

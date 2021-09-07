@@ -9,7 +9,7 @@ module.exports = {
 	options: [],
 	run: async (client, message, args) => {
 		if(!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.reply('You don\'t have permissions for that :/');
+			return message.editReply('You don\'t have permissions for that :/');
 		}
 		await arSchema.deleteMany();
 		const AC = await client.guilds.fetch(config.AC);
@@ -18,9 +18,9 @@ module.exports = {
 			.setColor(config.embedColor)
 			.setTitle('Responders were cleared')
 			.setTimestamp()
-			.setDescription('Responders were cleared by user ' + message.author.tag);
+			.setDescription('Responders were cleared by user ' + message.user.tag);
 		logs.send({ embeds: [embed] });
-		return message.reply('Successfully cleared the responders list!');
+		return message.editReply('Successfully cleared the commands list!');
 
 	},
 };

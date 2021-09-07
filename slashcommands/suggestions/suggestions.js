@@ -20,6 +20,6 @@ module.exports = {
         .setColor(config.embedColor)
         .setTitle('Suggestions for ' + message.guild.name)
         .addFields(fields);
-    return message.reply({ embeds: [embed] });
+    return message.editReply({ embeds: [embed] });
     },
 };

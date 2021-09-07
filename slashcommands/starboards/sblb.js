@@ -36,7 +36,7 @@ module.exports = {
       arg = args[0];
     }
     if(args[0] > numPages || args[0] < 0){
-      return message.reply("We don't seem to have that many users with starboards yet.");
+      return message.editReply("We don't seem to have that many users with starboards yet.");
     }
     if(args[0] == numPages){
       numEntries = list.length - 10*(numPages - 1);  
@@ -45,7 +45,7 @@ module.exports = {
     end = numEntries + start;
     page = arg;
     if(!list[i]){
-      return message.reply("Looks like we don't have any starboards yet :/");
+      return message.editReply("Looks like we don't have any starboards yet :/");
     }
     for(var i = start; i < end; i ++){
       fields.push({"name": `#${i+1} | ${list[i].name}`, "value": `${list[i].starboards}`})
@@ -55,6 +55,6 @@ module.exports = {
       .setTitle(`Starboards [${page}/${numPages}]`)
       .addFields(fields)
       .setAuthor("TerraBot Starboard Leaderboard", AC.iconURL());
-    return message.reply({embeds: [embed]});
+    return message.editReply({embeds: [embed]});
   }
 };

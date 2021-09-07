@@ -7,6 +7,6 @@ module.exports = {
     usage: `${config.prefix}invite`,
     options: [],
     run: async (client, message, args) => {
-        return message.reply(`Here's your Beano invite link! \n${config.botinvite}`);
+        return message.editReply(`Here's your Beano invite link! \n${config.botinvite}`);
     },
 }

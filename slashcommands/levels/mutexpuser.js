@@ -17,7 +17,7 @@ module.exports = {
     run: async (client, message, args) => {
         // command
         if(!message.member.permissions.has('MANAGE_MESSAGES')){
-            return message.reply('You don\'t have permissions for that :/');
+            return message.editReply('You don\'t have permissions for that :/');
         }
         const user = args[0];
 
@@ -26,10 +26,10 @@ module.exports = {
         if(member.muted){
             member.muted = false;
             await member.save();
-            return message.reply(`XP unmuted user ${member.name}`);
+            return message.editReply(`XP unmuted user ${member.name}`);
         }
         member.muted = true;
         await member.save();
-        return message.reply(`XP muted user ${member.name}`);
+        return message.editReply(`XP muted user ${member.name}`);
     },
 };

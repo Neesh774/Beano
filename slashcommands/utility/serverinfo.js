@@ -24,6 +24,6 @@ module.exports = {
     .addField('Total Members', `${message.guild.memberCount}`)
     .setThumbnail(message.guild.iconURL({ dynamic: true }))
     .setFooter(message.user.username, message.user.avatarURL());
-    message.reply({ embeds: [serverembed] });
+    message.editReply({ embeds: [serverembed] });
   },
 };

@@ -21,6 +21,6 @@ module.exports = {
             .setColor(config.embedColor)
             .setTitle("Reaction Roles for " + message.guild.name)
             .addFields(fields);
-        return message.reply({embeds: [embed]});
+        return message.editReply({embeds: [embed]});
     }
 }; 

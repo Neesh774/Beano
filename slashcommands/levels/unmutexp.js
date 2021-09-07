@@ -17,7 +17,7 @@ module.exports = {
     run: async (client, message, args) => {
     // command
         if(!message.member.permissions.has('MANAGE_MESSAGES')){
-            return message.reply('You don\'t have permissions for that :/');
+            return message.editReply('You don\'t have permissions for that :/');
         }
         let channel = args[0];
         if(!args[0]){
@@ -25,11 +25,11 @@ module.exports = {
         }
         const mc = await mcSchema.findOne({ channel: channel.id });
         if(!mc){
-            return message.reply('That channel isn\'t muted!');
+            return message.editReply('That channel isn\'t muted!');
         }
         else{
             await mcSchema.deleteOne({ channel: channel.id });
         }
-        return message.reply(`Successfully xp unmuted ${channel}`);
+        return message.editReply(`Successfully xp unmuted ${channel}`);
     },
 };

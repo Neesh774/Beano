@@ -23,6 +23,6 @@ module.exports = {
 			.setColor(config.embedColor)
 			.setTitle(`Leaderboard for ${message.guild.name}`)
 			.addFields(fields);
-		return message.reply({ embeds: [embed] });
+		return message.editReply({ embeds: [embed] });
 	},
 };

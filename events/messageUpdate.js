@@ -4,6 +4,7 @@ const badwords = require('../nonowords.json');
 module.exports = {
     name: 'messageUpdate',
     async execute(oldMessage, newMessage, client){
+        if(newMessage.guildId != config.guildID) return;
         for(var i = 0;i < badwords.badwords.length;i++){
             if(newMessage.content.toLowerCase().includes(badwords.badwords[i].toLowerCase())){
                 newMessage.delete().then(msg =>{

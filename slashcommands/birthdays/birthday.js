@@ -13,12 +13,12 @@ module.exports = {
     //command
         const hasbday = await bSchema.findOne({userID: message.user.id});
         if(!hasbday){
-            return message.reply("You don't have a birthday! Set one using the `setbday <mm> <dd>` command!");
+            return message.editReply("You don't have a birthday! Set one using the `setbday <mm> <dd>` command!");
         }
         const formattedDate = hasbday.birthday.toString().slice(4, 10);
         let embed = new Discord.MessageEmbed()
             .setColor(config.embedColor)
             .setDescription(`Your birthday is set to ${formattedDate}`);
-        return message.reply({embeds: [embed]});
+        return message.editReply({embeds: [embed]});
     }
 };

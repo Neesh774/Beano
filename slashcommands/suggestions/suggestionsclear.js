@@ -11,7 +11,7 @@ module.exports = {
     run: async (client, message, args) => {
     // command
         if(!message.member.permissions.has('MANAGE_MESSAGES')){
-            return message.reply('You don\'t have permissions for that :/');
+            return message.editReply('You don\'t have permissions for that :/');
         }
         await sSchema.deleteMany();
         const AC = await client.guilds.fetch(config.AC);
@@ -22,6 +22,6 @@ module.exports = {
             .setTimestamp()
             .setDescription('Suggestions were cleared by user ' + message.user.username);
         logs.send({ embeds: [embed] });
-        return message.reply('Successfully cleared the suggestions list!');
+        return message.editReply('Successfully cleared the suggestions list!');
     },  
 };

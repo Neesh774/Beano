@@ -31,7 +31,7 @@ module.exports = {
           mRank = mRank.map(x => x.xp).indexOf(member.xp) + 1;
         }
         catch(e){
-            return message.reply('I can\'t find that user.');
+            return message.editReply('I can\'t find that user.');
         }
         const currentlevelXP = await functions.getXP(member.level);
         const nextLevelXP = await functions.getXP(member.level + 1);
@@ -49,7 +49,7 @@ module.exports = {
     rank.build()
         .then(data => {
             const attachment = new Discord.MessageAttachment(data, 'RankCard.png');
-            message.reply({ files: [attachment] });
+            message.editReply({ files: [attachment] });
         });
     },
 };

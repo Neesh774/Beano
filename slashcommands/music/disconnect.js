@@ -9,13 +9,13 @@ module.exports = {
   run: async (client, message) => {
   const channel = message.member.voice.channel;
   if (!channel)
-    return message.reply(
+    return message.editReply(
       "You must Join a voice channel before using this command!"
     );
 
   await channel.leave();
 
-  return message.reply(
+  return message.editReply(
     new MessageEmbed()
       .setDescription("**Left the voice channel :white_check_mark: **")
       .setColor(config.embedColor)

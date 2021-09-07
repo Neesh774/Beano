@@ -8,7 +8,7 @@ module.exports = {
 	usage: `${config.prefix}ccclearall`,
 	run: async (client, message, args) => {
 		if(!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.reply('You don\'t have permissions for that :/');
+			return message.editReply('You don\'t have permissions for that :/');
 		}
 		await ccSchema.deleteMany();
 		const AC = await client.guilds.fetch(config.AC);
@@ -17,9 +17,9 @@ module.exports = {
 			.setColor(config.embedColor)
 			.setTitle('Commands were cleared')
 			.setTimestamp()
-			.setDescription('Commands were cleared by user ' + message.author.tag);
+			.setDescription('Commands were cleared by user ' + message.user.tag);
 		logs.send({ embeds: [embed] });
-		return message.reply('Successfully cleared the commands list!');
+		return message.editReply('Successfully cleared the responders list!');
 
 	},
 };

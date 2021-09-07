@@ -20,7 +20,7 @@ module.exports = {
 		const fields = [];
 		if(args[0]) {
 			if(args[0] > numResponses) {
-				return message.reply('That responder doesn\'t exist!');
+				return message.editReply('That responder doesn\'t exist!');
 			}
 			const responder = await arSchema.findOne({ id: args[0] });
 			for(var i = 0; i < responder.responsesArray.length;i++) {
@@ -31,7 +31,7 @@ module.exports = {
 				.setTitle(`Responder #${args[0]}`)
 				.setDescription(responder.trigger)
 				.addFields(fields);
-			return message.reply({ embeds: [embed] });
+			return message.editReply({ embeds: [embed], ephemeral: false });
 		}
 		else{
 			// eslint-disable-next-line no-redeclare
@@ -43,7 +43,7 @@ module.exports = {
 				.setColor(config.embedColor)
 				.setTitle('Automatic Responder')
 				.addFields(fields);
-			return message.reply({ embeds: [embed] });
+			return message.editReply({ embeds: [embed], ephemeral: false });
 		}
 	},
 };

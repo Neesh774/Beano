@@ -10,9 +10,9 @@ module.exports = {
   options: [],
   run: async (client, message, args) => {
     if(!message.member.permissions.has("MANAGE_MESSAGES")){
-        return message.reply("You don't have permissions for that :/");
+        return message.editReply("You don't have permissions for that :/");
     }
     await sbSchema.deleteMany({});
-    return message.reply("Successfully deleted all of the starboards.");
+    return message.editReply("Successfully deleted all of the starboards.");
   }
 };

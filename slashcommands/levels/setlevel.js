@@ -24,7 +24,7 @@ module.exports = {
     run: async (client, message, args) => {
         // command
         if(!message.member.permissions.has('MANAGE_MESSAGES')){
-            return message.reply('You don\'t have permissions for that :/');
+            return message.editReply('You don\'t have permissions for that :/');
         }
         const user = await functions.getMember(args[0], client, message.guild);
         const member = await mSchema.findOne({ userID: user.id });
@@ -32,18 +32,18 @@ module.exports = {
             await functions.createUserProfile(user.user)
         }
         if(args[1] < 0){
-            message.reply('Couldn\'t set them to that level.');
+            message.editReply('Couldn\'t set them to that level.');
         }
         try{
             member.level = args[1];
             const newxp = await functions.getXP(args[1]);
             member.xp = newxp;
             await member.save();
-            message.reply(`Successfully set them to level ${args[1]}!`);
+            message.editReply(`Successfully set them to level ${args[1]}!`);
         }
         catch(e){
             console.log(e.stack);
-            message.reply('Couldn\'t set them to that level. Please try again.');
+            message.editReply('Couldn\'t set them to that level. Please try again.');
         }
     },
 };

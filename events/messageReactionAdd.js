@@ -8,6 +8,7 @@ const sSchema = require('../models/suggestschema.js');
 module.exports = {
     name: 'messageReactionAdd',
     async execute(messageReaction, user, client){
+        if(messageReaction.message.guildId != config.guildID) return;
         const message = messageReaction.message;
         const schema = await rrSchema.findOne({ channelID: message.channel.id, messageID: message.id, reactionID: messageReaction.emoji.id });
         const AC = await client.guilds.fetch(config.AC);

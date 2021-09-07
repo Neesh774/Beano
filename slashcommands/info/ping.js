@@ -8,7 +8,7 @@ module.exports = {
     usage: `${config.prefix}ping`,
     options: [],
     run: async (client, message, args) => {
-		message.reply({ content: `🏓 Pong!
+		message.editReply({ content: `🏓 Pong!
         API Latency is ${Math.round(client.ws.ping)}ms` });
 	},
 };

@@ -33,6 +33,6 @@
             .setColor(config.embedColor)
             .setTimestamp()
             .setThumbnail(user.avatarURL())
-        message.reply({ embeds: [person] })
+        message.editReply({ embeds: [person] })
         },
     };

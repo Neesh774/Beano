@@ -46,13 +46,13 @@ module.exports = {
 		// command
 		const numResponders = await arSchema.countDocuments({});
 		if(!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.reply('You don\'t have permissions for that :/');
+			return message.editReply('You don\'t have permissions for that :/');
 		}
 		if(!args[0]) {
-			return message.reply('You need to give me a trigger!');
+			return message.editReply('You need to give me a trigger!');
 		}
 		if(!args[1]) {
-			return message.reply('You need to give me atleast one response!');
+			return message.editReply('You need to give me atleast one response!');
 		}
 		const trigger = args[0];
 		args.splice(0, 1);
@@ -62,7 +62,7 @@ module.exports = {
 			trigger: trigger,
 			responsesArray: responses,
 			created: message.createdAt.toUTCString(),
-			createdByID: message.author.id,
+			createdByID: message.user.id,
 		});
 		ar.save().catch(err => console.log(err));
 		const fields = [];
@@ -73,12 +73,12 @@ module.exports = {
 			.setColor(config.embedColor)
 			.setTimestamp()
 			.setTitle('Auto Response Created')
-			.setDescription(`An auto responder was created by ${message.author.tag}`)
+			.setDescription(`An auto responder was created by ${message.user.tag}`)
 			.addField('Trigger', trigger)
 			.addFields(fields);
 		const AC = await client.guilds.fetch(config.AC);
 		const logs = await AC.channels.cache.get(config.logs);
 		logs.send({ embeds: [embed] });
-		return message.reply({ embeds: [embed] });
+		return message.editReply({ embeds: [embed] });
 	},
 };

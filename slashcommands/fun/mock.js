@@ -16,7 +16,7 @@ module.exports = {
     run: async (client, message, args) => {
     // command
         if(!args[0]){
-            return message.reply('What am I mocking?');
+            return message.editReply('What am I mocking?');
         }
         var text = args.join(' ');
         for(var i = 0; i < text.length;i++){
@@ -30,6 +30,6 @@ module.exports = {
             .setAuthor(message.member.nickname, message.user.avatarURL())
             .setDescription(text)
             .setThumbnail('https://media.tenor.com/images/d0f9e3756a2b5546d88d6716de6f8c3f/tenor.gif');
-        return message.reply({ embeds: [embed] });
+        return message.editReply({ embeds: [embed] });
     },
 };

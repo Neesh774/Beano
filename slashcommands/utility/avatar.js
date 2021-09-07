@@ -21,7 +21,7 @@ module.exports = {
         /* If user isnt found it selects ur profile */
         let member = message.member;
         if(args[0]) member = await message.guild.members.fetch(args[0]);
-        if (!member.user.avatarURL) return message.reply({ content: 'That user does not have an avatar' });
+        if (!member.user.avatarURL) return message.editReply({ content: 'That user does not have an avatar' });
 
         const avatar = new Discord.MessageEmbed()
 			.setTitle(`${member.user.username}'s Avatar`)
@@ -30,9 +30,9 @@ module.exports = {
             .setColor(member.displayHexColor)
             .setImage(member.user.displayAvatarURL({ dynamic: true, size: 2048 }))
             .setURL(member.user.avatarURL())
-        message.reply({ embeds: [avatar] })
+        message.editReply({ embeds: [avatar] })
             // If bot doesnt have embed perms
-            .catch(() => message.reply({ content: '**Error:** Missing permission `Embed link` ' }));
+            .catch(() => message.editReply({ content: '**Error:** Missing permission `Embed link` ' }));
 
     },
 

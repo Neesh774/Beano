@@ -13,8 +13,8 @@ module.exports= {
   run: async (client, message, args) => {
   const channel = message.member.voice.channel;
 
-  const error = (err) => message.reply({content: err});;
-  const send = (content) => message.reply(content);
+  const error = (err) => message.editReply({content: err});;
+  const send = (content) => message.editReply(content);
   const setqueue = (id, obj) => message.client.queue.set(id, obj);
   const deletequeue = (id) => message.client.queue.delete(id);
   var song;
@@ -47,7 +47,7 @@ module.exports= {
       };
     } catch (e) {
       console.log(e);
-      return message.reply(":x: There was an error. Please make sure you're using the proper arguments and try again.");
+      return message.editReply(":x: There was an error. Please make sure you're using the proper arguments and try again.");
     }
   }
   else {
@@ -150,7 +150,7 @@ module.exports= {
       );
     } catch (e) {
       console.error(e);
-      return message.reply(":x: There was an error. Please make sure you're using the proper arguments and try again.");
+      return message.editReply(":x: There was an error. Please make sure you're using the proper arguments and try again.");
     }
   }
 }

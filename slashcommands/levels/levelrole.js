@@ -26,7 +26,7 @@ module.exports = {
 
         const levelNum = args[1];
         if(!levelNum || levelNum < 0){
-            return message.reply({ content: ':X | **Couldn\'t set that level' });
+            return message.editReply({ content: ':X | **Couldn\'t set that level' });
         }
 
         const lr = new lSchema({
@@ -34,6 +34,6 @@ module.exports = {
             level: levelNum,
         });
         lr.save();
-        return message.reply({ content: `Successfully set to give users the role ${role.name} when they get to level ${levelNum}` });
+        return message.editReply({ content: `Successfully set to give users the role ${role.name} when they get to level ${levelNum}` });
     },
 };

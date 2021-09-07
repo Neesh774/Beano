@@ -11,7 +11,7 @@ module.exports = {
 			name: 'command_id',
 			type: 'INTEGER',
 			description: 'The ID of the command you want info about',
-			required: true,
+			required: false,
 		},
 	],
 	run: async (client, message, args) => {
@@ -20,9 +20,9 @@ module.exports = {
 		const fields = [];
 		if(args[0]) {
 			if(args[0] > numCommands) {
-				return message.reply('That command doesn\'t exist!');
+				return message.editReply('That command doesn\'t exist!');
 			}
-			const command = ccSchema.findOne({ id: args[0] });
+			const command = ccSchema.findOne({ id: args[0]-1 });
 			for(var i = 0; i < command.responses.length;i++) {
 				fields.push({ 'name':`Response #${i + 1}`, 'value': `${command.responses[i]}` });
 			}
@@ -31,7 +31,7 @@ module.exports = {
 				.setTitle(`Command #${args[0]}`)
 				.setDescription(command.trigger)
 				.addFields(fields);
-			return message.reply({ embeds: [embed] });
+			return message.editReply({ embeds: [embed] });
 		}
 		else{
 			// eslint-disable-next-line no-redeclare
@@ -43,7 +43,7 @@ module.exports = {
 				.setColor(config.embedColor)
 				.setTitle('Custom Commands')
 				.addFields(fields);
-			return message.reply({ embeds: [embed] });
+			return message.editReply({ embeds: [embed] });
 		}
 	},
 };

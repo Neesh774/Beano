@@ -22,12 +22,12 @@ module.exports = {
     run: async (client, message, args) => {
     try{
       if(!message.member.permissions.has('MANAGE_MESSAGES')){
-        return message.reply({ embeds: [new MessageEmbed()
+        return message.editReply({ embeds: [new MessageEmbed()
             .setColor(config.embedColor)
             .setTitle('❌ ERROR | You don\'t have permission for that.')] },
       );
       }
-      message.reply({ content: 'Successfully sent the embed!', ephemeral: true });
+      message.editReply({ content: 'Successfully sent the embed!', ephemeral: true });
       const title = args[0];
       const desc = args[1];
       message.channel.send({ embeds: [new MessageEmbed()
@@ -38,7 +38,7 @@ module.exports = {
     }
  catch (e) {
         console.log(e.stack);
-        return message.reply({ content: ':x: There was an error. Please make sure you\'re using the proper arguments and try again.' });
+        return message.editReply({ content: ':x: There was an error. Please make sure you\'re using the proper arguments and try again.' });
     }
   },
 }

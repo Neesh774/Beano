@@ -29,7 +29,7 @@ module.exports = {
 		}
 		if(args[0]) {
 			if(args[0] > numPages || args[0] < 0) {
-				return message.reply('We don\'t seem to have that many starboards yet.');
+				return message.editReply('We don\'t seem to have that many starboards yet.');
 			}
 			let numEntries = 10;
 			if(args[0] == numPages) {
@@ -60,6 +60,6 @@ module.exports = {
 			.setTitle(`Starboards [${page}/${numPages}]`)
 			.addFields(fields)
 			.setAuthor('Beano Starboard Leaderboard', AC.iconURL());
-		return message.reply({ embeds: [embed] });
+		return message.editReply({ embeds: [embed] });
 	},
 };

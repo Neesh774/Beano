@@ -42,7 +42,7 @@ module.exports = {
             if (!msg) return message.channel.reply(':x: | **Message Not Found**');
             const mes = msg.id;
             let role = message.guild.roles.cache.get(args[2]);
-            if (!role) return message.reply({ content: ':x: | **Role Not Found**' });
+            if (!role) return message.editReply({ content: ':x: | **Role Not Found**' });
             role = role.id;
             let embed = new Discord.MessageEmbed()
                 .setTitle("Success!")
@@ -52,8 +52,8 @@ module.exports = {
             let reaction = args[3]
             await msg.react(reaction).then(() => {//attempt unicode emoji
                 emoji = reaction;
-                message.reply({embeds: [embed]});
-            }).catch(err => message.reply("Invalid emoji. I must have access to the emoji.").then(m => setTimeout(async () => {await m.delete()}, 7500)));
+                message.editReply({embeds: [embed]});
+            }).catch(err => message.editReply("Invalid emoji. I must have access to the emoji.").then(m => setTimeout(async () => {await m.delete()}, 7500)));
             const numRRs = await rrSchema.countDocuments({}) + 1;
             if(emoji.includes(':')) emoji = emoji.replace("<:", "").slice(emoji.replace("<:", "").indexOf(":") + 1, emoji.replace("<:", "").length - 1);
             const rr = new rrSchema({
@@ -67,7 +67,7 @@ module.exports = {
         }
         catch (e){
             console.log(e.stack);
-            return message.reply({content: ":x: There was an error. Please make sure you're using the proper arguments and try again."});
+            return message.editReply({content: ":x: There was an error. Please make sure you're using the proper arguments and try again."});
         }
     }
 }; 

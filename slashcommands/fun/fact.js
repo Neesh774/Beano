@@ -15,9 +15,9 @@ module.exports = {
 		async function work() {
 
 			const bean = (await tb.sfw.fact());
-			message.reply({ content: bean.fact }).catch(error => {
+			message.editReply({ content: bean.fact }).catch(error => {
 				console.error(error);
-				return message.reply({ content: ':x: There was an error. Please make sure you\'re using the proper arguments and try again.' });
+				return message.editReply({ content: ':x: There was an error. Please make sure you\'re using the proper arguments and try again.' });
 			});
 
 		}

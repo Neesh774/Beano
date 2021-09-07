@@ -38,6 +38,6 @@ module.exports = {
             .addField("AST", "```css\n" +  ast + "```", true)
             .addField("IST", "```css\n" +  ist + "```", false)
             .addField("AWST/SGT", "```css\n" +  awst + "```", false)
-        return message.reply({embeds: [embed]});
+        return message.editReply({embeds: [embed]});
     }
 };

@@ -19,13 +19,13 @@ module.exports = {
 		const numResponders = await arSchema.countDocuments({});
 		const fields = [];
 		if(!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.reply('You don\'t have permissions for that :/');
+			return message.editReply('You don\'t have permissions for that :/');
 		}
 		if(!args[0]) {
-			return message.reply('Which responder should I delete?');
+			return message.editReply('Which responder should I delete?');
 		}
 		if(args[0] > numResponders) {
-			return message.reply('That responder doesn\'t exist!');
+			return message.editReply('That responder doesn\'t exist!');
 		}
 		const responder = await arSchema.findOne({ id: args[0] });
 		await arSchema.deleteOne({ id: args[0] });
@@ -34,14 +34,14 @@ module.exports = {
 			nextResponse.id--;
 			await nextResponse.save();
 		}
-		message.reply(`Responder with trigger ${responder.trigger} successfully deleted!`);
+		message.editReply(`Responder with trigger ${responder.trigger} successfully deleted!`);
 		const AC = await client.guilds.fetch(config.AC);
 		const logs = await AC.channels.cache.get(config.logs);
 		const embed = new Discord.MessageEmbed()
 			.setColor(config.embedColor)
 			.setTitle('Responder Deleted')
 			.setTimestamp()
-			.setDescription(`Responder with trigger ${responder.trigger} was cleared by user ` + message.author.tag);
+			.setDescription(`Responder with trigger ${responder.trigger} was cleared by user ` + message.user.tag);
 		return logs.send({ embeds: [embed] });
 	},
 };

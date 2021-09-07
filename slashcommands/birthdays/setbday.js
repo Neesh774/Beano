@@ -24,12 +24,12 @@ module.exports = {
     //command
     
         if(args.length != 2){
-            return message.reply("Please send me your birthday in the format `<mm> <dd>`(with spaces in between)!");
+            return message.editReply("Please send me your birthday in the format `<mm> <dd>`(with spaces in between)!");
         }
         const month = parseInt(args[0]);
         const day = parseInt(args[1]);
         if((!month || !day) || month < 0 || month > 12 || day > 31 || day < 1){
-            return message.reply("Please send me your birthday in the format `<mm> <dd>`(with spaces in between)!");
+            return message.editReply("Please send me your birthday in the format `<mm> <dd>`(with spaces in between)!");
         }
         const hasbday = await bSchema.findOne({userID: message.user.id});
         if(hasbday){
@@ -46,6 +46,6 @@ module.exports = {
             .setColor(config.embedColor)
             .setTitle("Birthday set successfully")
             .setDescription(`I set your birthday to ${new Date(datestring).toString().slice(4, 10)}`);
-        return message.reply({embeds: [embed]});
+        return message.editReply({embeds: [embed]});
     }
 };

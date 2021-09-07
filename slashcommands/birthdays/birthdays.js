@@ -32,7 +32,7 @@ module.exports = {
       arg = args[0];
     }
     if(args[0] > numPages || args[0] < 0){
-      return message.reply("We don't seem to have that many users with birthdays yet.");
+      return message.editReply("We don't seem to have that many users with birthdays yet.");
     }
     if(arg == numPages){
       numEntries = list.length - 10*(numPages - 1);  
@@ -48,6 +48,6 @@ module.exports = {
       .setTitle(`Birthdays [${page}/${numPages}]`)
       .addFields(fields)
       .setAuthor("Beano Birthdays", AC.iconURL());
-    return message.reply({embeds: [embed]});
+    return message.editReply({embeds: [embed]});
     }
 };

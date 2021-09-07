@@ -13,7 +13,6 @@ const client = new Client({
 });
 
 // Command Handler
-client.commands = new Collection();
 client.slashcommands = new Collection();
 client.aliases = new Collection();
 client.queue = new Map();
@@ -23,38 +22,43 @@ client.ccCoolDowns = new Set();
 client.lockedChannels = new Set();
 client.lockDown = false;
 // Command Folder location
-client.categories = fs.readdirSync('./commands/');
-['command', 'slashcommands', 'event'].forEach(handler => {
+client.categories = fs.readdirSync('./slashcommands/');
+['slashcommands', 'event'].forEach(handler => {
 	require(`./handlers/${handler}`)(client);
 });
 
 // Bot Status
 client.on('ready', async () => {
-    const data = [];
-    client.slashcommands.forEach(cmd => {
-        if(cmd.options) {
-            data.push(
-                {
-                    name: cmd.name,
-                    description: cmd.description,
-                    options: cmd.options,
-                });
-        }
-        else{
-            data.push(
-                {
-                    name: cmd.name,
-                    description: cmd.description,
-                });
-        }
-    });
-    const AC = client.guilds.cache.get(config.AC);
-    const commands = await AC.commands.set(data);
-    console.log('Slash commands deployed successfully.')
-	console.log(`Bot User ${client.user.username} has been logged in and is ready to use!`);
-	client.user.setActivity('!bhelp', { type: 'WATCHING' });
-	functions.connectMongoose(mongoose);
-    await functions.cacheMessages(client);
+    try{
+        const data = [];
+        client.slashcommands.forEach(cmd => {
+            if(cmd.options) {
+                data.push(
+                    {
+                        name: cmd.name,
+                        description: cmd.description,
+                        options: cmd.options,
+                    });
+            }
+            else{
+                data.push(
+                    {
+                        name: cmd.name,
+                        description: cmd.description,
+                    });
+            }
+        });
+        const AC = client.guilds.cache.get(config.AC);
+        const commands = await AC.commands.set(data);
+        console.log('Slash commands deployed successfully.')
+        console.log(`Bot User ${client.user.username} has been logged in and is ready to use!`);
+        client.user.setActivity('!bhelp', { type: 'WATCHING' });
+        functions.connectMongoose(mongoose);
+        await functions.cacheMessages(client);
+    }
+    catch(e){
+        console.log(e);
+    }
 });
 
 client.on('messageCreate', async message => {
@@ -83,11 +87,6 @@ client.on('messageCreate', async message => {
     const cmd = args.shift().toLowerCase();
     if (cmd.length === 0) return;
     await functions.sendCustomCommand(message, client);
-    let command = client.commands.get(cmd);
-    if (!command) command = client.commands.get(client.aliases.get(cmd));
-	if (command) {
-		command.run(client, message, args);
-	}
 
 });
 

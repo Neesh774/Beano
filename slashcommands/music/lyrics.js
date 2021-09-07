@@ -30,6 +30,6 @@ module.exports ={
 
   if (lyricsEmbed.description.length >= 2048)
     lyricsEmbed.description = `${lyricsEmbed.description.substr(0, 2045)}...`;
-  return message.reply(lyricsEmbed).catch(console.error);
+  return message.editReply(lyricsEmbed).catch(console.error);
 }
 }

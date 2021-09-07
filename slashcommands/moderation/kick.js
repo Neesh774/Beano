@@ -24,18 +24,18 @@ module.exports = {
 		const logs = await AC.channels.cache.get(config.logs);
 
 		try {
-			if (!message.member.permissions.has('KICK_MEMBERS')) return message.reply('**You Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
-			if (!message.guild.me.permissions.has('KICK_MEMBERS')) return message.reply('**I Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
+			if (!message.member.permissions.has('KICK_MEMBERS')) return message.editReply('**You Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
+			if (!message.guild.me.permissions.has('KICK_MEMBERS')) return message.editReply('**I Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
 
-			if (!args[0]) return message.reply({ content: '**Enter A User To Kick!**' });
+			if (!args[0]) return message.editReply({ content: '**Enter A User To Kick!**' });
 
 			var kickMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username.toLowerCase() === args[0].toLocaleLowerCase()) || message.guild.members.cache.find(ro => ro.displayName.toLowerCase() === args[0].toLocaleLowerCase());
-			if (!kickMember) return message.reply({ content: '**User Is Not In The Guild!**' });
+			if (!kickMember) return message.editReply({ content: '**User Is Not In The Guild!**' });
 
-			if (kickMember.id === message.member.id) return message.reply({ content: '**You Cannot Kick Yourself!**' });
+			if (kickMember.id === message.member.id) return message.editReply({ content: '**You Cannot Kick Yourself!**' });
 
-			if (!kickMember.kickable) return message.reply({ content: '**Cannot Kick This User!**' });
-			if (kickMember.user.bot) return message.reply({ content: '**Cannot Kick A Bot!**' });
+			if (!kickMember.kickable) return message.editReply({ content: '**Cannot Kick This User!**' });
+			if (kickMember.user.bot) return message.editReply({ content: '**Cannot Kick A Bot!**' });
 
 			var reason = args.slice(1).join(' ');
 			try {
@@ -53,13 +53,13 @@ module.exports = {
 				var sembed = new Discord.MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${kickMember.user.username}** has been kicked for ${reason}`);
-				message.reply({ embeds: [sembed] });
+				message.editReply({ embeds: [sembed] });
 			}
 			else {
 				var sembed2 = new Discord.MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${kickMember.user.username}** has been kicked`);
-				message.reply({ embeds: [sembed2] });
+				message.editReply({ embeds: [sembed2] });
 			}
 
 			const embed = new Discord.MessageEmbed()
@@ -68,7 +68,7 @@ module.exports = {
 				.setFooter(message.guild.name, message.guild.iconURL())
 				.addField('**Moderation**', 'kick')
 				.addField('**User Kicked**', kickMember.user.username)
-				.addField('**Kicked By**', message.author.username)
+				.addField('**Kicked By**', message.user.username)
 				.addField('**Reason**', `${reason || '**No Reason**'}`)
 				.addField('**Date**', message.createdAt.toLocaleString())
 				.setTimestamp();
@@ -77,7 +77,7 @@ module.exports = {
 		}
 		catch (e) {
 			console.log(e.stack);
-			return message.reply({ content: '**:x: Error, please try again.**' });
+			return message.editReply({ content: '**:x: Error, please try again.**' });
 		}
 	},
 };

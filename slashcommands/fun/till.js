@@ -14,11 +14,11 @@ module.exports = {
         }
     ],
     run: async (client, message, args) => {
-        if(!args[0] || isNaN(args[0]) || args[0] < 1) return message.reply("Please enter a valid number.");
+        if(!args[0] || isNaN(args[0]) || args[0] < 1) return message.editReply("Please enter a valid number.");
         let num = args[0];
         if(num < message.guild.memberCount){
-            return message.reply(`We already have ${num} users in this server!`);
+            return message.editReply(`We already have ${num} users in this server!`);
         }
-        message.reply(`${message.guild.name} needs ${num - message.guild.memberCount} members before getting to ${num} members.`);
+        message.editReply(`${message.guild.name} needs ${num - message.guild.memberCount} members before getting to ${num} members.`);
     }
 }

@@ -23,7 +23,12 @@ module.exports = {
                 interaction.reply("There was an error. Please try that again later.")
             } 
             if (command){
-                command.run(client, interaction, args);
+                await interaction.deferReply()
+                command.run(client, interaction, args).catch(async (e) => {
+                    console.log(e);
+                    await client.users.fetch(config.neesh).then(user => {user.send(e)})
+                    interaction.editReply("There was an error. Please try that again later.")
+                })
             }
         }
 	},

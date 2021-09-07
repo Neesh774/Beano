@@ -10,12 +10,12 @@ module.exports= {
   const queue = message.client.queue.get(message.guild.id);
 
   if (!queue)
-    return message.reply(
+    return message.editReply(
       ":x: There are no songs playing in this server"
     );
 
   queue.loop = !queue.loop;
-  message.reply(
+  message.editReply(
     new MessageEmbed()
       .setColor(config.embedColor)
       .setTimestamp()

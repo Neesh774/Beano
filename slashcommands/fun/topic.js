@@ -13,6 +13,6 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setColor(config.embedColor)
 			.setDescription(topic);
-		return message.reply({ embeds: [embed] });
+		return message.editReply({ embeds: [embed] });
 	},
 };

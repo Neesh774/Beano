@@ -42,7 +42,7 @@ function getAll(client, message) {
 	// Map all the commands
 	// with the specific category
 	const commands = (category) => {
-		return client.commands
+		return client.slashcommands
 			.filter(cmd => cmd.category === category)
 			.map(cmd => `\`${cmd.name}\``)
 			.join(', ');
@@ -53,7 +53,7 @@ function getAll(client, message) {
 		.map(cat => stripIndents`**${cat[0].toUpperCase() + cat.slice(1)}** \n${commands(cat)}`)
 		.reduce((string, category) => string + '\n' + category);
 
-        message.reply({ content: 'Sent help to dms' })
+        message.editReply({ content: 'Sent help to dms' })
 
 
     return message.user.send({ embeds: [embed.setDescription(info)] });
@@ -64,13 +64,13 @@ function getCMD(client, message, input) {
 	const embed = new MessageEmbed();
 
 	// Get the cmd by the name or alias
-	const cmd = client.commands.get(input.toLowerCase()) || client.commands.get(client.aliases.get(input.toLowerCase()));
+	const cmd = client.slashcommands.get(input.toLowerCase()) || client.slashcommands.get(client.aliases.get(input.toLowerCase()));
 
 	let info = `No information found for command **${input.toLowerCase()}**`;
 
     // If no cmd is found, send not found embed
     if (!cmd) {
-        return message.reply(embed.setColor(config.embedColor).setDescription(info));
+        return message.editReply(embed.setColor(config.embedColor).setDescription(info));
     }
 
 	// Add all cmd info to the embed
@@ -82,5 +82,5 @@ function getCMD(client, message, input) {
 		embed.setFooter('Syntax: <> = required, [] = optional');
 	}
 
-    return message.reply(embed.setColor(config.embedColor).setDescription(info));
+    return message.editReply({embeds: [embed.setColor(config.embedColor).setDescription(info)]});
 }

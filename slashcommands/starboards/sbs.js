@@ -38,6 +38,6 @@ module.exports = {
         }
         embed.addFields(fields);
     }
-    return message.reply({embeds: [embed]});
+    return message.editReply({embeds: [embed]});
   }
 };

@@ -16,7 +16,7 @@ module.exports = {
    ],
    run: async (client, message, args) => {
       const time = args[0];
-      message.reply(`Alright, I'm going to let you study for ${time}. Make me proud, ok?`);
+      message.editReply(`Alright, I'm going to let you study for ${time}. Make me proud, ok?`);
       message.member.roles.add(config.mutedRole);
       setTimeout(() => {
           message.member.roles.remove(config.mutedRole);

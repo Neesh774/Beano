@@ -4,7 +4,7 @@ const mSchema = require('../models/memberschema')
 module.exports = {
     name: 'guildMemberRemove',
     async execute(member, client){
-
+        if(member.guild.id != config.guildID) return;
         const userProfile = await mSchema.deleteOne({ memberID: member.id });
         const AC = await client.guilds.fetch(config.AC);
         const logs = await AC.channels.cache.get(config.logs);

@@ -4,6 +4,7 @@ const config = require('../config.json');
 module.exports = {
     name: 'guildMemberUpdate',
     async execute(oldMember, newMember, client){
+        if(newMember.guild.id != config.guildID) return;
         const AC = await client.guilds.fetch(config.AC); 
         const logs = await AC.channels.cache.get(config.logs);
         let updated = false;

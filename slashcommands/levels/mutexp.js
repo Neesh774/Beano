@@ -16,7 +16,7 @@ module.exports = {
     ],
     run: async (client, message, args) => {
         if(!message.member.permissions.has('MANAGE_MESSAGES')){
-            return message.reply('You don\'t have permissions for that :/');
+            return message.editReply('You don\'t have permissions for that :/');
         }
         let channel = args[0];
         if(!args[0]) channel = message.channel;
@@ -28,8 +28,8 @@ module.exports = {
             await mc.save();
         }
         else{
-            return message.reply('That channel is already muted!');
+            return message.editReply('That channel is already muted!');
         }
-        return message.reply(`Successfully xp muted ${channel}`);
+        return message.editReply(`Successfully xp muted ${channel}`);
     },
 };

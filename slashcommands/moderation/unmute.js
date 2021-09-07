@@ -16,19 +16,19 @@ module.exports = {
 	run: async (client, message, args) => {
 		// command
 		if(!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.reply('You don\'t have permissions for that :/');
+			return message.editReply('You don\'t have permissions for that :/');
 		}
 		if(!args[0]) {
-			return message.reply('You need to give me someone to unmute!');
+			return message.editReply('You need to give me someone to unmute!');
 		}
 		const memberID = args[0].substring(3, 21);
 		const AC = await client.guilds.fetch(config.AC);
 		const logs = await AC.channels.cache.get(config.logs);
 		const member = await AC.members.fetch(memberID);
 		if(!member.roles.cache.has(config.mutedRole)) {
-			return message.reply('That user isn\'t muted.');
+			return message.editReply('That user isn\'t muted.');
 		}
 		member.roles.remove(message.guild.roles.cache.get(config.mutedRole));
-		return message.reply(`Unmuted ${member.toString()}`);
+		return message.editReply(`Unmuted ${member.toString()}`);
 	},
 };

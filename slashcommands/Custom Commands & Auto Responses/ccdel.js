@@ -19,10 +19,10 @@ module.exports = {
 		const numCommands = await ccSchema.countDocuments({});
 		const fields = [];
 		if(!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.reply('You don\'t have permissions for that :/');
+			return message.editReply('You don\'t have permissions for that :/');
 		}
 		if(args[0] > numCommands) {
-			return message.reply('That command doesn\'t exist!');
+			return message.editReply('That command doesn\'t exist!');
 		}
 		const command = await ccSchema.findOne({ id: args[0] });
 		await ccSchema.deleteOne({ id: args[0] });
@@ -31,14 +31,14 @@ module.exports = {
 			nextCommand.id--;
 			await nextCommand.save();
 		}
-		message.reply(`Command with trigger ${command.trigger} successfully deleted!`);
+		message.editReply(`Command with trigger ${command.trigger} successfully deleted!`);
 		const AC = await client.guilds.fetch(config.AC);
 		const logs = await AC.channels.cache.get(config.logs);
 		const embed = new Discord.MessageEmbed()
 			.setColor(config.embedColor)
 			.setTitle('Command Deleted')
 			.setTimestamp()
-			.setDescription(`Command with trigger ${command.trigger} was cleared by user ` + message.author.tag);
+			.setDescription(`Command with trigger ${command.trigger} was cleared by user ` + message.user.tag);
 		return logs.send({ embeds: [embed] });
 	},
 };

@@ -140,7 +140,7 @@ module.exports = {
 			return false;
 		}
         if(client.ccCoolDowns.has(schema.id)) {
-			return message.reply('That command is on cooldown!').then(msg => msg.delete({ timeout: 5000 }));
+			return message.reply('That auto response is on cooldown!').then(msg => setTimeout(() => msg.delete(), 5000));
 		}
 		const responses = schema.responsesArray;
 		const ranInt = Math.floor(Math.random() * responses.length);
@@ -161,14 +161,14 @@ module.exports = {
             useCreateIndex: true
           });
     },
-    sendAutoResponse: async function(message){
+    sendAutoResponse: async function(message, client){
         const arSchema = require('./models/arschema');
 		const schema = await arSchema.findOne({ trigger: message });
 		if(!schema) {
 			return false;
 		}
         if(client.autoResponseCoolDowns.has(schema.id)) {
-			return message.reply('That auto response is on cooldown!').then(msg => msg.delete({ timeout: 5000 }));
+			return message.reply('That auto response is on cooldown!').then(msg => setTimeout(() => msg.delete(), 5000));
 		}
 		const responses = schema.responsesArray;
 		const ranInt = Math.floor(Math.random() * responses.length);
@@ -182,14 +182,14 @@ module.exports = {
 		}
     },
     setReminder: async function(message, time, content){
-        if (!time) return message.reply("When should I remind you?");
+        if (!time) return message.editReply("When should I remind you?");
 
         let response = `Okily dokily ${message.user.username}, I'll remind you in ${time}`;
         if(content) response += `to ${content}`;    
-        message.reply(response);
+        message.editReply(response);
 
         // Create reminder time out
-        setTimeout(() => {message.reply("Reminder to " + content)}, ms(time));
+        setTimeout(() => {message.editReply("Reminder to " + content)}, ms(time));
     },
     setCoolDown: async function(profile){
         profile.coolDown = false;
