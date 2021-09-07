@@ -9,7 +9,7 @@ module.exports = {
   run: async (client, message, args) => {
     // command
     const servericon = message.guild.iconURL;
-    const owner = await message.guild.members.fetch(message.guild.ownerID);
+    const owner = await message.guild.fetchOwner();
     const channels = message.guild.channels.cache.size;
     const serverembed = new Discord.MessageEmbed()
     .setTitle('Server Information')

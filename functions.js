@@ -185,11 +185,11 @@ module.exports = {
         if (!time) return message.editReply("When should I remind you?");
 
         let response = `Okily dokily ${message.user.username}, I'll remind you in ${time}`;
-        if(content) response += `to ${content}`;    
+        if(content) response += ` to ${content}`;    
         message.editReply(response);
 
         // Create reminder time out
-        setTimeout(() => {message.editReply("Reminder to " + content)}, ms(time));
+        setTimeout(() => {message.user.send("Reminder to " + content)}, ms(time));
     },
     setCoolDown: async function(profile){
         profile.coolDown = false;

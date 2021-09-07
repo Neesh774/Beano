@@ -23,7 +23,6 @@ module.exports = {
    ],
    run: async (client, message, args) => {
       const timeArg = args[0]
-      functions.setReminder(message.member, timeArg, args[1]);
-      message.editReply(`Set a reminder to \`${args[1]}\` in ${timeArg}`)
+      functions.setReminder(message, timeArg, args[1]);
    },
 };

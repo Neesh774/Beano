@@ -20,15 +20,11 @@
         if(!args[0]){
             user = message.user;
         }
-
-        var playing = ('[ ' + user.presence.activities + ' ]')
-
-                const person = new Discord.MessageEmbed()
+        user = user.user;
+        const person = new Discord.MessageEmbed()
             .setTitle('User Info:')
             .addField('Full Username', `${user.tag}`)
             .addField('ID', user.id)
-            .addField('Playing', playing, true)
-            .addField('Status', `${user.presence.status}`, true)
             .addField('Joined Discord At', user.createdAt.toString())
             .setColor(config.embedColor)
             .setTimestamp()
