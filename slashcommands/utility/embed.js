@@ -19,6 +19,7 @@ module.exports = {
           required: true,
         },
     ],
+    ephemeral: true,
     run: async (client, message, args) => {
     try{
       if(!message.member.permissions.has('MANAGE_MESSAGES')){

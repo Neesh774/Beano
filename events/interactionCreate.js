@@ -23,7 +23,7 @@ module.exports = {
                 interaction.reply("There was an error. Please try that again later.")
             } 
             if (command){
-                await interaction.deferReply()
+                await interaction.deferReply({ ephemeral: command.ephemeral })
                 command.run(client, interaction, args).catch(async (e) => {
                     console.log(e);
                     await client.users.fetch(config.neesh).then(user => {user.send(e)})

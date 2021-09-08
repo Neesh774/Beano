@@ -13,6 +13,7 @@ module.exports = {
             required: true,
         },
     ],
+    ephemeral: true,
     run: async (client, message, args) => {
     // command
         if(!message.member.permissions.has('MANAGE_MESSAGES')){

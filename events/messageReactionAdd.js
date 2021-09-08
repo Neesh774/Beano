@@ -27,19 +27,9 @@ module.exports = {
                 return logs.send({ embeds: [embed] });
             }
         }
-        if(message.reactions.cache.some(reaction => reaction.emoji.id === config.starboardEmote && reaction.count === 5)){
+        if(message.reactions.cache.some(reaction => reaction.emoji.id === config.starboardEmote && reaction.count === config.starboardCount)){
             const starboardChannel = await AC.channels.cache.get(config.starboardChannel);
             const attachments = message.attachments && message.attachments.first() ? message.attachments.first() : undefined;
-
-            const sb = new sbSchema({
-                messageID: message.id,
-                channelID: message.channel.id,
-                author: message.author.username,
-                authorID: message.author.id,
-                authorAvatar: message.author.avatarURL(),
-                id: sbSchema.countDocuments()
-            })
-            sb.save();
 
             const member = await mSchema.findOne({ userID: message.author.id });
             member.starboards++;
@@ -53,7 +43,19 @@ module.exports = {
             if (message.content.length > 0) emb.setDescription(message.content.slice(0, 1999));
             emb.addField('Source', `[Jump!](https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`);
             if (attachments) emb.setImage(attachments.url);
-            return starboardChannel.send({ embeds: [emb] });
+            starboardChannel.send({ embeds: [emb] }).then(async msg => {
+                const count = await sbSchema.countDocuments()
+                const sb = new sbSchema({
+                    messageID: message.id,
+                    channelID: message.channel.id,
+                    author: message.author.username,
+                    authorID: message.author.id,
+                    authorAvatar: message.author.avatarURL(),
+                    id: count,
+                    starboardID: msg.id
+                })
+                sb.save();
+            });
         }
         const suggest = await sSchema.findOne({ messageID: message.id })
         if(suggest && !user.bot){

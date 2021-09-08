@@ -9,9 +9,9 @@ module.exports = {
   usage: `${config.prefix}delsb <id>`,
   options: [
         {
-          name: 'id',
-          type: 'INTEGER',
-          description: 'The id of the starboard',
+          name: 'message_id',
+          type: 'STRING',
+          description: 'The message id of the starboard message',
           required: true,
         },
   ],
@@ -19,14 +19,16 @@ module.exports = {
     if(!message.member.permissions.has("MANAGE_MESSAGES")){
         return message.editReply("You don't have permissions for that :/");
     }
-    if(!args[1]){
-        return message.editReply("You didn't tell me which channel I should be looking in!");
-    }
-    const msg = await sbSchema.findOne({id: args[0]});
+    const msg = await sbSchema.findOne({starboardID: args[0]});
     if(!msg){
         return message.editReply("Sorry, I don't think that message is a starboard");
     }
-    await sbSchema.deleteOne({id: args[0]}).catch((e) => {return message.editReply("There was an error. Please try that again.")});
+    await sbSchema.deleteOne({starboardID: args[0]}).catch((e) => {return message.editReply("There was an error. Please try that again.")});
+    const AC = await client.guilds.fetch(config.AC);
+    const sbChannel = await AC.channels.cache.get(config.starboardChannel);
+
+    const sMessage = await sbChannel.messages.fetch(args[0]);
+    await sMessage.delete()
     return message.editReply("Successfully deleted that starboard.");
   }
 };

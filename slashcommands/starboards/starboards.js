@@ -1,65 +1,43 @@
-const Discord = require('discord.js');
-const sbSchema = require('../../models/starboard.js');
-const config = require('../../config.json');
+const Discord = require("discord.js")
+const mSchema = require("../../models/memberschema");
+const sbSchema = require("../../models/starboard.js");
+const config = require("../../config.json");
 
 module.exports = {
-	name: 'starboards',
-	category: 'Starboards',
-	description: 'Gives you a list of all the server\'s starboards',
-	usage: `${config.prefix}starboards [page]`,
-	options: [
-		{
-			name: 'page',
-			type: 'INTEGER',
-			description: 'The page of the starboards to check',
-			required: false,
-		},
-	],
-	run: async (client, message, args) => {
-		// command
-		const sbs = await sbSchema.find();
-		let numPages = Math.ceil(sbs.length / 10);
-		const AC = await client.guilds.fetch(config.AC);
-		const fields = [];
-		let start = 0;
-		let end = 10;
-		let page = 1;
-		if(sbs.length < 10) {
-			end = sbs.length;
-		}
-		if(args[0]) {
-			if(args[0] > numPages || args[0] < 0) {
-				return message.editReply('We don\'t seem to have that many starboards yet.');
-			}
-			let numEntries = 10;
-			if(args[0] == numPages) {
-				numEntries = sbs.length - 10 * (numPages - 1);
-			}
-			start = 10 * (args[0] - 1);
-			end = numEntries + start;
-			page = args[0];
-			for(var i = start; i < end; i++) {
-				const channel = await AC.channels.cache.get(sbs[i].channelID);
-				const msg = await channel.messages.fetch(sbs[i].messageID);
-				fields.push({ 'name': `#${i + 1} | ${sbs[i].author}`, 'value': `[Jump!](${msg.url})` });
-			}
-		}
-		else{
-			// eslint-disable-next-line no-redeclare
-			for(var i = start; i < end; i++) {
-				const channel = await AC.channels.cache.get(sbs[i].channelID);
-				const msg = await channel.messages.fetch(sbs[i].messageID);
-				fields.push({ 'name': `#${i + 1} | ${sbs[i].author}`, 'value': `[Jump!](${msg.url})` });
-			}
-		}
-		if(numPages == 0) {
-			numPages = 1;
-		}
-		const embed = new Discord.MessageEmbed()
-			.setColor(config.embedColor)
-			.setTitle(`Starboards [${page}/${numPages}]`)
-			.addFields(fields)
-			.setAuthor('Beano Starboard Leaderboard', AC.iconURL());
-		return message.editReply({ embeds: [embed] });
-	},
+  name: "starboards",
+  category: "Starboards",
+  description: "Tells you how many starboards you have, or how many someone else has",
+  usage: `${config.prefix}sbs [user]`,
+  options: [
+    {
+      name: 'user',
+      type: 'USER',
+      description: 'The user to check the starboards of',
+      required: false,
+  },
+  ],
+  run: async (client, message, args) => {
+    let member = await mSchema.findOne({userID: message.user.id});
+    let user = message.user;
+    if(args[0]){
+        user = args[0];
+        member = await mSchema.findOne({userID: user.id});
+    }
+    let embed = new Discord.MessageEmbed() 
+        .setColor(config.embedColor)
+        .setTitle(`${message.user.username}'s starboards`)
+        .setAuthor("Beano Starboards", message.user.avatarURL());
+    if(member.starboards > 0){
+        let fields = [];
+        const starboards = await sbSchema.find({authorID: user.id});
+        const AC = await client.guilds.fetch(config.AC); 
+        for(var i = 0; i < starboards.length; i ++){
+            const channel = await AC.channels.cache.get(starboards[i].channelID);
+            const msg = await channel.messages.fetch(starboards[i].messageID);
+            fields.push({"name": `#${i +1}`, "value": `[Jump!](${msg.url})`})
+        }
+        embed.addFields(fields);
+    }
+    return message.editReply({embeds: [embed]});
+  }
 };
