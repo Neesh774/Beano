@@ -1,4 +1,4 @@
-var figlet = require('figlet');
+const figlet = require('figlet');
 const config = require('../../config.json');
 
 module.exports = {
@@ -16,11 +16,11 @@ module.exports = {
 	],
 	run: async (client, message, args) => {
 		// command
-		var maxLen = 100;
+		const maxLen = 100;
 
-    if(args.join(' ').length > maxLen) return message.editReply({ content: `The max length is ${maxLen}!` })
+		if (args.join(' ').length > maxLen) return message.editReply({ content: `The max length is ${maxLen}!` });
 
-    if(!args[0]) return message.editReply({ content: 'Please enter some text.' });
+		if (!args[0]) return message.editReply({ content: 'Please enter some text.' });
 
 		figlet(`${args.join(' ')}`, function(err, data) {
 			if (err) {
@@ -28,7 +28,7 @@ module.exports = {
 				return;
 			}
 
-        message.editReply({ content: `\`\`\`${data}\`\`\`` });
-    });
-  },
+			message.editReply({ content: `\`\`\`${data}\`\`\`` });
+		});
+	},
 };

@@ -47,13 +47,13 @@ module.exports = {
 	run: async (client, message, args) => {
 		// command
 		const numCommands = await ccSchema.countDocuments({});
-		if(!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
 			return message.editReply('You don\'t have permissions for that :/');
 		}
-		if(!args[0]) {
+		if (!args[0]) {
 			return message.editReply('You need to give me a trigger!');
 		}
-		if(!args[1]) {
+		if (!args[1]) {
 			return message.editReply('You need to give me atleast one response!');
 		}
 		const trigger = args[0];
@@ -68,7 +68,7 @@ module.exports = {
 		});
 		cc.save().catch(err => console.log(err));
 		const fields = [];
-		for(var i = 0;i < responses.length;i++) {
+		for (let i = 0;i < responses.length;i++) {
 			fields.push({ 'name':`Response #${i + 1}`, 'value': responses[i] });
 		}
 		const embed = new Discord.MessageEmbed()

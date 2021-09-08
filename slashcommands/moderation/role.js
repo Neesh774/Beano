@@ -21,24 +21,16 @@ module.exports = {
 	],
 	run: async (client, message, args) => {
 		// command
-		if(!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
 			return message.editReply('You don\'t have permissions for that :/');
 		}
-		if(!args[0]) {
-			return message.editReply('You need to give me someone to give/remove the role!');
-		}
-		if(!args[1]) {
-			return message.editReply('You need to give me a role to give/remove to them!');
-		}
-		const role = message.guild.roles.cache.find(r => r.name === args[1]);
-		if(!role) {
+		const role = await message.guild.roles.fetch(args[1]);
+		if (!role) {
 			return message.editReply(`Couldn't find role ${args[1]} >_<`);
 		}
-		const memberID = args[0].substring(3, 21);
 		const AC = await client.guilds.fetch(config.AC);
-		const logs = await AC.channels.cache.get(config.logs);
-		const member = await AC.members.fetch(memberID);
-		if(member.roles.cache.has(role.id)) {
+		const member = await AC.members.fetch(args[0]);
+		if (member.roles.cache.has(role.id)) {
 			member.roles.remove(role.id);
 			return message.editReply(`Removed the role ${role.name} from ${member.nickname}`);
 		}

@@ -18,15 +18,15 @@ module.exports = {
 		// command
 		const numCommands = await ccSchema.countDocuments({});
 		const fields = [];
-		if(!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
 			return message.editReply('You don\'t have permissions for that :/');
 		}
-		if(args[0] > numCommands) {
+		if (args[0] > numCommands) {
 			return message.editReply('That command doesn\'t exist!');
 		}
 		const command = await ccSchema.findOne({ id: args[0] });
 		await ccSchema.deleteOne({ id: args[0] });
-		for(var i = command.id + 1;i < numCommands + 1; i++) {
+		for (let i = command.id + 1;i < numCommands + 1; i++) {
 			const nextCommand = await ccSchema.findOne({ id:i });
 			nextCommand.id--;
 			await nextCommand.save();

@@ -74,6 +74,6 @@
   "author": "Neesh",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^7.29.0"
+    "eslint": "^7.32.0"
   }
 }

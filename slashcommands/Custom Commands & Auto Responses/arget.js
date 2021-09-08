@@ -18,12 +18,12 @@ module.exports = {
 		// command
 		const numResponses = await arSchema.countDocuments({});
 		const fields = [];
-		if(args[0]) {
-			if(args[0] > numResponses) {
+		if (args[0]) {
+			if (args[0] > numResponses) {
 				return message.editReply('That responder doesn\'t exist!');
 			}
 			const responder = await arSchema.findOne({ id: args[0] });
-			for(var i = 0; i < responder.responsesArray.length;i++) {
+			for (let i = 0; i < responder.responsesArray.length;i++) {
 				fields.push({ 'name':`Response #${i + 1}`, 'value': `${responder.responsesArray[i]}` });
 			}
 			const embed = new Discord.MessageEmbed()
@@ -33,9 +33,9 @@ module.exports = {
 				.addFields(fields);
 			return message.editReply({ embeds: [embed], ephemeral: false });
 		}
-		else{
+		else {
 			// eslint-disable-next-line no-redeclare
-			for(var i = 1;i < numResponses + 1;i++) {
+			for (let i = 1;i < numResponses + 1;i++) {
 				const responder = await arSchema.findOne({ id: i }).exec();
 				fields.push({ 'name': `#${i}`, 'value': `Trigger: ${responder.trigger}` });
 			}

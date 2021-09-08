@@ -18,18 +18,18 @@ module.exports = {
 		// responder
 		const numResponders = await arSchema.countDocuments({});
 		const fields = [];
-		if(!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
 			return message.editReply('You don\'t have permissions for that :/');
 		}
-		if(!args[0]) {
+		if (!args[0]) {
 			return message.editReply('Which responder should I delete?');
 		}
-		if(args[0] > numResponders) {
+		if (args[0] > numResponders) {
 			return message.editReply('That responder doesn\'t exist!');
 		}
 		const responder = await arSchema.findOne({ id: args[0] });
 		await arSchema.deleteOne({ id: args[0] });
-		for(var i = responder.id + 1;i < numResponders + 1; i++) {
+		for (let i = responder.id + 1;i < numResponders + 1; i++) {
 			const nextResponse = await arSchema.findOne({ id:i });
 			nextResponse.id--;
 			await nextResponse.save();

@@ -24,35 +24,35 @@ module.exports = {
 		let start = 0;
 		let end = 10;
 		let page = 1;
-		if(sbs.length < 10) {
+		if (sbs.length < 10) {
 			end = sbs.length;
 		}
-		if(args[0]) {
-			if(args[0] > numPages || args[0] < 0) {
+		if (args[0]) {
+			if (args[0] > numPages || args[0] < 0) {
 				return message.editReply('We don\'t seem to have that many starboards yet.');
 			}
 			let numEntries = 10;
-			if(args[0] == numPages) {
+			if (args[0] == numPages) {
 				numEntries = sbs.length - 10 * (numPages - 1);
 			}
 			start = 10 * (args[0] - 1);
 			end = numEntries + start;
 			page = args[0];
-			for(var i = start; i < end; i++) {
+			for (let i = start; i < end; i++) {
 				const channel = await AC.channels.cache.get(sbs[i].channelID);
 				const msg = await channel.messages.fetch(sbs[i].messageID);
 				fields.push({ 'name': `#${i + 1} | ${sbs[i].author}`, 'value': `[Jump!](${msg.url})` });
 			}
 		}
-		else{
+		else {
 			// eslint-disable-next-line no-redeclare
-			for(var i = start; i < end; i++) {
+			for (let i = start; i < end; i++) {
 				const channel = await AC.channels.cache.get(sbs[i].channelID);
 				const msg = await channel.messages.fetch(sbs[i].messageID);
 				fields.push({ 'name': `#${i + 1} | ${sbs[i].author}`, 'value': `[Jump!](${msg.url})` });
 			}
 		}
-		if(numPages == 0) {
+		if (numPages == 0) {
 			numPages = 1;
 		}
 		const embed = new Discord.MessageEmbed()

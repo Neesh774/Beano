@@ -29,34 +29,27 @@ module.exports = {
 
 			if (!args[0]) return message.editReply({ content: '**Enter A User To Kick!**' });
 
-			var kickMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(r => r.user.username.toLowerCase() === args[0].toLocaleLowerCase()) || message.guild.members.cache.find(ro => ro.displayName.toLowerCase() === args[0].toLocaleLowerCase());
+			const kickMember = await message.guild.members.fetch(args[0]);
 			if (!kickMember) return message.editReply({ content: '**User Is Not In The Guild!**' });
 
 			if (kickMember.id === message.member.id) return message.editReply({ content: '**You Cannot Kick Yourself!**' });
 
-			if (!kickMember.kickable) return message.editReply({ content: '**Cannot Kick This User!**' });
-			if (kickMember.user.bot) return message.editReply({ content: '**Cannot Kick A Bot!**' });
-
-			var reason = args.slice(1).join(' ');
+			const reason = args.slice(1).join(' ');
 			try {
-				const sembed2 = new Discord.MessageEmbed()
-					.setColor(config.embedColor)
-					.setDescription(`**You Have Been Kicked From ${message.guild.name} for - ${reason || 'No Reason!'}**`)
-					.setFooter(message.guild.name, message.guild.iconURL());
-				kickMember.send({ embeds: [sembed2] }).then(() =>
+				kickMember.send({ content: '`**You Have Been Kicked From ${message.guild.name} for - ${reason || \'No Reason!\'}**`' }).then(() =>
 					kickMember.kick()).catch(() => null);
 			}
 			catch {
 				kickMember.kick();
 			}
 			if (reason) {
-				var sembed = new Discord.MessageEmbed()
+				const sembed = new Discord.MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${kickMember.user.username}** has been kicked for ${reason}`);
 				message.editReply({ embeds: [sembed] });
 			}
 			else {
-				var sembed2 = new Discord.MessageEmbed()
+				const sembed2 = new Discord.MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${kickMember.user.username}** has been kicked`);
 				message.editReply({ embeds: [sembed2] });

@@ -29,64 +29,64 @@ client.categories = fs.readdirSync('./slashcommands/');
 
 // Bot Status
 client.on('ready', async () => {
-    try{
-        const data = [];
-        client.slashcommands.forEach(cmd => {
-            if(cmd.options) {
-                data.push(
-                    {
-                        name: cmd.name,
-                        description: cmd.description,
-                        options: cmd.options,
-                    });
-            }
-            else{
-                data.push(
-                    {
-                        name: cmd.name,
-                        description: cmd.description,
-                    });
-            }
-        });
-        const AC = client.guilds.cache.get(config.AC);
-        const commands = await AC.commands.set(data);
-        console.log('Slash commands deployed successfully.')
-        console.log(`Bot User ${client.user.username} has been logged in and is ready to use!`);
-        client.user.setActivity('!bhelp', { type: 'WATCHING' });
-        functions.connectMongoose(mongoose);
-        await functions.cacheMessages(client);
-    }
-    catch(e){
-        console.log(e);
-    }
+	try {
+		const data = [];
+		client.slashcommands.forEach(cmd => {
+			if (cmd.options) {
+				data.push(
+					{
+						name: cmd.name,
+						description: cmd.description,
+						options: cmd.options,
+					});
+			}
+			else {
+				data.push(
+					{
+						name: cmd.name,
+						description: cmd.description,
+					});
+			}
+		});
+		const AC = client.guilds.cache.get(config.AC);
+		await AC.commands.set(data);
+		console.log('Slash commands deployed successfully.');
+		console.log(`Bot User ${client.user.username} has been logged in and is ready to use!`);
+		client.user.setActivity('!bhelp', { type: 'WATCHING' });
+		functions.connectMongoose(mongoose);
+		await functions.cacheMessages(client);
+	}
+	catch (e) {
+		console.log(e);
+	}
 });
 
 client.on('messageCreate', async message => {
-    // Loads prefix from config.json
-    const prefix = (config.prefix);
-    // Makes sure bot wont respond to other bots including itself
-    if (message.system || message.author.bot) return;
-    // Checks if the command is from a server and not a dm
-    if (!message.guild) return;
-    for(var i = 0;i < badwords.badwords.length;i++){
-        if(message.content.toLowerCase().includes(badwords.badwords[i].toLowerCase())){
-            message.delete().then(msg =>{
-                functions.warn(message.member, message.guild, message.channel, 'no no word', client);
-                msg.channel.send({ content: 'SMH MY HEAD NO NO WORD' });
-            })
-        }
-    }
-    functions.levelUser(message, client)
-    await functions.sendAutoResponse(message, client);
-    // Checks if the command starts with a prefix
-    if (!message.content.startsWith(prefix)) return;
-    // Makes sure bot wont respond to other bots including itself
-    if (!message.member) message.member = await message.guild.fetchMember(message);
+	// Loads prefix from config.json
+	const prefix = (config.prefix);
+	// Makes sure bot wont respond to other bots including itself
+	if (message.system || message.author.bot) return;
+	// Checks if the command is from a server and not a dm
+	if (!message.guild) return;
+	for (let i = 0;i < badwords.badwords.length;i++) {
+		if (message.content.toLowerCase().includes(badwords.badwords[i].toLowerCase())) {
+			message.delete().then(msg => {
+				functions.warn(message.member, message.guild, message.channel, 'no no word', client);
+				msg.channel.send({ content: 'SMH MY HEAD NO NO WORD' });
+			});
+		}
+	}
+	functions.levelUser(message, client);
+	await functions.sendAutoResponse(message, client);
+	// Checks if the command starts with a prefix
+	if (!message.content.startsWith(prefix)) return;
+	// Makes sure bot wont respond to other bots including itself
+	if (!message.member) message.member = await message.guild.fetchMember(message);
 
 	const args = message.content.slice(prefix.length).trim().split(/ +/g);
-    const cmd = args.shift().toLowerCase();
-    if (cmd.length === 0) return;
-    await functions.sendCustomCommand(message, client);
+	const cmd = args.shift().toLowerCase();
+	if (cmd.length === 0) return;
+	await functions.sendCustomCommand(message, client);
 
 });
 

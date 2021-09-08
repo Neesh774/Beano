@@ -23,9 +23,9 @@ module.exports = {
 			.setDescription(args.join(' '));
 		const AC = await client.guilds.fetch(config.AC);
 		const suggest = await AC.channels.cache.get(config.suggestions);
-		let msg = message;
+		const msg = message;
 
-		await suggest.send({ embeds: [embed] }).then(msgtwo =>{
+		await suggest.send({ embeds: [embed] }).then(msgtwo => {
 			const sSuggest = new sSchema({
 				id: numSuggest + 1,
 				suggestion: args.join(' '),
@@ -43,6 +43,6 @@ module.exports = {
 			msgtwo.react(config.upvote).catch(err => msgtwo.react('👍'));
 			msgtwo.react(config.downvote).catch(err => msgtwo.react('👎'));
 		});
-		message.editReply({content: 'Your suggestion has been sent!', ephemeral: true});
+		message.editReply({ content: 'Your suggestion has been sent!', ephemeral: true });
 	},
 };
