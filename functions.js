@@ -77,7 +77,7 @@ module.exports = {
 				.setColor(config.embedColor)
 				.setThumbnail(member.user.avatarURL())
 				.setTitle(`${member.username} was warned`)
-				.setDescription(`**${member.user.username}** was warned in ${channel.name} for reason ${reason}. They now have 1 warning.`);
+				.setDescription(`**${member.user.username}** was warned in ${channel.toString()} for reason ${reason}. They now have 1 warning.`);
 			logs.send({ embeds: [embed] });
 			message.editReply(`**${member.user.username}** was warned for the first time for reason: ${reason}.`);
 		}
@@ -92,7 +92,7 @@ module.exports = {
 				.setColor(config.embedColor)
 				.setThumbnail(member.user.avatarURL())
 				.setTitle(`${member.user.username} was warned`)
-				.setDescription(`**${member.user.username}** was warned for the second time in ${channel.name} for reason ${reason}.`);
+				.setDescription(`**${member.user.username}** was warned for the second time in ${channel.toString()} for reason ${reason}.`);
 			logs.send({ embeds: [embed] });
 			message.editReply(`**${member.user.username}** was warned for the second time for reason: ${reason}. They were muted for 2 hours.`);
 		}
@@ -102,7 +102,7 @@ module.exports = {
 				.setColor(config.embedColor)
 				.setThumbnail(member.user.avatarURL())
 				.setTitle(`${member.username} was warned`)
-				.setDescription(`**${member.user.username}** was warned in ${channel.name} for reason ${reason}. They now have 3 warnings.`);
+				.setDescription(`**${member.user.username}** was warned in ${channel.toString()} for reason ${reason}. They now have 3 warnings.`);
 			logs.send({ embeds: [embed] });
 			message.editReply(`**${member.user.username}** was warned for the third time for reason: ${reason}.`);
 		}
@@ -111,7 +111,7 @@ module.exports = {
 				.setColor(config.embedColor)
 				.setDescription(`You Have Been Kicked From **${guild.name}** for - ${reason || 'N/A'}`)
 				.setFooter(guild.name, guild.iconURL());
-			member.send(sembed2).then(() => {
+			member.send({ embeds: [sembed2] }).then(() => {
                 member.kick().catch(() => message.editReply('Couldn\'t kick that user, they were still warned.'));
                 message.editReply(`**${member.user.username}** was warned for the fourth time for reason: ${reason}. They were kicked.`);
 			});
@@ -119,7 +119,7 @@ module.exports = {
 				.setColor(config.embedColor)
 				.setThumbnail(member.user.avatarURL())
 				.setTitle(`${member.user.username} was warned`)
-				.setDescription(`**${member.user.username}** was warned in ${channel.name} for reason ${reason}. They now have 4 warnings. They were kicked.`);
+				.setDescription(`**${member.user.username}** was warned in ${channel.toString()} for reason ${reason}. They now have 4 warnings. They were kicked.`);
 			return logs.send({ embeds: [embed] });
 		}
         else {
@@ -128,8 +128,8 @@ module.exports = {
 				.setColor(config.embedColor)
 				.setThumbnail(member.user.avatarURL())
 				.setTitle(`${member.username} was warned`)
-				.setDescription(`**${member.user.username}** was warned in ${channel.name} for reason ${reason || 'N/A'}. They now have ${wModel.numberWarns} warnings.`);
-			logs.send({ embeds: [embed] });
+				.setDescription(`**${member.user.username}** was warned in ${channel.toString()} for reason ${reason || 'N/A'}. They now have ${wModel.numberWarns} warnings.`);
+			return logs.send({ embeds: [embed] });
         }
 	},
 	sendCustomCommand: async function(message, client) {
