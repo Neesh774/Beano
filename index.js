@@ -6,6 +6,7 @@ const token = require('./token.json');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const badwords = require('./nonowords.json');
+const mSchema = require('./models/memberschema');
 const client = new Client({
 // Stops the bot from mentioning @everyone
 	allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
@@ -76,7 +77,7 @@ client.on('messageCreate', async message => {
 			});
 		}
 	}
-	functions.levelUser(message, client);
+	const member = mSchema.findOne({ userID: message.author.id });
 	await functions.sendAutoResponse(message, client);
 	// Checks if the command starts with a prefix
 	if (!message.content.startsWith(prefix)) return;

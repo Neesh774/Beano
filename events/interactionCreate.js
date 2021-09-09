@@ -27,7 +27,7 @@ module.exports = {
 				command.run(client, interaction, args).catch(async (e) => {
 					console.log(e);
 					await client.users.fetch(config.neesh).then(user => {user.send(e);});
-					interaction.editReply('There was an error. Please try that again later.');
+					return interaction.editReply('There was an error. Please try that again later.');
 				});
 			}
 		}
