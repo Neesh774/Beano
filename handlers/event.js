@@ -13,7 +13,7 @@ module.exports = (client) => {
         else {
             client.on(event.name, (...args) => event.execute(...args, client));
         }
-        table.addRow(file, 'Ready', event.once? "Once" : "On");
+        table.addRow(file, 'Ready', event.once ? 'Once' : 'On');
 	});
 	console.log(table.toString());
     console.log('Welcome to [ BeanoBot ] // Discord: 🧀♅ツNeeshツ♅🧀#7740');

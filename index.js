@@ -38,6 +38,7 @@ client.on('ready', async () => {
 						name: cmd.name,
 						description: cmd.description,
 						options: cmd.options,
+						defaultPermission: !cmd.moderation,
 					});
 			}
 			else {
@@ -45,6 +46,7 @@ client.on('ready', async () => {
 					{
 						name: cmd.name,
 						description: cmd.description,
+						permissions: !cmd.moderation,
 					});
 			}
 		});

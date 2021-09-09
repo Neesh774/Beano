@@ -9,7 +9,7 @@ module.exports = {
 	options: [],
 	run: async (client, message, args) => {
 		// command
-		if(!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
 			return message.editReply('You don\'t have permissions for that :/');
 		}
 		await mSchema.deleteMany();

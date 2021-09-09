@@ -6,6 +6,7 @@ module.exports = {
 	description: 'Locks every channel in the server',
 	usage: `${config.prefix}lockdown`,
 	options: [],
+	moderation: true,
 	run: async (client, message, args) => {
 		if (!message.channel.permissionsFor(message.member).has('BAN_MEMBERS')) return message.editReply('You don\'t have permissions for that :/');
 		const channels = message.guild.channels.cache.filter(ch => ch.type !== 'category');

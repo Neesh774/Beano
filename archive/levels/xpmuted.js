@@ -13,7 +13,7 @@ module.exports = {
 		const fields = [];
 		const list = await mcSchema.find({});
 		const AC = await client.guilds.fetch(config.AC);
-		for(var i = 0;i < numMuted; i++) {
+		for (let i = 0;i < numMuted; i++) {
 			const channel = await AC.channels.cache.get(list[i].channel);
 			fields.push({ 'name': `#${i + 1}`, 'value': `${channel.toString()}` });
 		}

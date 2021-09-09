@@ -21,6 +21,7 @@ module.exports = {
 			required: false,
 		},
 	],
+	moderation: true,
 	run: async (client, message, args) => {
 		if (!message.member.permissions.has('KICK_MEMBERS')) {
 			return message.editReply('You don\'t have permissions for that :/');
