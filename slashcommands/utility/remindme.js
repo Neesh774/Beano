@@ -1,5 +1,5 @@
 const ms = require('ms');
-const functions = require('../../functions.js');
+const functions = require('../../functions/messageFuncs');
 const config = require('../../config.json');
 
 module.exports = {

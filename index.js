@@ -1,18 +1,25 @@
 // Modules
 const { Client, Collection, Intents } = require('discord.js');
-const functions = require('./functions.js');
+const databaseFuncs = require('./functions/databaseFuncs');
+const messageFuncs = require('./functions/messageFuncs');
 const config = require('./config.json');
 const token = require('./token.json');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const badwords = require('./nonowords.json');
 const mSchema = require('./models/memberschema');
+const Filter = require('badwords-filter');
 const client = new Client({
 // Stops the bot from mentioning @everyone
 	allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_BANS, Intents.FLAGS.GUILD_MEMBERS],
 });
-
+const automodFilter = {
+    list: badwords.badwords,
+    cleanWith: '*',
+    useRegex: true,
+};
+const filter = new Filter(automodFilter);
 // Command Handler
 client.slashcommands = new Collection();
 client.aliases = new Collection();
@@ -39,6 +46,7 @@ client.on('ready', async () => {
 						name: cmd.name,
 						description: cmd.description,
 						options: cmd.options,
+						// defaultPermission: !cmd.moderation,
 					});
 			}
 			else {
@@ -46,6 +54,7 @@ client.on('ready', async () => {
 					{
 						name: cmd.name,
 						description: cmd.description,
+						// defaultPermission: !cmd.moderation,
 					});
 			}
 		});
@@ -54,8 +63,8 @@ client.on('ready', async () => {
 		console.log('Slash commands deployed successfully.');
 		console.log(`Bot User ${client.user.username} has been logged in and is ready to use!`);
 		client.user.setActivity('!bhelp', { type: 'WATCHING' });
-		functions.connectMongoose(mongoose);
-		await functions.cacheMessages(client);
+		databaseFuncs.connectMongoose(mongoose);
+		await databaseFuncs.cacheMessages(client);
 	}
 	catch (e) {
 		console.log(e);
@@ -69,16 +78,14 @@ client.on('messageCreate', async message => {
 	if (message.system || message.author.bot) return;
 	// Checks if the command is from a server and not a dm
 	if (!message.guild) return;
-	for (let i = 0;i < badwords.badwords.length;i++) {
-		if (message.content.toLowerCase().includes(badwords.badwords[i].toLowerCase())) {
-			message.delete().then(msg => {
-				functions.warn(message.member, message.guild, message.channel, 'no no word', client);
-				msg.channel.send({ content: 'SMH MY HEAD NO NO WORD' });
-			});
-		}
-	}
+	if (filter.isUnclean(message.content)) {
+        message.delete().then(msg => {
+            databaseFuncs.warn(message.member, message.guild, message.channel, 'no no word', client, message, false);
+            msg.channel.send({ content: 'SMH MY HEAD NO NO WORD' }).then(m => setTimeout(() => m.delete(), 5000));
+        });
+    }
 	const member = mSchema.findOne({ userID: message.author.id });
-	await functions.sendAutoResponse(message, client);
+	await messageFuncs.sendAutoResponse(message, client);
 	// Checks if the command starts with a prefix
 	if (!message.content.startsWith(prefix)) return;
 	// Makes sure bot wont respond to other bots including itself
@@ -87,7 +94,7 @@ client.on('messageCreate', async message => {
 	const args = message.content.slice(prefix.length).trim().split(/ +/g);
 	const cmd = args.shift().toLowerCase();
 	if (cmd.length === 0) return;
-	await functions.sendCustomCommand(message, client);
+	await messageFuncs.sendCustomCommand(message, client);
 
 });
 

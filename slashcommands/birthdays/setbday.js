@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const config = require('../../config.json');
 const mSchema = require('../../models/memberschema.js');
-const functions = require('../../functions.js');
+const functions = require('../../functions/databaseFuncs');
 
 module.exports = {
     name: 'setbday',

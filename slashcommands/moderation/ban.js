@@ -20,6 +20,7 @@ module.exports = {
 			required: false,
 		},
 	],
+	moderation: true,
 	run: async (client, message, args) => {
 		const AC = await client.guilds.fetch(config.AC);
 		const logs = await AC.channels.cache.get(config.logs);

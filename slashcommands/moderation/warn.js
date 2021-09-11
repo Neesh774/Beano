@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const functions = require('../../functions.js');
+const functions = require('../../functions/databaseFuncs');
 const config = require('../../config.json');
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
 		{
 			name: 'user',
 			type: 'USER',
-			description: 'The user you want to wanr',
+			description: 'The user you want to warn',
 			required: true,
 		},
 		{
@@ -21,6 +21,7 @@ module.exports = {
 			required: false,
 		},
 	],
+	moderation: true,
 	run: async (client, message, args) => {
 		if (!message.member.permissions.has('KICK_MEMBERS')) {
 			return message.editReply('You don\'t have permissions for that :/');
@@ -32,6 +33,6 @@ module.exports = {
 		const AC = await client.guilds.fetch(config.AC);
 		const member = await AC.members.fetch(args[0]);
 
-		functions.warn(member, message.guild, message.channel, reason, client, message);
+		functions.warn(member, message.guild, message.channel, reason, client, message, true);
 	},
 };

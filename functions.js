@@ -66,52 +66,17 @@ module.exports = {
 	// 		setTimeout(() => {client.coolDowns.delete(profile.userID);}, 60 * 1000);
 	// 	}
 	// },
-	cacheMessages: async function(client) {
-		const reactionRoles = await rrSchema.find({});
-		reactionRoles.forEach((rr) => {
-			client.channels.fetch(rr.channelID).then(async (channel) => {
-				await channel.messages.fetch(rr.messageID).catch(async () => {
-					console.log(`Failed to fetch reaction role with ID ${rr.messageID}`);
-					await rr.remove();
-				});
-			}).catch(async () => {
-				console.log(`Failed to fetch channel with ID ${rr.channelID}`);
-				await rr.remove();
-			});
-		});
-		console.log('Cached all reaction roles!');
-		const suggestions = await sSchema.find({});
-		const AC = await client.guilds.fetch(config.AC);
-		const suggest = await AC.channels.cache.get(config.suggestions);
-		suggestions.forEach(async (s) => {
-			await suggest.messages.fetch(s.messageID).catch(async () => {
-				console.log(`Failed to fetch suggestion with ID ${s.messageID}`);
-				await s.remove();
-			});
-		});
-		console.log('Cached all suggestions!');
-		const starboards = await sbSchema.find({});
-		starboards.forEach((sb) => {
-			client.channels.fetch(sb.channelID).then(async (channel) => {
-				await channel.messages.fetch(sb.messageID).catch(async () => {
-					console.log(`Failed to fetch starboard with ID ${sb.messageID}`);
-					await sb.remove();
-				});
-			});
-		});
-		console.log('Cached all starboards!');
-	},
-    createMember: async function(username, id) {
-        const mS = new mSchema({
-            name: username,
-            userID: id,
-            level: 1,
-            xp: 0,
-            muted: false,
-            starboards: 0,
-            numberWarns: 0,
-            warnReasons: [],
-        });
-        await mS.save();
-    },
+        createMember: async function(username, id) {
+            const mS = new mSchema({
+                name: username,
+                userID: id,
+                level: 1,
+                xp: 0,
+                muted: false,
+                starboards: 0,
+                numberWarns: 0,
+                warnReasons: [],
+            });
+            await mS.save();
+        },
 };

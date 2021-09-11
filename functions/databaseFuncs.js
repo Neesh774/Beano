@@ -1,13 +1,13 @@
 const Discord = require('discord.js');
-const mSchema = require('./models/memberschema.js');
-const config = require('./config.json');
-const token = require('./token.json');
-const rrSchema = require('./models/rrschema');
-const sSchema = require('./models/suggestschema');
-const sbSchema = require('./models/starboard');
+const mSchema = require('../models/memberschema.js');
+const config = require('../config.json');
+const token = require('../token.json');
+const rrSchema = require('../models/rrschema');
+const sSchema = require('../models/suggestschema');
+const sbSchema = require('../models/starboard');
 
 module.exports = {
-    warn: async function(member, guild, channel, reason, client, message) {
+    warn: async function(member, guild, channel, reason, client, message, interaction) {
 		let wModel;
 		wModel = await mSchema.findOne({ userID: member.id });
 		if (!wModel) {
@@ -15,7 +15,8 @@ module.exports = {
 		}
 		const AC = await client.guilds.fetch(config.AC);
 		const logs = await AC.channels.cache.get(config.logs);
-
+        let logEmb;
+        let reply;
 		wModel.numberWarns++;
 		await wModel.save();
 		if (!reason) {
@@ -23,15 +24,15 @@ module.exports = {
 		}
 		wModel.warnReasons.push(reason);
 		await wModel.save();
+		console.log(wModel.numberWarns);
 		if (wModel.numberWarns == 1) {
 			member.send(`You have been warned for the first time in **${guild.name}** for ${reason || 'N/A'}. If you get warned again you will be muted for 2 hours.`);
-			const embed = new Discord.MessageEmbed()
+			logEmb = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
 				.setThumbnail(member.user.avatarURL())
-				.setTitle(`${member.username} was warned`)
-				.setDescription(`**${member.user.username}** was warned in ${channel.toString()} for reason ${reason}. They now have 1 warning.`);
-			logs.send({ embeds: [embed] });
-			message.editReply(`**${member.user.username}** was warned for the first time for reason: ${reason}.`);
+				.setTitle(`${member.user.username} was warned`)
+				.setDescription(`${member.user.toString()} was warned in ${channel.toString()} for reason ${reason}. They now have 1 warning.`);
+			reply = `**${member.user.username}** was warned for the first time for reason: ${reason}.`;
 		}
 		if (wModel.numberWarns == 2) {
 			member.send(`You have been warned for the second time in **${guild.name}** for ${reason || 'N/A'}. You were muted for 2 hours.`);
@@ -40,23 +41,21 @@ module.exports = {
 			setTimeout(function() {
 				member.roles.remove(mute);
 			}, (2 * 60 * 60 * 1000));
-			const embed = new Discord.MessageEmbed()
+			logEmb = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
 				.setThumbnail(member.user.avatarURL())
 				.setTitle(`${member.user.username} was warned`)
 				.setDescription(`**${member.user.username}** was warned for the second time in ${channel.toString()} for reason ${reason}.`);
-			logs.send({ embeds: [embed] });
-			message.editReply(`**${member.user.username}** was warned for the second time for reason: ${reason}. They were muted for 2 hours.`);
+			reply = `**${member.user.username}** was warned for the second time for reason: ${reason}. They were muted for 2 hours.`;
 		}
 		else if (wModel.numberWarns == 3) {
 			member.send(`You have been warned in **${guild.name}** for ${reason}. If you get warned again you will be kicked.`);
-			const embed = new Discord.MessageEmbed()
+            logEmb = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
 				.setThumbnail(member.user.avatarURL())
 				.setTitle(`${member.username} was warned`)
 				.setDescription(`**${member.user.username}** was warned in ${channel.toString()} for reason ${reason}. They now have 3 warnings.`);
-			logs.send({ embeds: [embed] });
-			message.editReply(`**${member.user.username}** was warned for the third time for reason: ${reason}.`);
+			reply = `**${member.user.username}** was warned for the third time for reason: ${reason}.`;
 		}
 		else if (wModel.numberWarns == 4) {
 			const sembed2 = new Discord.MessageEmbed()
@@ -65,24 +64,24 @@ module.exports = {
 				.setFooter(guild.name, guild.iconURL());
 			member.send({ embeds: [sembed2] }).then(() => {
                 member.kick().catch(() => message.editReply('Couldn\'t kick that user, they were still warned.'));
-                message.editReply(`**${member.user.username}** was warned for the fourth time for reason: ${reason}. They were kicked.`);
+                reply = `**${member.user.username}** was warned for the fourth time for reason: ${reason}. They were kicked.`;
 			});
-			const embed = new Discord.MessageEmbed()
+			logEmb = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
 				.setThumbnail(member.user.avatarURL())
 				.setTitle(`${member.user.username} was warned`)
 				.setDescription(`**${member.user.username}** was warned in ${channel.toString()} for reason ${reason}. They now have 4 warnings. They were kicked.`);
-			return logs.send({ embeds: [embed] });
 		}
         else {
             member.send(`You have been warned in Arcade Cafe for reason ${reason || 'N/A'}`);
-            const embed = new Discord.MessageEmbed()
+            logEmb = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
 				.setThumbnail(member.user.avatarURL())
-				.setTitle(`${member.username} was warned`)
+				.setTitle(`${member.user.username} was warned`)
 				.setDescription(`**${member.user.username}** was warned in ${channel.toString()} for reason ${reason || 'N/A'}. They now have ${wModel.numberWarns} warnings.`);
-			return logs.send({ embeds: [embed] });
         }
+        logs.send({ embeds: [logEmb] });
+        return interaction ? message.editReply({ content: reply, ephemeral: true }) : '';
 	},
     connectMongoose: async function(mongoose) {
 		await mongoose.connect(token.mongoURI, {

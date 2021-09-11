@@ -9,6 +9,7 @@
     "@discordjs/opus": "^0.5.0",
     "@discordjs/voice": "^0.5.3",
     "ascii-table": "^0.0.9",
+    "badwords-filter": "^1.1.1",
     "booru": "^2.4.0",
     "canvacord": "^5.2.1",
     "cheerio": "*",

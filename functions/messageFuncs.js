@@ -1,6 +1,6 @@
-const config = require('./config.json');
-const ccSchema = require('./models/ccschema');
-const arSchema = require('./models/arschema');
+const config = require('../config.json');
+const ccSchema = require('../models/ccschema');
+const arSchema = require('../models/arschema');
 const ms = require('ms');
 module.exports = {
     sendCustomCommand: async function(message, client) {
