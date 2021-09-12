@@ -23,17 +23,17 @@ module.exports = {
 		},
 	],
 	moderation: true,
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const AC = await client.guilds.fetch(config.AC);
         const member = await AC.members.fetch(args[0]);
 		const memberSchema = await mSchema.findOne({ userID: member.id });
 		if (!memberSchema) {
 			databaseFuncs.createMember(member.user.username, member.id);
-			return message.editReply('That user doesn\'t have any warns!');
+			return interaction.editReply('That user doesn\'t have any warns!');
 		}
 		else if (memberSchema.numberWarns == 0) {
-			return message.editReply('That user doesn\'t have any warns!');
+			return interaction.editReply('That user doesn\'t have any warns!');
 		}
 		const reason = args[1] ? args[1] : 'No reason given';
 		memberSchema.numberWarns--;
@@ -49,6 +49,6 @@ module.exports = {
 			.setTimestamp();
 		const logs = await AC.channels.cache.get(config.logs);
 		logs.send({ embeds: [embed] });
-		return message.editReply(`Successfully removed a warn from ${member.user.username}. They now have ${memberSchema.numberWarns} warns.`);
+		return interaction.editReply(`Successfully removed a warn from ${member.user.username}. They now have ${memberSchema.numberWarns} warns.`);
 	},
 };

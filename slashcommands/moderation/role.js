@@ -20,22 +20,22 @@ module.exports = {
 		},
 	],
 	moderation: true,
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.editReply('You don\'t have permissions for that :/');
+			return interaction.editReply('You don\'t have permissions for that :/');
 		}
 		const role = await message.guild.roles.fetch(args[1]);
 		if (!role) {
-			return message.editReply(`Couldn't find role ${args[1]} >_<`);
+			return interaction.editReply(`Couldn't find role ${args[1]} >_<`);
 		}
 		const AC = await client.guilds.fetch(config.AC);
 		const member = await AC.members.fetch(args[0]);
 		if (member.roles.cache.has(role.id)) {
 			member.roles.remove(role.id);
-			return message.editReply(`Removed the role ${role.name} from ${member.nickname}`);
+			return interaction.editReply(`Removed the role ${role.name} from ${member.nickname}`);
 		}
 		member.roles.add(role);
-		return message.editReply(`Gave ${member.user.username} the role ${role.name}`);
+		return interaction.editReply(`Gave ${member.user.username} the role ${role.name}`);
 	},
 };

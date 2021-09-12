@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const config = require('../../config.json');
 const mSchema = require('../../models/memberschema');
-const functions = require('../../functions.js');
 
 module.exports = {
     name: 'birthdays',
@@ -14,7 +13,7 @@ module.exports = {
       description: 'The page of birthdays you want to see',
       required: false,
     }],
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
     // command
       const list = await mSchema.find({ birthday: { $ne: null, $exists: true } });
       const numPages = Math.ceil(list.length / 10);
@@ -27,12 +26,9 @@ module.exports = {
           end = list.length;
       }
       let numEntries = 10;
-      let arg = 1;
-      if (args[0]) {
-        arg = args[0];
-      }
-      if (args[0] > numPages || args[0] < 0) {
-        return message.editReply('We don\'t seem to have that many users with birthdays yet.');
+      const arg = interaction.options.getInteger('page') ? interaction.options.getInteger('page') : 1;
+      if (arg > numPages || arg < 0) {
+        return interaction.editReply('We don\'t seem to have that many users with birthdays yet.');
       }
       if (arg == numPages) {
         numEntries = list.length - 10 * (numPages - 1);
@@ -46,13 +42,13 @@ module.exports = {
         }
       }
       catch (e) {
-        return message.editReply('There was an error.');
+        return interaction.editReply('There was an error.');
       }
       const embed = new Discord.MessageEmbed()
         .setColor(config.embedColor)
         .setTitle(`Birthdays [${page}/${numPages}]`)
         .addFields(fields)
         .setAuthor('Beano Birthdays', AC.iconURL());
-      return message.editReply({ embeds: [embed] });
+      return interaction.editReply({ embeds: [embed] });
     },
 };

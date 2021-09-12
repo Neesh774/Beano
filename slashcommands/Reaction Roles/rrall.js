@@ -8,7 +8,7 @@ module.exports = {
 	description: 'Displays all current reaction roles',
 	usage: `${config.prefix}rrall`,
 	options: [],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		const numRRs = await rrSchema.countDocuments();
 		const fields = [];
 		for (let i = 1;i < numRRs + 1; i++) {
@@ -21,6 +21,6 @@ module.exports = {
 			.setColor(config.embedColor)
 			.setTitle('Reaction Roles for ' + message.guild.name)
 			.addFields(fields);
-		return message.editReply({ embeds: [embed] });
+		return interaction.editReply({ embeds: [embed] });
 	},
 };

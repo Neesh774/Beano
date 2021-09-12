@@ -7,7 +7,7 @@ module.exports = {
 	description: 'Beano will clear all of the xp',
 	usage: `${config.prefix}clearxp`,
 	options: [],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
 			return message.editReply('You don\'t have permissions for that :/');

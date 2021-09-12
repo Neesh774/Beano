@@ -6,7 +6,7 @@ module.exports = {
 	description: 'Shows info about a server',
 	usage: `${config.prefix}serverinfo`,
 	options: [],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const servericon = message.guild.iconURL;
 		const owner = await message.guild.fetchOwner();
@@ -24,6 +24,6 @@ module.exports = {
 			.addField('Total Members', `${message.guild.memberCount}`)
 			.setThumbnail(message.guild.iconURL({ dynamic: true }))
 			.setFooter(message.user.username, message.user.avatarURL());
-		message.editReply({ embeds: [serverembed] });
+		interaction.editReply({ embeds: [serverembed] });
 	},
 };

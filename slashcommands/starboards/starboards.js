@@ -16,7 +16,7 @@ module.exports = {
 			required: false,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		let member = await mSchema.findOne({ userID: message.user.id });
 		let user = message.user;
 		if (args[0]) {
@@ -38,6 +38,6 @@ module.exports = {
 			}
 			embed.addFields(fields);
 		}
-		return message.editReply({ embeds: [embed] });
+		return interaction.editReply({ embeds: [embed] });
 	},
 };

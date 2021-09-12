@@ -8,7 +8,7 @@ module.exports = {
 	description: 'Lists all suggestions',
 	usage: `${config.prefix}suggestions`,
 	options: [],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const fields = [];
 		const numSuggest = await sSchema.countDocuments({});
@@ -20,6 +20,6 @@ module.exports = {
 			.setColor(config.embedColor)
 			.setTitle('Suggestions for ' + message.guild.name)
 			.addFields(fields);
-		return message.editReply({ embeds: [embed] });
+		return interaction.editReply({ embeds: [embed] });
 	},
 };

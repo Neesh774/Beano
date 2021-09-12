@@ -7,8 +7,8 @@ module.exports = {
     usage: `${config.prefix}lock`,
     options: [],
 	moderation: true,
-    run: async (client, message, args) => {
-        if (!message.channel.permissionsFor(message.member).has('BAN_MEMBERS')) return message.editReply('You don\'t have permissions for that :/');
+    run: async (client, interaction) => {
+        if (!message.channel.permissionsFor(message.member).has('BAN_MEMBERS')) return interaction.editReply('You don\'t have permissions for that :/');
         if (client.lockedChannels.has(message.channel.id)) {
             message.channel.permissionOverwrites.edit(message.guild.roles.everyone, {
                 SEND_MESSAGES: true,
@@ -21,7 +21,7 @@ module.exports = {
             const lockEmbed = new Discord.MessageEmbed()
                 .setDescription(`Successfully unlocked ${message.channel.name}`)
                 .setColor(config.embedColor);
-            return message.editReply({ embeds: [lockEmbed] });
+            return interaction.editReply({ embeds: [lockEmbed] });
         }
         else {
             message.channel.permissionOverwrites.edit(message.guild.roles.everyone, {
@@ -35,7 +35,7 @@ module.exports = {
             const unlockEmbed = new Discord.MessageEmbed()
                 .setDescription(`Successfully locked ${message.channel.name}`)
                 .setColor(config.embedColor);
-            return message.editReply({ embeds: [unlockEmbed] });
+            return interaction.editReply({ embeds: [unlockEmbed] });
         }
     },
 };

@@ -13,50 +13,18 @@ module.exports = {
 		required: true,
 	},
 	{
-		name: 'response1',
+		name: 'responses',
 		type: 'STRING',
-		description: 'The phrase that will be sent back to the user',
-		required: true,
-	},
-	{
-		name: 'response2',
-		type: 'STRING',
-		description: 'The phrase that will be sent back to the user',
-		required: false,
-	},
-	{
-		name: 'response3',
-		type: 'STRING',
-		description: 'The phrase that will be sent back to the user',
-		required: false,
-	},
-	{
-		name: 'response4',
-		type: 'STRING',
-		description: 'The phrase that will be sent back to the user',
-		required: false,
-	},
-	{
-		name: 'response5',
-		type: 'STRING',
-		description: 'The phrase that will be sent back to the user',
-		required: false,
+		description: 'The phrases that will be sent to the user, separated by \'&&\'',
 	}],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const numResponders = await arSchema.countDocuments({});
 		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.editReply('You don\'t have permissions for that :/');
+			return interaction.editReply('You don\'t have permissions for that :/');
 		}
-		if (!args[0]) {
-			return message.editReply('You need to give me a trigger!');
-		}
-		if (!args[1]) {
-			return message.editReply('You need to give me atleast one response!');
-		}
-		const trigger = args[0];
-		args.splice(0, 1);
-		const responses = args;
+		const trigger = interaction.options.getString('trigger');
+		const responses = interaction.options.getString('responses').split('&&')
 		const ar = new arSchema({
 			id: numResponders + 1,
 			trigger: trigger,
@@ -79,6 +47,6 @@ module.exports = {
 		const AC = await client.guilds.fetch(config.AC);
 		const logs = await AC.channels.cache.get(config.logs);
 		logs.send({ embeds: [embed] });
-		return message.editReply({ embeds: [embed] });
+		return interaction.editReply({ embeds: [embed] });
 	},
 };

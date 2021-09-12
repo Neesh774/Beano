@@ -14,24 +14,25 @@ module.exports = {
 			required: false,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const numCommands = await ccSchema.countDocuments({});
 		const fields = [];
-		if (args[0]) {
-			if (args[0] > numCommands) {
-				return message.editReply('That command doesn\'t exist!');
+		const commandid = interaction.options.getInteger('command_id');
+		if (commandid) {
+			if (commandid > numCommands) {
+				return interaction.editReply('That command doesn\'t exist!');
 			}
-			const command = ccSchema.findOne({ id: args[0] - 1 });
+			const command = ccSchema.findOne({ id: commandid - 1 });
 			for (let i = 0; i < command.responses.length;i++) {
 				fields.push({ 'name':`Response #${i + 1}`, 'value': `${command.responses[i]}` });
 			}
 			const embed = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
-				.setTitle(`Command #${args[0]}`)
+				.setTitle(`Command #${command}`)
 				.setDescription(command.trigger)
 				.addFields(fields);
-			return message.editReply({ embeds: [embed] });
+			return interaction.editReply({ embeds: [embed] });
 		}
 		else {
 			// eslint-disable-next-line no-redeclare
@@ -43,7 +44,7 @@ module.exports = {
 				.setColor(config.embedColor)
 				.setTitle('Custom Commands')
 				.addFields(fields);
-			return message.editReply({ embeds: [embed] });
+			return interaction.editReply({ embeds: [embed] });
 		}
 	},
 };

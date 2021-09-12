@@ -15,7 +15,7 @@ module.exports = {
 			required: false,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const sbs = await sbSchema.find();
 		let numPages = Math.ceil(sbs.length / 10);
@@ -29,7 +29,7 @@ module.exports = {
 		}
 		if (args[0]) {
 			if (args[0] > numPages || args[0] < 0) {
-				return message.editReply('We don\'t seem to have that many starboards yet.');
+				return interaction.editReply('We don\'t seem to have that many starboards yet.');
 			}
 			let numEntries = 10;
 			if (args[0] == numPages) {
@@ -60,6 +60,6 @@ module.exports = {
 			.setTitle(`Starboards [${page}/${numPages}]`)
 			.addFields(fields)
 			.setAuthor('Beano Starboard Leaderboard', AC.iconURL());
-		return message.editReply({ embeds: [embed] });
+		return interaction.editReply({ embeds: [embed] });
 	},
 };

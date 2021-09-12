@@ -14,18 +14,18 @@ module.exports = {
 			required: true,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const numSuggests = await sSchema.countDocuments({});
 		const fields = [];
 		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.editReply('You don\'t have permissions for that :/');
+			return interaction.editReply('You don\'t have permissions for that :/');
 		}
 		if (!args[0]) {
-			return message.editReply('Which suggestion am I deleting?');
+			return interaction.editReply('Which suggestion am I deleting?');
 		}
 		if (args[0] > numSuggests) {
-			return message.editReply('That command doesn\'t exist!');
+			return interaction.editReply('That command doesn\'t exist!');
 		}
 		const suggest = await sSchema.findOne({ id: args[0] });
 		await sSchema.deleteOne({ id: args[0] });
@@ -39,7 +39,7 @@ module.exports = {
 
 		const sMessage = await suggestChannel.messages.fetch(suggest.messageID);
 		await sMessage.delete();
-		message.editReply(`Suggestion with content ${suggest.suggestion} successfully deleted!`);
+		interaction.editReply(`Suggestion with content ${suggest.suggestion} successfully deleted!`);
 		const logs = await AC.channels.cache.get(config.logs);
 		const embed = new Discord.MessageEmbed()
 			.setColor(config.embedColor)

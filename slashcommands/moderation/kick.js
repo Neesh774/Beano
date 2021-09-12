@@ -20,20 +20,20 @@ module.exports = {
 		},
 	],
 	moderation: true,
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		const AC = await client.guilds.fetch(config.AC);
 		const logs = await AC.channels.cache.get(config.logs);
 
 		try {
-			if (!message.member.permissions.has('KICK_MEMBERS')) return message.editReply('**You Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
-			if (!message.guild.me.permissions.has('KICK_MEMBERS')) return message.editReply('**I Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
+			if (!message.member.permissions.has('KICK_MEMBERS')) return interaction.editReply('**You Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
+			if (!message.guild.me.permissions.has('KICK_MEMBERS')) return interaction.editReply('**I Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
 
-			if (!args[0]) return message.editReply({ content: '**Enter A User To Kick!**' });
+			if (!args[0]) return interaction.editReply({ content: '**Enter A User To Kick!**' });
 
 			const kickMember = await message.guild.members.fetch(args[0]);
-			if (!kickMember) return message.editReply({ content: '**User Is Not In The Guild!**' });
+			if (!kickMember) return interaction.editReply({ content: '**User Is Not In The Guild!**' });
 
-			if (kickMember.id === message.member.id) return message.editReply({ content: '**You Cannot Kick Yourself!**' });
+			if (kickMember.id === message.member.id) return interaction.editReply({ content: '**You Cannot Kick Yourself!**' });
 
 			const reason = args.slice(1).join(' ');
 			try {
@@ -47,13 +47,13 @@ module.exports = {
 				const sembed = new Discord.MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${kickMember.user.username}** has been kicked for ${reason}`);
-				message.editReply({ embeds: [sembed] });
+				interaction.editReply({ embeds: [sembed] });
 			}
 			else {
 				const sembed2 = new Discord.MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${kickMember.user.username}** has been kicked`);
-				message.editReply({ embeds: [sembed2] });
+				interaction.editReply({ embeds: [sembed2] });
 			}
 
 			const embed = new Discord.MessageEmbed()
@@ -71,7 +71,7 @@ module.exports = {
 		}
 		catch (e) {
 			console.log(e.stack);
-			return message.editReply({ content: '**:x: Error, please try again.**' });
+			return interaction.editReply({ content: '**:x: Error, please try again.**' });
 		}
 	},
 };

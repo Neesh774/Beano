@@ -14,21 +14,19 @@ module.exports = {
 			required: true,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const maxLen = 100;
+		const text = interaction.options.getString('text');
+		if (text.length() > maxLen) return interaction.editReply({ content: `The max length is ${maxLen}!` });
 
-		if (args.join(' ').length > maxLen) return message.editReply({ content: `The max length is ${maxLen}!` });
-
-		if (!args[0]) return message.editReply({ content: 'Please enter some text.' });
-
-		figlet(`${args.join(' ')}`, function(err, data) {
+		figlet(text, function(err, data) {
 			if (err) {
 				console.dir(err);
 				return;
 			}
 
-			message.editReply({ content: `\`\`\`${data}\`\`\`` });
+			interaction.editReply({ content: `\`\`\`${data}\`\`\`` });
 		});
 	},
 };

@@ -16,10 +16,10 @@ module.exports = {
             required: false,
         },
     ],
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
         let user = message.user;
         if(args[0]){
-            guildMember = await functions.getMember(args[0], client, message.guild);
+            guildMember = await functions.getMember(args[0], client, interaction.guild);
             user = guildMember.user;
         }
         const member = await mSchema.findOne({ userID: user.id });

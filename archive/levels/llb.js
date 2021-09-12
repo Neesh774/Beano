@@ -7,7 +7,7 @@ module.exports = {
 	description: 'Beano will get you a leaderboard of all of the levels',
 	usage: `${config.prefix}llb`,
 	options: [],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const list = await mSchema.find({});
 		list.sort(function(a, b) {

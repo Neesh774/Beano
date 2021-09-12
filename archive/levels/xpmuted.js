@@ -7,7 +7,7 @@ module.exports = {
 	description: 'Beano lists all the channels that are xp muted',
 	usage: `${config.prefix}xpmuted`,
 	options: [],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const numMuted = await mcSchema.countDocuments();
 		const fields = [];

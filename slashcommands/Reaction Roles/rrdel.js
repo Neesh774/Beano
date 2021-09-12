@@ -14,16 +14,16 @@ module.exports = {
 			required: false,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// reaction role
 		const numReactionRoles = await rrSchema.countDocuments({});
 		if (args[0]) {
 			const fields = [];
 			if (!message.member.permissions.has('MANAGE_MESSAGES')) {
-				return message.editReply('You don\'t have permissions for that :/');
+				return interaction.editReply('You don\'t have permissions for that :/');
 			}
 			if (args[0] > numReactionRoles) {
-				return message.editReply('That reaction role doesn\'t exist!');
+				return interaction.editReply('That reaction role doesn\'t exist!');
 			}
 			const reactionRole = await rrSchema.findOne({ id: args[0] });
 			await rrSchema.deleteOne({ id: args[0] });
@@ -32,7 +32,7 @@ module.exports = {
 				nextRR.id--;
 				await nextRR.save();
 			}
-			message.editReply('Reaction role successfully deleted!');
+			interaction.editReply('Reaction role successfully deleted!');
 			const AC = await client.guilds.fetch(config.AC);
 			const logs = await AC.channels.cache.get(config.logs);
 			const embed = new Discord.MessageEmbed()
@@ -44,10 +44,10 @@ module.exports = {
 		}
 		else {
 			if (!message.member.permissions.has('MANAGE_MESSAGES')) {
-				return message.editReply('You don\'t have permissions for that :/');
+				return interaction.editReply('You don\'t have permissions for that :/');
 			}
 			await rrSchema.deleteMany({});
-			message.editReply('Reaction roles successfully cleared!');
+			interaction.editReply('Reaction roles successfully cleared!');
 			const AC = await client.guilds.fetch(config.AC);
 			const logs = await AC.channels.cache.get(config.logs);
 			const embed = new Discord.MessageEmbed()

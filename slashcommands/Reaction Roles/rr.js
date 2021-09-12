@@ -32,16 +32,16 @@ module.exports = {
 			required: true,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		try {
 			const channel = await message.guild.channels.cache.get(args[0]);
 			if (!channel || channel.type != 'GUILD_TEXT') return message.channel.reply({ content: ':x: | **Channel Invalid**' });
 			const channelid = channel.id;
 			const msg = await channel.messages.fetch(args[1]);
-			if (!msg) return message.editReply(':x: | **Message Not Found**');
+			if (!msg) return interaction.editReply(':x: | **Message Not Found**');
 			const mes = msg.id;
 			let role = message.guild.roles.cache.get(args[2]);
-			if (!role) return message.editReply({ content: ':x: | **Role Not Found**' });
+			if (!role) return interaction.editReply({ content: ':x: | **Role Not Found**' });
 			role = role.id;
 			const embed = new Discord.MessageEmbed()
 				.setTitle('Success!')
@@ -51,8 +51,8 @@ module.exports = {
 			const reaction = args[3];
 			await msg.react(reaction).then(() => {
 				emoji = reaction;
-				message.editReply({ embeds: [embed] });
-			}).catch(err => message.editReply('Invalid emoji. I must have access to the emoji.').then(m => setTimeout(async () => {await m.delete();}, 7500)));
+				interaction.editReply({ embeds: [embed] });
+			}).catch(err => interaction.editReply('Invalid emoji. I must have access to the emoji.').then(m => setTimeout(async () => {await m.delete();}, 7500)));
 			const numRRs = await rrSchema.countDocuments({}) + 1;
 			if (emoji.includes(':')) emoji = emoji.replace('<:', '').slice(emoji.replace('<:', '').indexOf(':') + 1, emoji.replace('<:', '').length - 1);
 			const rr = new rrSchema({
@@ -65,7 +65,7 @@ module.exports = {
 			await rr.save();
 		}
 		catch (e) {
-			return message.editReply({ content: ':x: There was an error. Please make sure you\'re using the proper arguments and try again.' });
+			return interaction.editReply({ content: ':x: There was an error. Please make sure you\'re using the proper arguments and try again.' });
 		}
 	},
 };

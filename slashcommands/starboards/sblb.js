@@ -15,10 +15,10 @@ module.exports = {
 			required: false,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// ordering list
 		let list = await mSchema.find({});
-		if (!list[0]) return message.editReply('Looks like we don\'t have any starboards yet :/');
+		if (!list[0]) return interaction.editReply('Looks like we don\'t have any starboards yet :/');
 		list.sort(function(a, b) {
 			return b.starboards - a.starboards;
 		});
@@ -31,7 +31,7 @@ module.exports = {
 		const end = list.length < 10 ? list.length : 10;
 		const page = args[0] ? args[0] : 1;
 		// logic
-		if (args[0] > numPages || args[0] < 0) return message.editReply('We don\'t seem to have that many users with starboards yet.');
+		if (args[0] > numPages || args[0] < 0) return interaction.editReply('We don\'t seem to have that many users with starboards yet.');
 		start = 10 * (page - 1);
 		for (let i = start; i < end; i++) {
 			fields.push({ 'name': `#${i + 1} | ${list[i].name}`, 'value': `${list[i].starboards} starboards` });
@@ -41,6 +41,6 @@ module.exports = {
 			.setTitle(`Starboards [${page}/${numPages}]`)
 			.addFields(fields)
 			.setAuthor('TerraBot Starboard Leaderboard', AC.iconURL());
-		return message.editReply({ embeds: [embed] });
+		return interaction.editReply({ embeds: [embed] });
 	},
 };

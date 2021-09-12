@@ -21,7 +21,7 @@ module.exports = {
 			required: true,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		const timeArg = args[0];
 		functions.setReminder(message, timeArg, args[1]);
 	},

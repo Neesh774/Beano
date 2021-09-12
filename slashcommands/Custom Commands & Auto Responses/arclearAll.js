@@ -7,9 +7,9 @@ module.exports = {
 	description: 'Clears all auto responders',
 	usage: `${config.prefix}arclearall`,
 	options: [],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.editReply('You don\'t have permissions for that :/');
+			return interaction.editReply('You don\'t have permissions for that :/');
 		}
 		await arSchema.deleteMany();
 		const AC = await client.guilds.fetch(config.AC);
@@ -20,7 +20,7 @@ module.exports = {
 			.setTimestamp()
 			.setDescription('Responders were cleared by user ' + message.user.tag);
 		logs.send({ embeds: [embed] });
-		return message.editReply('Successfully cleared the commands list!');
+		return interaction.editReply('Successfully cleared the commands list!');
 
 	},
 };

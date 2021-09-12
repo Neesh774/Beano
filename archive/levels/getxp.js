@@ -16,11 +16,8 @@ module.exports = {
 			required: true,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
-		if(!args[0]) {
-			return message.editReply('How much xp should I count?');
-		}
 		try{
 			const level = parseInt(args[0]);
 			const xp = await functions.getXP(level);

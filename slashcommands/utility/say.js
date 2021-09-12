@@ -14,15 +14,15 @@ module.exports = {
 		},
 	],
 	ephemeral: true,
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.editReply('You don\'t have permissions for that.');
+			return interaction.editReply('You don\'t have permissions for that.');
 		}
 		if (!args[0]) {
-			return message.editReply('You need to give me something to say!');
+			return interaction.editReply('You need to give me something to say!');
 		}
-		message.editReply({ content: `Successfully said ${args[0]}`, ephemeral: true }).then(msg => {
+		interaction.editReply({ content: `Successfully said ${args[0]}`, ephemeral: true }).then(msg => {
 			return message.channel.send({ content: args[0] });
 		});
 	},

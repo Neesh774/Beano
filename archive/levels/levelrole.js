@@ -20,7 +20,7 @@ module.exports = {
             required: true,
         },
     ],
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
     // command
         const role = args[0];
 

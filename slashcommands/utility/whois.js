@@ -14,7 +14,7 @@ module.exports = {
 			required: false,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		const AC = await client.guilds.fetch(config.AC);
 		let user = await AC.members.fetch(args[0]);
 		user = user.user;
@@ -29,6 +29,6 @@ module.exports = {
 			.setColor(config.embedColor)
 			.setTimestamp()
 			.setThumbnail(user.avatarURL());
-		message.editReply({ embeds: [person] });
+		interaction.editReply({ embeds: [person] });
 	},
 };

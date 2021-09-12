@@ -21,22 +21,22 @@ module.exports = {
 		},
 	],
 	moderation: true,
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		const AC = await client.guilds.fetch(config.AC);
 		const logs = await AC.channels.cache.get(config.logs);
 
 		try {
-			if (!message.member.permissions.has('BAN_MEMBERS') && !config.neesh.includes(message.user.id)) return message.editReply({ content: '**You Dont Have The Permissions To Ban Users! - [BAN_MEMBERS]**' });
-			if (!message.guild.me.permissions.has('BAN_MEMBERS')) return message.editReply({ content: '**I Dont Have The Permissions To Ban Users! - [BAN_MEMBERS]**' });
-			if (!args[0]) return message.editReply('**Please Provide A User To Ban!**');
+			if (!message.member.permissions.has('BAN_MEMBERS') && !config.neesh.includes(message.user.id)) return interaction.editReply({ content: '**You Dont Have The Permissions To Ban Users! - [BAN_MEMBERS]**' });
+			if (!message.guild.me.permissions.has('BAN_MEMBERS')) return interaction.editReply({ content: '**I Dont Have The Permissions To Ban Users! - [BAN_MEMBERS]**' });
+			if (!args[0]) return interaction.editReply('**Please Provide A User To Ban!**');
 
 			const banMember = await message.guild.members.fetch(args[0]);
-			if (!banMember) return message.editReply({ content: '**User Is Not In The Guild**' });
-			if (banMember === message.member) return message.editReply({ content: '**You Cannot Ban Yourself**' });
+			if (!banMember) return interaction.editReply({ content: '**User Is Not In The Guild**' });
+			if (banMember === message.member) return interaction.editReply({ content: '**You Cannot Ban Yourself**' });
 
 			const reason = args.slice(1).join(' ');
 			console.log(banMember);
-			// if (!banMember.bannable) return message.editReply({ content: '**Can\'t ban that user**' });
+			// if (!banMember.bannable) return interaction.editReply({ content: '**Can\'t ban that user**' });
 			try {
 				message.guild.members.ban(banMember);
 				banMember.send({ content: `**Hello, You Have Been Banned From ${message.guild.name} for - ${reason || 'No Reason'}**` }).catch(() => null);
@@ -48,13 +48,13 @@ module.exports = {
 				const sembed = new MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${banMember.user.username}** has been banned for ${reason}`);
-				message.editReply({ embeds: [sembed] });
+				interaction.editReply({ embeds: [sembed] });
 			}
 			else {
 				const sembed2 = new MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${banMember.user.username}** has been banned`);
-				message.editReply({ embeds: [sembed2] });
+				interaction.editReply({ embeds: [sembed2] });
 			}
 
 			const embed = new MessageEmbed()
@@ -72,7 +72,7 @@ module.exports = {
 		}
 		catch (e) {
 			console.log(e.stack);
-			return message.editReply({ content:'**:x: Error, please try again**' });
+			return interaction.editReply({ content:'**:x: Error, please try again**' });
 		}
 	},
 };

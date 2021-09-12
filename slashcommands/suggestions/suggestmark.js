@@ -40,20 +40,20 @@ module.exports = {
 			required: false,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const numSuggest = await sSchema.countDocuments({});
 		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.editReply('You don\'t have permissions for that :/');
+			return interaction.editReply('You don\'t have permissions for that :/');
 		}
 		if (!args[0]) {
-			return message.editReply('Which suggestion do you want me to mark?');
+			return interaction.editReply('Which suggestion do you want me to mark?');
 		}
 		if (args[0] > numSuggest) {
-			return message.editReply('That suggestion doesn\'t exist!');
+			return interaction.editReply('That suggestion doesn\'t exist!');
 		}
 		if (!args[1] || (args[1].toLowerCase() != 'dead' && args[1].toLowerCase() != 'in_progress' && args[1].toLowerCase() != 'done')) {
-			return message.editReply('Please make sure you are marking it as either `Dead`, `In_Progress`, or `Done`');
+			return interaction.editReply('Please make sure you are marking it as either `Dead`, `In_Progress`, or `Done`');
 		}
 		const suggest = await sSchema.findOne({ id: args[0] }).exec();
 		const mark = args[1];
@@ -107,6 +107,6 @@ module.exports = {
 			.addField('Status', `${suggest.status}`)
 			.addField('Reason', `${suggest.reason}`)
 			.setAuthor(suggest.createdBy, suggest.createdByIcon);
-		return message.editReply({ embeds: [embed] });
+		return interaction.editReply({ embeds: [embed] });
 	},
 };

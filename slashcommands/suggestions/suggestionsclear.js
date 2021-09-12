@@ -8,10 +8,10 @@ module.exports = {
 	description: 'Clears all pending suggestions',
 	usage: `${config.prefix}suggestionsclear`,
 	options: [],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return message.editReply('You don\'t have permissions for that :/');
+			return interaction.editReply('You don\'t have permissions for that :/');
 		}
 		await sSchema.deleteMany();
 		const AC = await client.guilds.fetch(config.AC);
@@ -22,6 +22,6 @@ module.exports = {
 			.setTimestamp()
 			.setDescription('Suggestions were cleared by user ' + message.user.username);
 		logs.send({ embeds: [embed] });
-		return message.editReply('Successfully cleared the suggestions list!');
+		return interaction.editReply('Successfully cleared the suggestions list!');
 	},
 };

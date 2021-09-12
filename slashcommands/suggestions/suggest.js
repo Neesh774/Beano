@@ -14,7 +14,7 @@ module.exports = {
 			required: true,
 		},
 	],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		const numSuggest = await sSchema.countDocuments({});
 		const embed = new Discord.MessageEmbed()
@@ -43,6 +43,6 @@ module.exports = {
 			msgtwo.react(config.upvote).catch(err => msgtwo.react('👍'));
 			msgtwo.react(config.downvote).catch(err => msgtwo.react('👎'));
 		});
-		message.editReply({ content: 'Your suggestion has been sent!', ephemeral: true });
+		interaction.editReply({ content: 'Your suggestion has been sent!', ephemeral: true });
 	},
 };

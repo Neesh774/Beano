@@ -7,8 +7,8 @@ module.exports = {
 	usage: `${config.prefix}lockdown`,
 	options: [],
 	moderation: true,
-	run: async (client, message, args) => {
-		if (!message.channel.permissionsFor(message.member).has('BAN_MEMBERS')) return message.editReply('You don\'t have permissions for that :/');
+	run: async (client, interaction) => {
+		if (!message.channel.permissionsFor(message.member).has('BAN_MEMBERS')) return interaction.editReply('You don\'t have permissions for that :/');
 		const channels = message.guild.channels.cache.filter(ch => ch.type !== 'category');
 		if (!client.lockDown) {
 			channels.forEach(channel => {
@@ -20,7 +20,7 @@ module.exports = {
 			const lockEmbed = new Discord.MessageEmbed()
 				.setDescription(`Successfully locked ${channels.size} channels!`)
 				.setColor(config.embedColor);
-			return message.editReply({ embeds: [lockEmbed] });
+			return interaction.editReply({ embeds: [lockEmbed] });
 		}
 		else {
 			channels.forEach(channel => {
@@ -32,7 +32,7 @@ module.exports = {
 			const lockEmbed = new Discord.MessageEmbed()
 				.setDescription(`Successfully unlocked ${channels.size} channels!`)
 				.setColor(config.embedColor);
-			return message.editReply({ embeds: [lockEmbed] });
+			return interaction.editReply({ embeds: [lockEmbed] });
 		}
 	},
 };

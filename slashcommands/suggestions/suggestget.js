@@ -14,14 +14,14 @@ module.exports = {
             required: true,
         },
     ],
-    run: async (client, message, args) => {
+    run: async (client, interaction) => {
     // command
     const numSuggest = await sSchema.countDocuments({});
     if(!args[0]){
-        return message.editReply('Which suggestion do you want me to get?');
+        return interaction.editReply('Which suggestion do you want me to get?');
     }
     if(args[0] > numSuggest || args[0] <= 0){
-        return message.editReply('That suggestion doesn\'t exist!');
+        return interaction.editReply('That suggestion doesn\'t exist!');
     }
     const suggest = await sSchema.findOne({ id: args[0] }).exec();
     const embed = new Discord.MessageEmbed()
@@ -33,7 +33,7 @@ module.exports = {
         .addField('Votes', `👍 ${suggest.upvotes}, 👎 ${suggest.downvotes}`)
         .setFooter(suggest.createdAt)
         .setAuthor(suggest.createdBy, suggest.createdByIcon);
-    return message.editReply({ embeds: [embed] });
+    return interaction.editReply({ embeds: [embed] });
 
     },
 };

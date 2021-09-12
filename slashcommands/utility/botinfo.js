@@ -14,7 +14,7 @@ module.exports = {
 	description: 'Sends detailed info about the client',
 	usage: `${config.prefix}botinfo`,
 	options: [],
-	run: async (client, message, args) => {
+	run: async (client, interaction) => {
 		// command
 		let cpuLol;
 		cpuStat.usagePercent(function(err, percent, seconds) {
@@ -38,7 +38,7 @@ module.exports = {
 				.addField('🤖 Arch', `\`${os.arch()}\``, true)
 				.addField('💻 Platform', `\`\`${os.platform()}\`\``, true)
 				.addField('API Latency', `${(client.ws.ping)}ms`);
-			message.editReply({ embeds: [botinfo] });
+			interaction.editReply({ embeds: [botinfo] });
 		});
 	},
 };
