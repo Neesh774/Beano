@@ -17,8 +17,8 @@ module.exports = {
 		},
 	],
 	run: async (client, interaction) => {
-		let member = await mSchema.findOne({ userID: message.user.id });
-		let user = message.user;
+		let member = await mSchema.findOne({ userID: interaction.user.id });
+		let user = interaction.options.getUser('user');
 		if (args[0]) {
 			user = args[0];
 			member = await mSchema.findOne({ userID: user.id });

@@ -23,16 +23,13 @@ module.exports = {
 	],
 	moderation: true,
 	run: async (client, interaction) => {
-		if (!message.member.permissions.has('KICK_MEMBERS')) {
+		if (!interaction.member.permissions.has('KICK_MEMBERS')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
-		let reason;
-		if (args[1]) {
-			reason = args[1];
-		}
+		const reason = interaction.options.getString('reason') ?? 'No reason given';
 		const AC = await client.guilds.fetch(config.AC);
-		const member = await AC.members.fetch(args[0]);
+		const member = interaction.options.getMember('user');
 
-		functions.warn(member, message.guild, message.channel, reason, client, interaction, true);
+		functions.warn(member, interaction.guild, interaction.channel, reason, client, interaction, true);
 	},
 };

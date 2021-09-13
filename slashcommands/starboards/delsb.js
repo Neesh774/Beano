@@ -16,18 +16,19 @@ module.exports = {
 		},
 	],
 	run: async (client, interaction) => {
-		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
-		const msg = await sbSchema.findOne({ starboardID: args[0] });
+		const id = interaction.options.getString('message_id');
+		const msg = await sbSchema.findOne({ starboardID: id});
 		if (!msg) {
 			return interaction.editReply('Sorry, I don\'t think that message is a starboard');
 		}
-		await sbSchema.deleteOne({ starboardID: args[0] }).catch((e) => {return interaction.editReply('There was an error. Please try that again.');});
+		await sbSchema.deleteOne({ starboardID: id }).catch((e) => {return interaction.editReply('There was an error. Please try that again.');});
 		const AC = await client.guilds.fetch(config.AC);
 		const sbChannel = await AC.channels.cache.get(config.starboardChannel);
 
-		const sMessage = await sbChannel.messages.fetch(args[0]);
+		const sMessage = await sbChannel.messages.fetch(id);
 		await sMessage.delete();
 		return interaction.editReply('Successfully deleted that starboard.');
 	},

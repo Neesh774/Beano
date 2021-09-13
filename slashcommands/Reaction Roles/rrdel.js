@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const { InteractionResponseTypes } = require('discord.js/typings/enums');
 const config = require('../../config.json');
 const rrSchema = require('../../models/rrschema.js');
 module.exports = {
@@ -17,16 +18,17 @@ module.exports = {
 	run: async (client, interaction) => {
 		// reaction role
 		const numReactionRoles = await rrSchema.countDocuments({});
-		if (args[0]) {
+		if (interaction.options.getInteger('reaction_role_id')) {
 			const fields = [];
-			if (!message.member.permissions.has('MANAGE_MESSAGES')) {
+			if (!InteractionResponseTypes.member.permissions.has('MANAGE_MESSAGES')) {
 				return interaction.editReply('You don\'t have permissions for that :/');
 			}
-			if (args[0] > numReactionRoles) {
+			const id = interaction.options.getInteger('reaction_role_id');
+			if (id > numReactionRoles) {
 				return interaction.editReply('That reaction role doesn\'t exist!');
 			}
-			const reactionRole = await rrSchema.findOne({ id: args[0] });
-			await rrSchema.deleteOne({ id: args[0] });
+			const reactionRole = await rrSchema.findOne({ id: id });
+			await rrSchema.deleteOne({ id: id });
 			for (let i = reactionRole.id + 1;i < numReactionRoles + 1; i++) {
 				const nextRR = await rrSchema.findOne({ id:i });
 				nextRR.id--;
@@ -39,11 +41,11 @@ module.exports = {
 				.setColor(config.embedColor)
 				.setTitle('Reaction Role Deleted')
 				.setTimestamp()
-				.setDescription('Reaction role was cleared by user ' + message.user.tag);
+				.setDescription('Reaction role was cleared by user ' + interaction.user.tag);
 			return logs.send({ embeds: [embed] });
 		}
 		else {
-			if (!message.member.permissions.has('MANAGE_MESSAGES')) {
+			if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 				return interaction.editReply('You don\'t have permissions for that :/');
 			}
 			await rrSchema.deleteMany({});
@@ -54,7 +56,7 @@ module.exports = {
 				.setColor(config.embedColor)
 				.setTitle('Reaction Roles Cleared')
 				.setTimestamp()
-				.setDescription('Reaction roles were cleared by user ' + message.user.tag);
+				.setDescription('Reaction roles were cleared by user ' + interaction.user.tag);
 			return logs.send({ embeds: [embed] });
 		}
 	},

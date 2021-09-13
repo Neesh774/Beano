@@ -29,9 +29,9 @@ module.exports = {
 		const fields = [];
 		let start = 0;
 		const end = list.length < 10 ? list.length : 10;
-		const page = args[0] ? args[0] : 1;
+		const page = interaction.options.getString('page') ?? 1;
 		// logic
-		if (args[0] > numPages || args[0] < 0) return interaction.editReply('We don\'t seem to have that many users with starboards yet.');
+		if (page > numPages || page < 0) return interaction.editReply('We don\'t seem to have that many users with starboards yet.');
 		start = 10 * (page - 1);
 		for (let i = start; i < end; i++) {
 			fields.push({ 'name': `#${i + 1} | ${list[i].name}`, 'value': `${list[i].starboards} starboards` });

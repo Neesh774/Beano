@@ -23,21 +23,20 @@ module.exports = {
 		const fields = [];
 		let start = 0;
 		let end = 10;
-		let page = 1;
 		if (sbs.length < 10) {
 			end = sbs.length;
 		}
-		if (args[0]) {
-			if (args[0] > numPages || args[0] < 0) {
+		const page = interaction.options.getInteger('page');
+		if (page) {
+			if (page > numPages || page < 0) {
 				return interaction.editReply('We don\'t seem to have that many starboards yet.');
 			}
 			let numEntries = 10;
-			if (args[0] == numPages) {
+			if (page == numPages) {
 				numEntries = sbs.length - 10 * (numPages - 1);
 			}
-			start = 10 * (args[0] - 1);
+			start = 10 * (page - 1);
 			end = numEntries + start;
-			page = args[0];
 			for (let i = start; i < end; i++) {
 				const channel = await AC.channels.cache.get(sbs[i].channelID);
 				const msg = await channel.messages.fetch(sbs[i].messageID);

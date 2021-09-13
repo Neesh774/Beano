@@ -23,48 +23,45 @@ module.exports = {
 	moderation: true,
 	run: async (client, interaction) => {
 		// command
-		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!interaction.member.permissions.has('MANAGE_interactionS')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
-		if (!args[0]) {
-			return interaction.editReply('You need to give me someone to mute!');
-		}
-		const member = await message.guild.members.fetch(args[0]);
+		const member = interaction.options.getMember('user');
 		if (!member) return interaction.editReply({ content: '**User Is Not In The Guild**' });
-		if (member === message.member) return interaction.editReply({ content: '**You Cannot Mute Yourself**' });
+		if (member === interaction.member) return interaction.editReply({ content: '**You Cannot Mute Yourself**' });
 		const AC = await client.guilds.fetch(config.AC);
 		const logs = await AC.channels.cache.get(config.logs);
 		let logEmb;
 		if (!member.roles.cache.has(config.cafeGuest)) {
 			return interaction.editReply('That user is already muted.');
 		}
-		if (!args[1]) {
-			member.roles.remove(message.guild.roles.cache.get(config.cafeGuest));
-			member.send({ content:`You were muted in ${message.guild.name}` });
+		if (interaction.options.getString('time')) {
+			member.roles.remove(interaction.guild.roles.cache.get(config.cafeGuest));
+			member.send({ content:`You were muted in ${interaction.guild.name}` });
 			interaction.editReply(`Muted ${member.toString()}`);
-			logEmb = new Discord.MessageEmbed()
+			logEmb = new Discord.interactionEmbed()
 				.setTitle(`${member.user.username} Muted`)
 				.setColor(config.embedColor)
-				.addField('Moderator', message.user.toString(), true)
+				.addField('Moderator', interaction.user.toString(), true)
 				.footer(`ID | ${member.id}`, member.user.displayAvatarURL());
 		}
 		else {
 			let time;
 			try {
-				time = ms(args[1]);
+				time = ms(interaction.options.getString('time'));
 			}
 			catch (e) {return interaction.editReply({ content: ':x: There was an error. Please make sure you\'re using the proper arguments and try again.' });}
-			member.roles.remove(message.guild.roles.cache.get(config.cafeGuest));
-			member.send({ content: `You were muted in ${message.guild.name} for ${args[1]}` });
+			member.roles.remove(interaction.guild.roles.cache.get(config.cafeGuest));
+			member.send({ content: `You were muted in ${interaction.guild.name} for ${interaction.options.getString('time')}` });
 			setTimeout(() => {
-				member.send({ content: 'You were unmuted in ' + message.guild.name });
-				member.roles.remove(message.guild.roles.cache.get(config.cafeGuest));
+				member.send({ content: 'You were unmuted in ' + interaction.guild.name });
+				member.roles.remove(interaction.guild.roles.cache.get(config.cafeGuest));
 			}, time);
 			interaction.editReply(`Muted ${member.toString()}`);
-			logEmb = new Discord.MessageEmbed()
-				.setTitle(`${member.user.username} Muted for ${args[1]}`)
+			logEmb = new Discord.interactionEmbed()
+				.setTitle(`${member.user.username} Muted for ${interaction.options.getString('time')}`)
 				.setColor(config.embedColor)
-				.addField('Moderator', message.user.toString(), true)
+				.addField('Moderator', interaction.user.toString(), true)
 				.footer(`ID | ${member.id}`, member.user.displayAvatarURL());
 		}
 		return logs.send(logEmb);

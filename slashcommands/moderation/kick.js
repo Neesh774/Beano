@@ -25,46 +25,44 @@ module.exports = {
 		const logs = await AC.channels.cache.get(config.logs);
 
 		try {
-			if (!message.member.permissions.has('KICK_MEMBERS')) return interaction.editReply('**You Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
-			if (!message.guild.me.permissions.has('KICK_MEMBERS')) return interaction.editReply('**I Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
+			if (!interaction.member.permissions.has('KICK_MEMBERS')) return interaction.editReply('**You Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
+			if (!interaction.guild.me.permissions.has('KICK_MEMBERS')) return interaction.editReply('**I Do Not Have Permissions To Kick Members! - [KICK_MEMBERS]**');
 
-			if (!args[0]) return interaction.editReply({ content: '**Enter A User To Kick!**' });
-
-			const kickMember = await message.guild.members.fetch(args[0]);
+			const kickMember = interaction.options.getMember('user');
 			if (!kickMember) return interaction.editReply({ content: '**User Is Not In The Guild!**' });
 
-			if (kickMember.id === message.member.id) return interaction.editReply({ content: '**You Cannot Kick Yourself!**' });
+			if (kickMember.id === interaction.member.id) return interaction.editReply({ content: '**You Cannot Kick Yourself!**' });
 
-			const reason = args.slice(1).join(' ');
+			const reason = interaction.options.getString('reason');
 			try {
-				kickMember.send({ content: '`**You Have Been Kicked From ${message.guild.name} for - ${reason || \'No Reason!\'}**`' }).then(() =>
+				kickMember.send({ content: '`**You Have Been Kicked From ${interaction.guild.name} for - ${reason || \'No Reason!\'}**`' }).then(() =>
 					kickMember.kick()).catch(() => null);
 			}
 			catch {
 				kickMember.kick();
 			}
 			if (reason) {
-				const sembed = new Discord.MessageEmbed()
+				const sembed = new Discord.interactionEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${kickMember.user.username}** has been kicked for ${reason}`);
 				interaction.editReply({ embeds: [sembed] });
 			}
 			else {
-				const sembed2 = new Discord.MessageEmbed()
+				const sembed2 = new Discord.interactionEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${kickMember.user.username}** has been kicked`);
 				interaction.editReply({ embeds: [sembed2] });
 			}
 
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.interactionEmbed()
 				.setColor(config.embedColor)
 				.setThumbnail(kickMember.user.displayAvatarURL({ dynamic: true }))
-				.setFooter(message.guild.name, message.guild.iconURL())
+				.setFooter(interaction.guild.name, interaction.guild.iconURL())
 				.addField('**Moderation**', 'kick')
 				.addField('**User Kicked**', kickMember.user.username)
-				.addField('**Kicked By**', message.user.username)
+				.addField('**Kicked By**', interaction.user.username)
 				.addField('**Reason**', `${reason || '**No Reason**'}`)
-				.addField('**Date**', message.createdAt.toLocaleString())
+				.addField('**Date**', interaction.createdAt.toLocaleString())
 				.setTimestamp();
 
 			logs.send({ embeds: [embed] });

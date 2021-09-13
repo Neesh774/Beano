@@ -80,7 +80,7 @@ client.on('messageCreate', async message => {
 	if (!message.guild) return;
 	if (filter.isUnclean(message.content)) {
         message.delete().then(msg => {
-            databaseFuncs.warn(message.member, message.guild, message.channel, 'no no word', client, interaction, false);
+            databaseFuncs.warn(message.member, message.guild, message.channel, 'no no word', client, message, false);
             msg.channel.send({ content: 'SMH MY HEAD NO NO WORD' }).then(m => setTimeout(() => m.delete(), 5000));
         });
     }

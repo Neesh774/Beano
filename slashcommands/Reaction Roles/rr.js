@@ -4,8 +4,8 @@ const rrSchema = require('../../models/rrschema.js');
 module.exports = {
 	name: 'rr',
 	category: 'Reaction Roles',
-	description: 'Creates a reaction role on the given message with the given emote',
-	usage: `${config.prefix}rr <Channel ID> <Message ID> <Role ID> <Reaction Emote>`,
+	description: 'Creates a reaction role on the given interaction with the given emote',
+	usage: `${config.prefix}rr <Channel ID> <interaction ID> <Role ID> <Reaction Emote>`,
 	options: [
 		{
 			name: 'channel',
@@ -28,27 +28,26 @@ module.exports = {
 		{
 			name: 'emoji',
 			type: 'STRING',
-			description: 'The emoji you want the reaction role to show up as on the message',
+			description: 'The emoji you want the reaction role to show up as on the interaction',
 			required: true,
 		},
 	],
 	run: async (client, interaction) => {
 		try {
-			const channel = await message.guild.channels.cache.get(args[0]);
-			if (!channel || channel.type != 'GUILD_TEXT') return message.channel.reply({ content: ':x: | **Channel Invalid**' });
+			const channel = interaction.options.getChannel('channel');
+			if (!channel || channel.type != 'GUILD_TEXT') return interaction.channel.reply({ content: ':x: | **Channel Invalid**' });
 			const channelid = channel.id;
-			const msg = await channel.messages.fetch(args[1]);
-			if (!msg) return interaction.editReply(':x: | **Message Not Found**');
+			const msg = await channel.messages.fetch(interaction.options.getString('message_id'));
+			if (!msg) return interaction.editReply(':x: | **interaction Not Found**');
 			const mes = msg.id;
-			let role = message.guild.roles.cache.get(args[2]);
-			if (!role) return interaction.editReply({ content: ':x: | **Role Not Found**' });
+			let role = interaction.options.getRole('role');
 			role = role.id;
-			const embed = new Discord.MessageEmbed()
+			const embed = new Discord.interactionEmbed()
 				.setTitle('Success!')
 				.setDescription('Reaction role spawned successfully')
 				.setColor(config.embedColor);
 			let emoji;
-			const reaction = args[3];
+			const reaction = interaction.options.getString('emoji');
 			await msg.react(reaction).then(() => {
 				emoji = reaction;
 				interaction.editReply({ embeds: [embed] });
@@ -57,7 +56,7 @@ module.exports = {
 			if (emoji.includes(':')) emoji = emoji.replace('<:', '').slice(emoji.replace('<:', '').indexOf(':') + 1, emoji.replace('<:', '').length - 1);
 			const rr = new rrSchema({
 				id: numRRs,
-				messageID: mes,
+				interactionID: mes,
 				channelID: channelid,
 				roleID: role,
 				reactionID: emoji,

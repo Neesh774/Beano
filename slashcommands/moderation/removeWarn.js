@@ -26,7 +26,7 @@ module.exports = {
 	run: async (client, interaction) => {
 		// command
 		const AC = await client.guilds.fetch(config.AC);
-        const member = await AC.members.fetch(args[0]);
+        const member = interaction.getMember('user');
 		const memberSchema = await mSchema.findOne({ userID: member.id });
 		if (!memberSchema) {
 			databaseFuncs.createMember(member.user.username, member.id);
@@ -35,7 +35,7 @@ module.exports = {
 		else if (memberSchema.numberWarns == 0) {
 			return interaction.editReply('That user doesn\'t have any warns!');
 		}
-		const reason = args[1] ? args[1] : 'No reason given';
+		const reason = interaction.options.getString('reason') ?? 'No reason given';
 		memberSchema.numberWarns--;
 		await memberSchema.save();
 		const embed = new Discord.MessageEmbed()
@@ -44,7 +44,7 @@ module.exports = {
 			.setDescription(`A warn has been removed from ${member.user.username}`)
 			.addField('Reason', reason)
 			.addField('Warns', `${memberSchema.numberWarns}`)
-			.addField('Removed by', message.user.toString())
+			.addField('Removed by', interaction.user.toString())
 			.setFooter(`${member.user.username} | ${member.id}`, member.user.displayAvatarURL())
 			.setTimestamp();
 		const logs = await AC.channels.cache.get(config.logs);
