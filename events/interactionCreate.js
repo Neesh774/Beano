@@ -11,7 +11,7 @@ module.exports = {
 				await interaction.deferReply({ ephemeral: command.ephemeral });
 				command.run(client, interaction).catch(async (e) => {
 					console.log(e);
-					await client.users.fetch(config.neesh).then(user => {user.send(`\`\`\`${e}\`\`\``);});
+					await client.users.fetch(config.neesh).then(user => {user.send(`\`\`\`${e.stack}\`\`\``);});
 					return interaction.editReply('There was an error. Please try that again later.');
 				});
 			}

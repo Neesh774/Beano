@@ -23,7 +23,7 @@ module.exports = {
 	run: async (client, interaction) => {
 		// command
 		const numCommands = await ccSchema.countDocuments({});
-		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
 		const trigger = interaction.options.get('trigger');
@@ -32,8 +32,8 @@ module.exports = {
 			id: numCommands + 1,
 			trigger: trigger,
 			responsesArray: responses,
-			created: message.createdAt.toUTCString(),
-			createdByID: message.user.id,
+			created: interaction.createdAt.toUTCString(),
+			createdByID: interaction.user.id,
 		});
 		cc.save().catch(err => console.log(err));
 		const fields = [];
@@ -44,7 +44,7 @@ module.exports = {
 			.setColor(config.embedColor)
 			.setTimestamp()
 			.setTitle('Custom Command Created')
-			.setDescription(`A custom command was created by ${message.user.tag}`)
+			.setDescription(`A custom command was created by ${interaction.user.tag}`)
 			.addField('Trigger', trigger)
 			.addFields(fields);
 		const AC = await client.guilds.fetch(config.AC);

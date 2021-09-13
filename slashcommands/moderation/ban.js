@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const config = require('../../config.json');
-const { interactionEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'ban',
 	category: 'moderation',
@@ -43,19 +43,19 @@ module.exports = {
 				interaction.guild.members.ban(banMember);
 			}
 			if (reason) {
-				const sembed = new interactionEmbed()
+				const sembed = new MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${banMember.user.username}** has been banned for ${reason}`);
 				interaction.editReply({ embeds: [sembed] });
 			}
 			else {
-				const sembed2 = new interactionEmbed()
+				const sembed2 = new MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${banMember.user.username}** has been banned`);
 				interaction.editReply({ embeds: [sembed2] });
 			}
 
-			const embed = new interactionEmbed()
+			const embed = new MessageEmbed()
 				.setColor(config.embedColor)
 				.setThumbnail(banMember.user.displayAvatarURL({ dynamic: true }))
 				.setFooter(interaction.guild.name, interaction.guild.iconURL())

@@ -30,8 +30,8 @@ module.exports = {
 				.setTitle(`${member.user.username} Muted`)
 				.setColor(config.embedColor)
 				.addField('Moderator', interaction.user.toString(), true)
-				.footer(`ID | ${member.id}`, member.user.displayAvatarURL());
-		logs.send(logEmb);
+				.setFooter(`ID | ${member.id}`, member.user.displayAvatarURL());
+		logs.send({ embeds: [logEmb] });
 		return interaction.editReply(`Unmuted ${member.toString()}`);
 	},
 };

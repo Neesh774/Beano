@@ -17,6 +17,7 @@ module.exports = {
     {
         name: 'day',
         type: 'INTEGER',
+        description: 'The day of your birthday, must be between 0 and 31',
         required: true,
     }],
     run: async (client, interaction) => {
@@ -38,7 +39,7 @@ module.exports = {
         member = await mSchema.findOne({ userID: interaction.user.id });
         member.birthday = new Date(datestring);
         await member.save();
-        const embed = new Discord.interactionEmbed()
+        const embed = new Discord.MessageEmbed()
             .setColor(config.embedColor)
             .setTitle('Birthday set successfully')
             .setDescription(`I set your birthday to ${new Date(datestring).toString().slice(4, 10)}`);

@@ -17,16 +17,12 @@ module.exports = {
 		},
 	],
 	run: async (client, interaction) => {
-		let member = await mSchema.findOne({ userID: interaction.user.id });
-		let user = interaction.options.getUser('user');
-		if (args[0]) {
-			user = args[0];
-			member = await mSchema.findOne({ userID: user.id });
-		}
+		const user = interaction.options.getUser('user') ?? interaction.user;
+		const member = await mSchema.findOne({ userID: user.id });
 		const embed = new Discord.MessageEmbed()
 			.setColor(config.embedColor)
-			.setTitle(`${message.user.username}'s starboards`)
-			.setAuthor('Beano Starboards', message.user.avatarURL());
+			.setTitle(`${interaction.user.username}'s starboards`)
+			.setAuthor('Beano Starboards', interaction.user.avatarURL());
 		if (member.starboards > 0) {
 			const fields = [];
 			const starboards = await sbSchema.find({ authorID: user.id });

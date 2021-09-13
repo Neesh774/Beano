@@ -17,18 +17,15 @@ module.exports = {
 	run: async (client, interaction) => {
 		// command
 		const numSuggests = await sSchema.countDocuments({});
-		const fields = [];
-		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
-		if (!args[0]) {
-			return interaction.editReply('Which suggestion am I deleting?');
+		const id = interaction.options.getInteger('suggestion_id');
+		if (id > numSuggests) {
+			return interaction.editReply('That suggestion doesn\'t exist!');
 		}
-		if (args[0] > numSuggests) {
-			return interaction.editReply('That command doesn\'t exist!');
-		}
-		const suggest = await sSchema.findOne({ id: args[0] });
-		await sSchema.deleteOne({ id: args[0] });
+		const suggest = await sSchema.findOne({ id: id });
+		await sSchema.deleteOne({ id: id });
 		for (let i = suggest.id + 1;i < numSuggests + 1; i++) {
 			const nextSuggest = await sSchema.findOne({ id:i });
 			nextSuggest.id--;
@@ -45,7 +42,7 @@ module.exports = {
 			.setColor(config.embedColor)
 			.setTitle('Suggestion Deleted')
 			.setTimestamp()
-			.setDescription(`Suggestion with content ${suggest.suggestion} was cleared by user ` + message.user.tag);
+			.setDescription(`Suggestion with content ${suggest.suggestion} was cleared by user ` + interaction.user.tag);
 		return logs.send({ embeds: [embed] });
 	},
 };

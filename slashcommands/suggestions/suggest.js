@@ -20,20 +20,19 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setColor(config.embedColor)
 			.setTitle(`Suggestion #${numSuggest + 1}`)
-			.setDescription(args.join(' '));
+			.setDescription(interaction.options.getString('suggestion'));
 		const AC = await client.guilds.fetch(config.AC);
 		const suggest = await AC.channels.cache.get(config.suggestions);
-		const msg = message;
 
 		await suggest.send({ embeds: [embed] }).then(msgtwo => {
 			const sSuggest = new sSchema({
 				id: numSuggest + 1,
-				suggestion: args.join(' '),
-				createdBy: message.user.username,
-				createdByIcon: message.user.avatarURL(),
-				createdByID: message.user.id,
-				createdAt: message.createdAt.toUTCString(),
-				messageID: msgtwo.id,
+				suggestion: interaction.options.getString('suggestion'),
+				createdBy: interaction.user.username,
+				createdByIcon: interaction.user.avatarURL(),
+				createdByID: interaction.user.id,
+				createdAt: interaction.createdAt.toUTCString(),
+				interactionID: msgtwo.id,
 				status: 'Unread',
 				reason: 'N/A',
 				upvotes: 0,

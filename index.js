@@ -1,3 +1,4 @@
+/* eslint-disable no-inline-comments */
 // Modules
 const { Client, Collection, Intents } = require('discord.js');
 const databaseFuncs = require('./functions/databaseFuncs');
@@ -35,31 +36,51 @@ client.categories = fs.readdirSync('./slashcommands/');
 	require(`./handlers/${handler}`)(client);
 });
 
+const moderationPerms = [
+	{
+		id: '884176293686575164', // General Manager
+		type: 'ROLE',
+		permission: true,
+	},
+	{
+		id: '833806459690418236', // Cafe Owner
+		type: 'ROLE',
+		permission: true,
+	},
+	{
+		id: '839250900165066772', // Barista
+		type: 'ROLE',
+		permission: true,
+	},
+	{
+		id: config.neesh,
+		type: 'USER',
+		permission: true,
+	},
+];
+
 // Bot Status
 client.on('ready', async () => {
 	try {
-		const data = [];
-		client.slashcommands.forEach(cmd => {
-			if (cmd.options) {
-				data.push(
-					{
-						name: cmd.name,
-						description: cmd.description,
-						options: cmd.options,
-						// defaultPermission: !cmd.moderation,
-					});
-			}
-			else {
-				data.push(
-					{
-						name: cmd.name,
-						description: cmd.description,
-						// defaultPermission: !cmd.moderation,
-					});
+		const modCommands = fs.readdirSync('./slashcommands/moderation');
+		const AC = client.guilds.cache.get(config.AC);
+		const commands = await AC.commands.fetch();
+		commands
+		.each(async (command) => {
+			const moderation = modCommands.includes(`${command.name}.js`);
+			const cmd = await AC.commands.create(
+				{
+					name: command.name,
+					description: command.description,
+					options: command.options,
+					defaultPermission: !moderation,
+				},
+				process.env.GUILD_ID || undefined,
+			);
+			if (moderation) {
+				cmd.permissions?.set({ permissions: moderationPerms });
 			}
 		});
-		const AC = client.guilds.cache.get(config.AC);
-		await AC.commands.set(data);
 		console.log('Slash commands deployed successfully.');
 		console.log(`Bot User ${client.user.username} has been logged in and is ready to use!`);
 		client.user.setActivity('!bhelp', { type: 'WATCHING' });
@@ -84,7 +105,6 @@ client.on('messageCreate', async message => {
             msg.channel.send({ content: 'SMH MY HEAD NO NO WORD' }).then(m => setTimeout(() => m.delete(), 5000));
         });
     }
-	const member = mSchema.findOne({ userID: message.author.id });
 	await messageFuncs.sendAutoResponse(message, client);
 	// Checks if the command starts with a prefix
 	if (!message.content.startsWith(prefix)) return;

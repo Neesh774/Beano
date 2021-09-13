@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const { InteractionResponseTypes } = require('discord.js/typings/enums');
 const config = require('../../config.json');
 const rrSchema = require('../../models/rrschema.js');
 module.exports = {
@@ -20,7 +19,7 @@ module.exports = {
 		const numReactionRoles = await rrSchema.countDocuments({});
 		if (interaction.options.getInteger('reaction_role_id')) {
 			const fields = [];
-			if (!InteractionResponseTypes.member.permissions.has('MANAGE_MESSAGES')) {
+			if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 				return interaction.editReply('You don\'t have permissions for that :/');
 			}
 			const id = interaction.options.getInteger('reaction_role_id');

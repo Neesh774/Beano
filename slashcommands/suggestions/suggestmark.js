@@ -43,31 +43,17 @@ module.exports = {
 	run: async (client, interaction) => {
 		// command
 		const numSuggest = await sSchema.countDocuments({});
-		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
-		if (!args[0]) {
-			return interaction.editReply('Which suggestion do you want me to mark?');
-		}
-		if (args[0] > numSuggest) {
+		const id = interaction.options.getInteger('suggestion_id');
+		if (id > numSuggest) {
 			return interaction.editReply('That suggestion doesn\'t exist!');
 		}
-		if (!args[1] || (args[1].toLowerCase() != 'dead' && args[1].toLowerCase() != 'in_progress' && args[1].toLowerCase() != 'done')) {
-			return interaction.editReply('Please make sure you are marking it as either `Dead`, `In_Progress`, or `Done`');
-		}
-		const suggest = await sSchema.findOne({ id: args[0] }).exec();
-		const mark = args[1];
-		const suggestAuthor = suggest.createdBy;
-		const index = args[0];
+		const suggest = await sSchema.findOne({ id: id }).exec();
+		const mark = interaction.options.getBoolean('mark');
 		suggest.status = mark;
-		if (args[2]) {
-			args.splice(0, 2);
-			const reason = args.join(' ');
-			suggest.reason = reason;
-		}
-		else {
-			suggest.reason = 'N/A';
-		}
+		suggest.reason = interaction.options.getString('reason') ?? 'N/A';
 		suggest.save();
 		const AC = await client.guilds.fetch(config.AC);
 		const suggestChannel = await AC.channels.cache.get(config.suggestions);
@@ -76,7 +62,7 @@ module.exports = {
 		if (suggest.status === 'dead') {
 			const newSuggest = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
-				.setTitle(`Suggestion #${index} marked as rejected`)
+				.setTitle(`Suggestion #${id} marked as rejected`)
 				.setDescription(`${suggest.suggestion}`)
 				.addField('Status', 'Dead')
 				.addField('Reason', `${suggest.reason}`);
@@ -85,7 +71,7 @@ module.exports = {
 		else if (suggest.status === 'in_progress') {
 			const newSuggest = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
-				.setTitle(`Suggestion #${index} marked as undertaken!`)
+				.setTitle(`Suggestion #${id} marked as undertaken!`)
 				.setDescription(`${suggest.suggestion}`)
 				.addField('Status', 'In Progress')
 				.addField('Reason', `${suggest.reason}`);
@@ -94,7 +80,7 @@ module.exports = {
 		else if (suggest.status === 'done') {
 			const newSuggest = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
-				.setTitle(`Suggestion #${index} marked as implemented`)
+				.setTitle(`Suggestion #${id} marked as implemented`)
 				.setDescription(`${suggest.suggestion}`)
 				.addField('Status', 'Implemented')
 				.addField('Reason', `${suggest.reason}`);
@@ -102,7 +88,7 @@ module.exports = {
 		}
 		const embed = new Discord.MessageEmbed()
 			.setColor(config.embedColor)
-			.setTitle('Suggestion #' + index + ' updated successfully!')
+			.setTitle('Suggestion #' + id + ' updated successfully!')
 			.setDescription(`${suggest.suggestion}`)
 			.addField('Status', `${suggest.status}`)
 			.addField('Reason', `${suggest.reason}`)

@@ -42,7 +42,7 @@ module.exports = {
 			const mes = msg.id;
 			let role = interaction.options.getRole('role');
 			role = role.id;
-			const embed = new Discord.interactionEmbed()
+			const embed = new Discord.MessageEmbed()
 				.setTitle('Success!')
 				.setDescription('Reaction role spawned successfully')
 				.setColor(config.embedColor);

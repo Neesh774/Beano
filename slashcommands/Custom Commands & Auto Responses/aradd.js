@@ -20,17 +20,17 @@ module.exports = {
 	run: async (client, interaction) => {
 		// command
 		const numResponders = await arSchema.countDocuments({});
-		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
 		const trigger = interaction.options.getString('trigger');
-		const responses = interaction.options.getString('responses').split('&&')
+		const responses = interaction.options.getString('responses').split('&&');
 		const ar = new arSchema({
 			id: numResponders + 1,
 			trigger: trigger,
 			responsesArray: responses,
-			created: message.createdAt.toUTCString(),
-			createdByID: message.user.id,
+			created: interaction.createdAt.toUTCString(),
+			createdByID: interaction.user.id,
 		});
 		ar.save().catch(err => console.log(err));
 		const fields = [];
@@ -41,7 +41,7 @@ module.exports = {
 			.setColor(config.embedColor)
 			.setTimestamp()
 			.setTitle('Auto Response Created')
-			.setDescription(`An auto responder was created by ${message.user.tag}`)
+			.setDescription(`An auto responder was created by ${interaction.user.tag}`)
 			.addField('Trigger', trigger)
 			.addFields(fields);
 		const AC = await client.guilds.fetch(config.AC);

@@ -56,7 +56,7 @@ function getAll(client, interaction) {
 	interaction.editReply({ content: 'Sent help to dms' });
 
 
-	return message.user.send({ embeds: [embed.setDescription(info)] });
+	return interaction.user.send({ embeds: [embed.setDescription(info)] });
 
 }
 

@@ -18,7 +18,7 @@ module.exports = {
 		}
 		const embed = new Discord.MessageEmbed()
 			.setColor(config.embedColor)
-			.setTitle('Suggestions for ' + message.guild.name)
+			.setTitle('Suggestions for ' + interaction.guild.name)
 			.addFields(fields);
 		return interaction.editReply({ embeds: [embed] });
 	},

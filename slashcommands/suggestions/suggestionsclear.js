@@ -10,7 +10,7 @@ module.exports = {
 	options: [],
 	run: async (client, interaction) => {
 		// command
-		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
 		await sSchema.deleteMany();
@@ -20,7 +20,7 @@ module.exports = {
 			.setColor(config.embedColor)
 			.setTitle('Suggestions were cleared')
 			.setTimestamp()
-			.setDescription('Suggestions were cleared by user ' + message.user.username);
+			.setDescription('Suggestions were cleared by user ' + interaction.user.username);
 		logs.send({ embeds: [embed] });
 		return interaction.editReply('Successfully cleared the suggestions list!');
 	},

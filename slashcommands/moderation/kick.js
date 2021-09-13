@@ -42,19 +42,19 @@ module.exports = {
 				kickMember.kick();
 			}
 			if (reason) {
-				const sembed = new Discord.interactionEmbed()
+				const sembed = new Discord.MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${kickMember.user.username}** has been kicked for ${reason}`);
 				interaction.editReply({ embeds: [sembed] });
 			}
 			else {
-				const sembed2 = new Discord.interactionEmbed()
+				const sembed2 = new Discord.MessageEmbed()
 					.setColor(config.embedColor)
 					.setDescription(`**${kickMember.user.username}** has been kicked`);
 				interaction.editReply({ embeds: [sembed2] });
 			}
 
-			const embed = new Discord.interactionEmbed()
+			const embed = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
 				.setThumbnail(kickMember.user.displayAvatarURL({ dynamic: true }))
 				.setFooter(interaction.guild.name, interaction.guild.iconURL())
