@@ -14,12 +14,13 @@ module.exports = {
 		},
 	],
 	run: async (client, interaction) => {
-		const time = args[0];
+		const time = interaction.options.getString('time');
 		interaction.editReply(`Alright, I'm going to let you study for ${time}. Make me proud, ok?`);
-		message.member.roles.add(config.mutedRole);
+		const member = interaction.member;
+		member.roles.remove(config.cafeGuest);
 		setTimeout(() => {
-			message.member.roles.remove(config.mutedRole);
-			message.member.send(`${message.user.toString()}, did you study well?`);
+			interaction.member.roles.remove(config.cafeGuest);
+			member.send(`${member.user.toString()}, did you study well?`);
 		}, ms(time));
 	},
 };

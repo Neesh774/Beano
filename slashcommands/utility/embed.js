@@ -20,18 +20,13 @@ module.exports = {
 		},
 	],
 	ephemeral: true,
+	moderation: true,
 	run: async (client, interaction) => {
 		try {
-			if (!message.member.permissions.has('MANAGE_MESSAGES')) {
-				return interaction.editReply({ embeds: [new MessageEmbed()
-					.setColor(config.embedColor)
-					.setTitle('❌ ERROR | You don\'t have permission for that.')] },
-				);
-			}
 			interaction.editReply({ content: 'Successfully sent the embed!', ephemeral: true });
-			const title = args[0];
-			const desc = args[1];
-			message.channel.send({ embeds: [new MessageEmbed()
+			const title = interaction.options.getString('title');
+			const desc = interaction.options.getString('description');
+			interaction.channel.send({ embeds: [new MessageEmbed()
 				.setColor(config.embedColor)
 				.setTitle(title ? title : '')
 				.setDescription(desc ? desc : '')] },

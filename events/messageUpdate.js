@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const config = require('../config.json');
 const badwords = require('../nonowords.json');
+const functions = require('../functions/databaseFuncs');
 module.exports = {
 	name: 'messageUpdate',
 	async execute(oldMessage, newMessage, client) {

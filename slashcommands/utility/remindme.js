@@ -5,7 +5,6 @@ const config = require('../../config.json');
 module.exports = {
 	name: 'remindme',
 	description: 'Set a reminder',
-	args: true,
 	usage: `${config.prefix}remindme <time> <reminder>`,
 	options: [
 		{
@@ -22,7 +21,8 @@ module.exports = {
 		},
 	],
 	run: async (client, interaction) => {
-		const timeArg = args[0];
-		functions.setReminder(message, timeArg, args[1]);
+		const timeArg = interaction.options.getString('time');
+		const reminder = interaction.options.getString('reminder');
+		functions.setReminder(timeArg, reminder, interaction.member, interaction);
 	},
 };

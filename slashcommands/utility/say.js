@@ -14,16 +14,12 @@ module.exports = {
 		},
 	],
 	ephemeral: true,
+	moderation: true,
 	run: async (client, interaction) => {
 		// command
-		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
-			return interaction.editReply('You don\'t have permissions for that.');
-		}
-		if (!args[0]) {
-			return interaction.editReply('You need to give me something to say!');
-		}
-		interaction.editReply({ content: `Successfully said ${args[0]}`, ephemeral: true }).then(msg => {
-			return message.channel.send({ content: args[0] });
+		const string = interaction.options.getString('text');
+		interaction.editReply({ content: `Successfully said ${string}`, ephemeral: true }).then(()=> {
+			return interaction.channel.send({ content: string });
 		});
 	},
 };

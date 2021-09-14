@@ -44,15 +44,12 @@ module.exports = {
 			console.log(e.stack);
 		}
 	},
-    setReminder: async function(message, time, content) {
-		if (!time) return message.editReply('When should I remind you?');
-
-		let response = `Okily dokily ${message.user.username}, I'll remind you in ${time}`;
-		if (content) response += ` to ${content}`;
-		message.editReply(response);
+    setReminder: async function(time, reminder, member, interaction) {
+		const response = `Okily dokily ${member.user.username}, I'll remind you in ${time} to ${reminder}`;
+		interaction.editReply(response);
 
 		// Create reminder time out
-		setTimeout(() => {message.user.send('Reminder to ' + content);}, ms(time));
+		setTimeout(() => {member.user.send('Reminder to ' + reminder);}, ms(time));
 	},
     setCoolDown: async function(profile) {
 		profile.coolDown = false;
