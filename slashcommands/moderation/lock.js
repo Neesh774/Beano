@@ -8,32 +8,32 @@ module.exports = {
     options: [],
 	moderation: true,
     run: async (client, interaction) => {
-        if (!message.channel.permissionsFor(message.member).has('BAN_MEMBERS')) return interaction.editReply('You don\'t have permissions for that :/');
-        if (client.lockedChannels.has(message.channel.id)) {
-            message.channel.permissionOverwrites.edit(message.guild.roles.everyone, {
+        if (!interaction.channel.permissionsFor(interaction.member).has('BAN_MEMBERS')) return interaction.editReply('You don\'t have permissions for that :/');
+        if (client.lockedChannels.has(interaction.channel.id)) {
+            interaction.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, {
                 SEND_MESSAGES: true,
             },
             {
-                reason: `Unlock by ${message.user.username}`,
+                reason: `Unlock by ${interaction.user.username}`,
             });
-            client.lockedChannels.delete(message.channel.id);
+            client.lockedChannels.delete(interaction.channel.id);
             console.log(client.lockedChannels);
             const lockEmbed = new Discord.MessageEmbed()
-                .setDescription(`Successfully unlocked ${message.channel.name}`)
+                .setDescription(`Successfully unlocked ${interaction.channel.name}`)
                 .setColor(config.embedColor);
             return interaction.editReply({ embeds: [lockEmbed] });
         }
         else {
-            message.channel.permissionOverwrites.edit(message.guild.roles.everyone, {
+            interaction.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, {
                 SEND_MESSAGES: false,
             },
             {
-                reason: `Lock by ${message.user.username}`,
+                reason: `Lock by ${interaction.user.username}`,
             });
-            client.lockedChannels.add(message.channel.id);
+            client.lockedChannels.add(interaction.channel.id);
             console.log(client.lockedChannels);
             const unlockEmbed = new Discord.MessageEmbed()
-                .setDescription(`Successfully locked ${message.channel.name}`)
+                .setDescription(`Successfully locked ${interaction.channel.name}`)
                 .setColor(config.embedColor);
             return interaction.editReply({ embeds: [unlockEmbed] });
         }

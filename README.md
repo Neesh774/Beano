@@ -1,5 +1,5 @@
 # Beano
-Beano is a general purpose discord bot I made for the [Arcade Cafe Server](https://discord.gg/CTfkUtXyTA). It will log most important events, has moderation features, fun commands, and a starboard.
+Beano is a general purpose discord bot I made for the [Arcade Cafe Server](https://discord.gg/CTfkUtXyTA). It will log most important events, has moderation features, fun commands, and a starboard, and features complete slash command support.
 ## Commands
 ### Birthdays
 - ``birthday`` tells you what your birthday is. It's ok, we all forget sometimes.
@@ -25,19 +25,6 @@ Beano is a general purpose discord bot I made for the [Arcade Cafe Server](https
 ### Info
 - ``help [command]`` will DM you with a list of all Beano's commands, or give you information about any one command.
 - ``ping``will give you information about Beano's latency.
-### Levels
-- ``clearxp`` will clear everybody's xp.
-- ``getlevel <xp>`` will tell you how many levels a certain amount of xp is.
-- ``getxp <level>`` will tell you how much xp a certain level is at.
-- ``levelrole <roleID> <level>`` will create a level role at level, and give users the role with roleID when they get to that level.
-- ``llb`` will give you a level leaderboard.
-- ``mutexp`` will stop a certain channel from allowing users to gain xp.
-- ``mutexpuser`` will toggle a mute on a user's xp.
-- ``rank [user]`` will tell you how much xp you have, or how much someone else has.
-- ``setlevel <user> <level>`` will set someone's level.
-- ``setxp <user> <xp>`` will set someone's xp.
-- ``unmutexp <channel>`` will allow a channel to give users xp.
-- ``xpmuted`` will tell you how many channels are muted.
 ### Moderation
 - ``ban <user> [reason]`` bans a user with an optional reason
 - ``kick <user> [reason]`` kicks a user with an optional reason.
@@ -75,19 +62,3 @@ Beano is a general purpose discord bot I made for the [Arcade Cafe Server](https
 - ``timezones`` will give you information about the most popular timezones.
 - ``urban <word>`` will define a word from Urban Dictionary.
 - ``whois <user>`` will give you information about a certain user.
-### Music
-- ``connect`` will connect Beano to your voice channel.
-- ``disconnect`` will make Beano leave the voice channel.
-- ``loop`` will turn on loop mode for the current song.
-- ``lyrics`` will try to find lyrics for the current song.
-- ``np`` will tell you what's currently playing.
-- ``pause`` will pause the music.
-- ``play <song>`` will play a song by it's youtube link or name.
-- ``queue`` will display the current queue.
-- ``remove <id>`` will remove a song by it's id.
-- ``resume`` will continue the paused music.
-- ``shuffle`` will shuffle the queue.
-- ``skip`` will skip the current song.
-- ``skipto <id>`` will skip to a certain song by it's id.
-- ``stop`` will stop any playing music.
-- ``volume <amount>`` will change the volume of the playing music.

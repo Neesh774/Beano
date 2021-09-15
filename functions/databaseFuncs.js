@@ -138,5 +138,6 @@ module.exports = {
             warnReasons: [],
         });
         await mS.save();
+		return mS;
     },
 };

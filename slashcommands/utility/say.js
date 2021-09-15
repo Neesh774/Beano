@@ -18,6 +18,16 @@ module.exports = {
 	run: async (client, interaction) => {
 		// command
 		const string = interaction.options.getString('text');
+		const AC = await client.guilds.fetch(config.AC);
+		const logs = await AC.channels.cache.get(config.logs);
+		const embed = new Discord.MessageEmbed()
+				.setColor(config.embedColor)
+				.setFooter(interaction.guild.name, interaction.guild.iconURL())
+				.setTitle('Say Command Used')
+				.addField('Author', interaction.user.toString())
+				.addField('Said', string)
+				.setTimestamp();
+			logs.send({ embeds: [embed] });
 		interaction.editReply({ content: `Successfully said ${string}`, ephemeral: true }).then(()=> {
 			return interaction.channel.send({ content: string });
 		});

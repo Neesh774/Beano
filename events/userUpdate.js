@@ -3,13 +3,13 @@ const config = require('../config.json');
 
 module.exports = {
     name: 'userUpdate',
-    async execute(oldUser, newUser, client){
+    async execute(oldUser, newUser, client) {
         const AC = await client.guilds.fetch(config.AC);
         const logs = await AC.channels.cache.get(config.logs);
         const member = await AC.members.fetch(newUser.id);
         let updated = false;
         let embed = false;
-        if(oldUser.avatar != newUser.avatar){
+        if (oldUser.avatar != newUser.avatar) {
             embed = new Discord.MessageEmbed()
                 .setColor(config.embedColor)
                 .setDescription(`**Profile Picture changed of ${newUser.toString()}**`)
@@ -36,8 +36,8 @@ module.exports = {
                 .setTimestamp();
             updated = true;
         }
-        if(updated){
+        if (updated) {
             return logs.send({ embeds: [embed] });
         }
     },
-}
+};

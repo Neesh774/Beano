@@ -64,10 +64,10 @@ client.on('ready', async () => {
 	try {
 		const modCommands = fs.readdirSync('./slashcommands/moderation');
 		const AC = client.guilds.cache.get(config.AC);
-		const commands = await AC.commands.fetch();
+		const commands = client.slashcommands;
 		commands
 		.each(async (command) => {
-			const moderation = modCommands.includes(`${command.name}.js`);
+			const moderation = command.moderation;
 			const cmd = await AC.commands.create(
 				{
 					name: command.name,
@@ -75,10 +75,9 @@ client.on('ready', async () => {
 					options: command.options,
 					defaultPermission: !moderation,
 				},
-				process.env.GUILD_ID || undefined,
 			);
 			if (moderation) {
-				cmd.permissions?.set({ permissions: moderationPerms });
+				await cmd.permissions?.set({ permissions: moderationPerms });
 			}
 		});
 		console.log('Slash commands deployed successfully.');
@@ -99,6 +98,7 @@ client.on('messageCreate', async message => {
 	if (message.system || message.author.bot) return;
 	// Checks if the command is from a server and not a dm
 	if (!message.guild) return;
+	await messageFuncs.checkHighlight(message, client);
 	if (filter.isUnclean(message.content)) {
         message.delete().then(msg => {
             databaseFuncs.warn(message.member, message.guild, message.channel, 'no no word', client, message, false);
@@ -115,7 +115,6 @@ client.on('messageCreate', async message => {
 	const cmd = args.shift().toLowerCase();
 	if (cmd.length === 0) return;
 	await messageFuncs.sendCustomCommand(message, client);
-
 });
 
 // Log into discord using the token in config.json
