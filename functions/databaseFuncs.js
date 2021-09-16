@@ -39,7 +39,7 @@ module.exports = {
 			const mute = await member.guild.roles.fetch(config.cafeGuest);
 			member.roles.remove(mute).catch(() => null);
 			setTimeout(function() {
-				member.roles.remove(mute);
+				member.roles.add(mute);
 			}, (2 * 60 * 60 * 1000));
 			logEmb = new Discord.MessageEmbed()
 				.setColor(config.embedColor)

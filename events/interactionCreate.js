@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const config = require('../config.json');
+const button = require('./button');
 
 module.exports = {
 	name: 'interactionCreate',
@@ -15,6 +16,9 @@ module.exports = {
 					return interaction.editReply('There was an error. Please try that again later.');
 				});
 			}
+		}
+		if (interaction.isButton()) {
+			button.execute(interaction, client);
 		}
 	},
 };

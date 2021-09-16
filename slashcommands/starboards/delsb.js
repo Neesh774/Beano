@@ -20,7 +20,7 @@ module.exports = {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
 		const id = interaction.options.getString('message_id');
-		const msg = await sbSchema.findOne({ starboardID: id});
+		const msg = await sbSchema.findOne({ starboardID: id });
 		if (!msg) {
 			return interaction.editReply('Sorry, I don\'t think that message is a starboard');
 		}

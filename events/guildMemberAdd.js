@@ -12,11 +12,7 @@ module.exports = {
 			rank: AC.memberCount + 1,
 			name: member.nickname,
 			userID: member.id,
-			level: 0,
 			coolDown: false,
-			toNextLevel: 50,
-			xp: 0,
-			levelxp: 0,
 			muted: 0,
 			starboards: 0,
 		});
