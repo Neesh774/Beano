@@ -31,6 +31,17 @@ module.exports = {
 				.setTitle(title ? title : '')
 				.setDescription(desc ? desc : '')] },
 			);
+			const AC = await client.guilds.fetch(config.AC);
+			const logs = await AC.channels.cache.get(config.logs);
+			const embed = new MessageEmbed()
+				.setColor(config.embedColor)
+				.setFooter(interaction.guild.name, interaction.guild.iconURL())
+				.setTitle('Embed Command Used')
+				.addField('Author', interaction.user.toString())
+				.addField('Title', title)
+				.addField('Description', desc)
+				.setTimestamp();
+			logs.send({ embeds: [embed] });
 		}
 		catch (e) {
 			console.log(e.stack);

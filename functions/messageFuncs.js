@@ -1,7 +1,10 @@
 const config = require('../config.json');
 const ccSchema = require('../models/ccschema');
 const arSchema = require('../models/arschema');
+const hlSchema = require('../models/hlschema');
 const ms = require('ms');
+const Filter = require('badwords-filter');
+const Discord = require('discord.js');
 module.exports = {
     sendCustomCommand: async function(message, client) {
 		const prefix = config.prefix;
@@ -54,5 +57,23 @@ module.exports = {
     setCoolDown: async function(profile) {
 		profile.coolDown = false;
 		await profile.save();
+	},
+	checkHighlight: async function(message, client) {
+		const members = await hlSchema.find({ $text: { $search: message.content, $diacriticSensitive: true, $caseSensitive: false } });
+		if (members.length > 0) {
+			members.forEach(async (schema) => {
+				const AC = await client.guilds.fetch(config.AC);
+				const member = await AC.members.fetch(schema.userID);
+				if (message.author.id == member.id) return;
+				if (message.channel.id == schema.ignore) return;
+				const embed = new Discord.MessageEmbed()
+					.setColor(config.embedColor)
+					.setTitle('Highlight Triggered')
+					.setDescription(`**${message.author.username}:** ${message.content}`)
+					.addField('Jump', `[Jump!](https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
+					.setTimestamp();
+				member.user.send({ embeds: [embed], content: `In ${message.guild.name} ${message.channel.toString()}, you were mentioned with a highlight.` });
+			});
+		}
 	},
 };
