@@ -26,7 +26,7 @@ module.exports = {
 		if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
-		const trigger = interaction.options.get('trigger');
+		const trigger = interaction.options.getString('trigger');
 		const responses = interaction.options.getString('responses').split('&&');
 		const cc = new ccSchema({
 			id: numCommands + 1,
