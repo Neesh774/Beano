@@ -14,6 +14,7 @@ module.exports = {
 			required: true,
 		},
 	],
+	moderation: true,
 	run: async (client, interaction) => {
 		// command
 		const numCommands = await ccSchema.countDocuments({});
@@ -26,7 +27,7 @@ module.exports = {
 			return interaction.editReply('That command doesn\'t exist!');
 		}
 		const command = await ccSchema.findOne({ id: commandid });
-		await ccSchema.deleteOne({ id: command });
+		await ccSchema.deleteOne({ id: commandid });
 		for (let i = command.id + 1;i < numCommands + 1; i++) {
 			const nextCommand = await ccSchema.findOne({ id:i });
 			nextCommand.id--;

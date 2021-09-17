@@ -23,13 +23,13 @@ module.exports = {
 			if (commandid > numCommands) {
 				return interaction.editReply('That command doesn\'t exist!');
 			}
-			const command = ccSchema.findOne({ id: commandid - 1 });
-			for (let i = 0; i < command.responses.length;i++) {
-				fields.push({ 'name':`Response #${i + 1}`, 'value': `${command.responses[i]}` });
+			const command = await ccSchema.findOne({ id: commandid });
+			for (let i = 0; i < command.responsesArray.length;i++) {
+				fields.push({ 'name':`Response #${i + 1}`, 'value': `${command.responsesArray[i]}` });
 			}
 			const embed = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
-				.setTitle(`Command #${command}`)
+				.setTitle(`Command #${command.id}`)
 				.setDescription(command.trigger)
 				.addFields(fields);
 			return interaction.editReply({ embeds: [embed] });

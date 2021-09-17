@@ -42,7 +42,7 @@ module.exports = {
 			}
 			const embed = new Discord.MessageEmbed()
 				.setColor(config.embedColor)
-				.setTitle('Automatic Responder')
+				.setTitle('Automatic Responders')
 				.addFields(fields);
 			return interaction.editReply({ embeds: [embed], ephemeral: false });
 		}
