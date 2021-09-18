@@ -14,6 +14,7 @@ module.exports = {
 			required: true,
 		},
 	],
+	moderation: true,
 	run: async (client, interaction) => {
 		// command
 		const numSuggests = await sSchema.countDocuments({});

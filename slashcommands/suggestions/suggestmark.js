@@ -40,6 +40,7 @@ module.exports = {
 			required: false,
 		},
 	],
+	moderation: true,
 	run: async (client, interaction) => {
 		// command
 		const numSuggest = await sSchema.countDocuments({});

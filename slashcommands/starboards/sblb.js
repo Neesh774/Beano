@@ -15,6 +15,7 @@ module.exports = {
 			required: false,
 		},
 	],
+	moderation: true,
 	run: async (client, interaction) => {
 		// ordering list
 		let list = await mSchema.find({});
