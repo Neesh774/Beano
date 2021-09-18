@@ -18,7 +18,7 @@ module.exports = {
             name: 'ignore',
             type: 'CHANNEL',
             description: 'The channel to ignore',
-            required: true,
+            required: false,
         },
 	],
 	moderation: true,

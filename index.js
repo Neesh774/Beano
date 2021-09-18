@@ -121,6 +121,10 @@ client.on('messageCreate', async message => {
 	if (message.system || message.author.bot) return;
 	// Checks if the command is from a server and not a dm
 	if (!message.guild) return;
+	const schema = await mSchema.findOne({ userID: message.author.id });
+	if (!schema) {
+		databaseFuncs.createMember(message.author.username, message.author.id);
+	}
 	await messageFuncs.checkHighlight(message, client);
 	if (filter.isUnclean(message.content)) {
         message.delete().then(msg => {
