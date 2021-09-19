@@ -78,3 +78,11 @@ Beano is a general purpose discord bot I made for the [Arcade Cafe Server](https
 - ``volume <1-100>`` will change the volume of the music player.
 - ``np`` will tell you what song is playing.
 - ``pause`` will pause/resume the music player.
+
+## Hosting
+If you want to host a copy of TerraBot yourself, you can do so by following these steps:
+- Create a bot account on Discord, and get the token.
+- Create a Discord server, and invite TerraBot to it.
+- Create a MongoDB collection, and get the URI.
+- Find the `sample_token.json` file in your TerraBot folder, and fill in your information.
+- Replace the values in the `config.json` file with your information. Feel free to DM me on Discord at ツCheesyNeeshツ#8152 if you need any help.
