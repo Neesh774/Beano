@@ -5,7 +5,6 @@ const token = require('../token.json');
 const rrSchema = require('../models/rrschema');
 const sSchema = require('../models/suggestschema');
 const sbSchema = require('../models/starboard');
-
 module.exports = {
     warn: async function(member, guild, channel, reason, client, message, interaction) {
 		let wModel;
