@@ -29,6 +29,7 @@ Beano is a general purpose discord bot I made for the [Arcade Cafe Server](https
 - ``ban <user> [reason]`` bans a user with an optional reason
 - ``kick <user> [reason]`` kicks a user with an optional reason.
 - ``mute <user> [time]`` will mute a user, optionally unmuting them after a certain amount of time.
+- ``highlight <phrase> [channel]`` will highlight a phrase and ping you whenever the phrase is said, ignoring the optional channel argument. Re-highlighting the phrase will remove the highlight.
 - ``prefix <prefix>`` will change Beano's prefix.
 - ``purge <number>`` will purge a certain amount of a channel's messages.
 - ``role <user> <role name>`` will give or remove a role from a user
@@ -62,3 +63,18 @@ Beano is a general purpose discord bot I made for the [Arcade Cafe Server](https
 - ``timezones`` will give you information about the most popular timezones.
 - ``urban <word>`` will define a word from Urban Dictionary.
 - ``whois <user>`` will give you information about a certain user.
+### Music
+- ``back`` will go to the previous song.
+- ``disconnect`` will disconnect Terra from the VC.
+- ``filter`` will give you a list of filter options.
+- ``loop <option>`` will give you a list of loop options.
+- ``lyrics <song name>`` will give you the lyrics to a song.
+- ``next`` will go to the next song.
+- ``play <song name | spotify URL | playlist URL>`` will play a song.
+- ``playnext <song name | spotify URL | playlist URL>`` will play this song next.
+- ``queue`` will give you a list of the current queue.
+- ``skip`` will skip the current song.
+- ``skipto <index>`` will skip to a certain song in the queue.
+- ``volume <1-100>`` will change the volume of the music player.
+- ``np`` will tell you what song is playing.
+- ``pause`` will pause/resume the music player.
