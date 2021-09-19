@@ -14,6 +14,7 @@ module.exports = {
 			required: false,
 		},
 	],
+	moderation: true,
 	run: async (client, interaction) => {
 		// reaction role
 		const numReactionRoles = await rrSchema.countDocuments({});

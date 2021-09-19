@@ -8,8 +8,9 @@ module.exports = {
 	description: 'Clears all of the starboards.',
 	usage: `${config.prefix}clearsb`,
 	options: [],
+	moderation: true,
 	run: async (client, interaction) => {
-		if (!message.member.permissions.has('MANAGE_MESSAGES')) {
+		if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
 		await sbSchema.deleteMany({});

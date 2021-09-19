@@ -14,6 +14,7 @@ module.exports = {
 			required: true,
 		},
 	],
+	moderation: true,
 	run: async (client, interaction) => {
 		// responder
 		const numResponders = await arSchema.countDocuments({});

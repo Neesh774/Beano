@@ -4,7 +4,7 @@ const rrSchema = require('../models/rrschema.js');
 const sbSchema = require('../models/starboard.js');
 const mSchema = require('../models/memberschema.js');
 const sSchema = require('../models/suggestschema.js');
-
+const databaseFuncs = require('../functions/databaseFuncs');
 module.exports = {
 	name: 'messageReactionAdd',
 	async execute(messageReaction, user, client) {
@@ -12,6 +12,7 @@ module.exports = {
 		const message = messageReaction.message;
 		const schema = await rrSchema.findOne({ channelID: message.channel.id, messageID: message.id, reactionID: messageReaction.emoji.id ?? messageReaction.emoji.name });
 		const AC = await client.guilds.fetch(config.AC);
+		// ===============Reaction Roles===============
 		if (schema) {
 			const member = message.guild.members.cache.get(user.id);
 			if (!member.roles.cache.has(schema.roleID)) {
@@ -27,6 +28,7 @@ module.exports = {
 				return logs.send({ embeds: [embed] });
 			}
 		}
+		// ==============================Starboard==============================
 		if (message.reactions.cache.some(reaction => reaction.emoji.id === config.starboardEmote && reaction.count === config.starboardCount)) {
 			const starboardChannel = await AC.channels.cache.get(config.starboardChannel);
 			const attachments = message.attachments && message.attachments.first() ? message.attachments.first() : undefined;
@@ -57,6 +59,7 @@ module.exports = {
 				sb.save();
 			});
 		}
+		// ============================Suggestions==============================
 		const suggest = await sSchema.findOne({ messageID: message.id });
 		if (suggest && !user.bot) {
 			switch (messageReaction.emoji.id) {
@@ -68,6 +71,15 @@ module.exports = {
 				break;
 			}
 			await suggest.save();
+		}
+		// ============================EGGGGGG==============================
+		if (message.channel.id === config.egg && messageReaction.emoji.name == '✅' && message.author.id != user.id) {
+			const member = await mSchema.findOne({ userID: message.author.id });
+			if (!member) {
+				databaseFuncs.createMember(message.author.username, message.author.id);
+			}
+			member.eggPoints ? member.eggPoints++ : member.eggPoints = 1;
+			await member.save();
 		}
 	},
 };

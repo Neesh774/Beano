@@ -32,6 +32,7 @@ module.exports = {
 			required: true,
 		},
 	],
+	moderation: true,
 	run: async (client, interaction) => {
 		try {
 			const channel = interaction.options.getChannel('channel');

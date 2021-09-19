@@ -8,6 +8,7 @@ module.exports = {
 	description: 'Clears all pending suggestions',
 	usage: `${config.prefix}suggestionsclear`,
 	options: [],
+	moderation: true,
 	run: async (client, interaction) => {
 		// command
 		if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {

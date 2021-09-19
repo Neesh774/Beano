@@ -20,14 +20,15 @@ module.exports = {
 			required: true,
 		},
 	],
+	moderation: true,
 	run: async (client, interaction) => {
 		// command
 		const numCommands = await ccSchema.countDocuments({});
 		if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
 		}
-		const trigger = interaction.options.get('trigger');
-		const responses = interaction.options.getString('responses').split('&&');
+		const trigger = interaction.options.getString('trigger');
+		const responses = interaction.options.getString('responses').split(' && ');
 		const cc = new ccSchema({
 			id: numCommands + 1,
 			trigger: trigger,

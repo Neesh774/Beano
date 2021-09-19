@@ -17,6 +17,7 @@ module.exports = {
 		type: 'STRING',
 		description: 'The phrases that will be sent to the user, separated by \'&&\'',
 	}],
+	moderation: true,
 	run: async (client, interaction) => {
 		// command
 		const numResponders = await arSchema.countDocuments({});

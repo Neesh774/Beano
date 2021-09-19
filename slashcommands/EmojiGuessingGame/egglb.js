@@ -3,27 +3,26 @@ const mSchema = require('../../models/memberschema');
 const config = require('../../config.json');
 
 module.exports = {
-	name: 'sblb',
-	category: 'Starboards',
-	description: 'Gives you a list of who has the most starboards',
-	usage: `${config.prefix}sblb [page]`,
+	name: 'egglb',
+	category: 'EmojiGuessingGame',
+	description: 'Gives you a list of who has the most egg points',
+	usage: `${config.prefix}egglb [page]`,
 	options: [
 		{
 			name: 'page',
 			type: 'INTEGER',
-			description: 'The page of the starboard leaderboard to check',
+			description: 'The page of the egg leaderboard to check',
 			required: false,
 		},
 	],
-	moderation: true,
 	run: async (client, interaction) => {
 		// ordering list
 		let list = await mSchema.find({});
-		if (!list[0]) return interaction.editReply('Looks like we don\'t have any starboards yet :/');
+		if (!list[0]) return interaction.editReply('Looks like we don\'t have any egg points yet :/');
 		list.sort(function(a, b) {
-			return b.starboards - a.starboards;
+			return b.eggPoints - a.eggPoints;
 		});
-		list = list.filter(member => member.starboards > 0);
+		list = list.filter(member => member.eggPoints > 0);
 		// variables
 		const numPages = Math.ceil(list.length / 10);
 		const AC = await client.guilds.fetch(config.AC);
@@ -32,16 +31,16 @@ module.exports = {
 		const end = list.length < 10 ? list.length : 10;
 		const page = interaction.options.getString('page') ?? 1;
 		// logic
-		if (page > numPages || page < 0) return interaction.editReply('We don\'t seem to have that many users with starboards yet.');
+		if (page > numPages || page < 0) return interaction.editReply('We don\'t seem to have that many users with egg points yet.');
 		start = 10 * (page - 1);
 		for (let i = start; i < end; i++) {
-			fields.push({ 'name': `#${i + 1} | ${list[i].name}`, 'value': `${list[i].starboards} starboards` });
+			fields.push({ 'name': `#${i + 1} | ${list[i].name}`, 'value': `${list[i].eggPoints} egg points` });
 		}
 		const embed = new Discord.MessageEmbed()
 			.setColor(config.embedColor)
-			.setTitle(`Starboards [${page}/${numPages}]`)
+			.setTitle(`Egg Points [${page}/${numPages}]`)
 			.addFields(fields)
-			.setAuthor('Beano Starboard Leaderboard', AC.iconURL());
+			.setAuthor('Beano Egg Leaderboard', AC.iconURL());
 		return interaction.editReply({ embeds: [embed] });
 	},
 };

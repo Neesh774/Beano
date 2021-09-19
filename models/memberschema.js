@@ -9,6 +9,7 @@ const mSchema = mongoose.Schema({
     numberWarns: Number,
     warnReasons: Array,
     birthday: Date,
+    eggPoints: Number,
 });
 
 module.exports = mongoose.model('Members', mSchema);

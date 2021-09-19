@@ -7,6 +7,7 @@ module.exports = {
 	description: 'Clears all auto responders',
 	usage: `${config.prefix}arclearall`,
 	options: [],
+	moderation: true,
 	run: async (client, interaction) => {
 		if (!interaction.member.permissions.has('MANAGE_MESSAGES')) {
 			return interaction.editReply('You don\'t have permissions for that :/');
@@ -20,7 +21,7 @@ module.exports = {
 			.setTimestamp()
 			.setDescription('Responders were cleared by user ' + interaction.user.tag);
 		logs.send({ embeds: [embed] });
-		return interaction.editReply('Successfully cleared the commands list!');
+		return interaction.editReply('Successfully cleared the responders list!');
 
 	},
 };
