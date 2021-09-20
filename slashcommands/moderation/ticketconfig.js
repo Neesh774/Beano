@@ -13,7 +13,7 @@ module.exports = {
 		const embed = new MessageEmbed()
             .setColor(config.embedColor)
             .setTitle('Create a Ticket')
-            .setDescription('Press the button below to create a ticket and contact staff.')
+            .setDescription('Press the button below to create a ticket and contact staff. **SERIOUS TICKETS ONLY!!**')
             .setFooter(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }));
         const button = new MessageActionRow().addComponents(
             new MessageButton()
