@@ -133,7 +133,7 @@ module.exports = {
 				.setLabel('Close Ticket')
 				.setStyle('DANGER'),
 		);
-		const message = await ticketChannel.send({ embeds: [embed], content: '<@$833805662147837982>', components: [button] });
+		const message = await ticketChannel.send({ embeds: [embed], content: '<@833805662147837982>', components: [button] });
 		const ticketSchema = new tSchema({
 			memberID: member.id,
 			memberName: member.user.username,
