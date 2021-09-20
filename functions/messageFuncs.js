@@ -2,6 +2,7 @@ const config = require('../config.json');
 const ccSchema = require('../models/ccschema');
 const arSchema = require('../models/arschema');
 const hlSchema = require('../models/hlschema');
+const mSchema = require('../models/memberschema');
 const ms = require('ms');
 const Filter = require('badwords-filter');
 const Discord = require('discord.js');
@@ -138,5 +139,27 @@ module.exports = {
 			await ticket.delete();
 		}
 		interaction.member.send('Your ticket was closed.');
+	},
+	checkBirthday: async function(client) {
+		const members = await mSchema.find({ birthday: { $ne: null } });
+		members.forEach(async (member) => {
+			const today = new Date();
+			const birthday = new Date(member.birthday);
+			if (today.getMonth() == birthday.getMonth() && today.getDate() == birthday.getDate()) {
+				const AC = await client.guilds.fetch(config.AC);
+				const general = await AC.channels.fetch(config.general);
+				const dMember = await AC.members.fetch(member.userID);
+				const embed = new Discord.MessageEmbed()
+				.setColor(config.embedColor)
+				.setTitle(`Happy Birthday ${dMember.user.username}!`)
+				.setFooter(`${dMember.user.username}`, dMember.user.displayAvatarURL());
+				general.send({ embeds:[embed], content: dMember.user.toString() });
+			}
+		});
+		// call checkBirthday after 24 hours
+		setTimeout(() => {
+			// eslint-disable-next-line no-undef
+			checkBirthday(client);
+		}, 1000 * 60 * 60 * 24);
 	},
 };

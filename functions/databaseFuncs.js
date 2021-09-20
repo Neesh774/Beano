@@ -135,7 +135,6 @@ module.exports = {
             starboards: 0,
             numberWarns: 0,
             warnReasons: [],
-			birthday: new Date(),
 			eggPoints: 0,
         });
         await mS.save();
