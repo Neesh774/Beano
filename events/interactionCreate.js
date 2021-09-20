@@ -12,7 +12,14 @@ module.exports = {
 				await interaction.deferReply({ ephemeral: command.ephemeral });
 				command.run(client, interaction).catch(async (e) => {
 					console.log(e);
-					await client.users.fetch(config.neesh).then(user => {user.send(`\`\`\`${e.stack}\`\`\``);});
+					await client.users.fetch(config.neesh).then(user => {
+						const embed = new Discord.MessageEmbed()
+							.setColor(config.embedColor)
+							.setTitle('I had an error')
+							.setDescription(`\`\`\`${e.stack}\`\`\``)
+							.addField('Command', `\`${interaction.commandName}\``);
+						user.send({ embeds: [embed] });
+					});
 					return interaction.editReply('There was an error. Please try that again later.');
 				});
 			}

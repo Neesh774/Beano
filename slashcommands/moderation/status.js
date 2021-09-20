@@ -6,17 +6,42 @@ module.exports = {
 	description: 'Beano changes its status.',
 	usage: `${config.prefix}role <new_status>`,
 	options: [
+        {
+            name: 'type',
+            description: 'The type of the status',
+            type: 'STRING',
+            choices: [
+                {
+                    name: 'playing',
+                    value: 'PLAYING',
+                },
+                {
+                    name: 'streaming',
+                    value: 'STREAMING',
+                },
+                {
+                    name: 'listening',
+                    value: 'LISTENING',
+                },
+                {
+                    name: 'watching',
+                    value: 'WATCHING',
+                },
+            ],
+            required: true,
+        },
 		{
             name: 'status',
-            description: 'Status of the command',
+            description: 'Beano\'s new status',
             type: 'STRING',
             required: true,
         },
 	],
 	moderation: true,
 	run: async (client, interaction) => {
-		const status = interaction.options.getRole('status');
+        const type = interaction.options.getString('type');
+		const status = interaction.options.getString('status', { type: type });
         client.user.setActivity(status);
-        interaction.editReply(`Set the status to ${status}!`);
+        interaction.editReply(`Set the status to ${type }${status}!`);
 	},
 };
