@@ -8,6 +8,7 @@ const Filter = require('badwords-filter');
 const Discord = require('discord.js');
 const { Client, Intents, Permissions, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const tSchema = require('../models/ticket');
+const rSchema = require('../models/reminder');
 module.exports = {
     sendCustomCommand: async function(message, client) {
 		const prefix = config.prefix;
@@ -53,9 +54,20 @@ module.exports = {
     setReminder: async function(time, reminder, member, interaction) {
 		const response = `Okily dokily ${member.user.username}, I'll remind you in ${time} to ${reminder}`;
 		interaction.editReply(response);
-
+		const numReminders = await rSchema.countDocuments();
+		const msTime = parseFloat(new Date().valueOf()) + parseFloat(ms(time));
+		const reminderSchema = new rSchema({
+			id: numReminders + 1,
+			reminder: reminder,
+			date: msTime,
+			memberId: member.id,
+		});
+		await reminderSchema.save();
 		// Create reminder time out
-		setTimeout(() => {member.user.send('Reminder to ' + reminder);}, ms(time));
+		setTimeout(async () => {
+			member.send(`You asked me to remind you to \`${reminder}\``);
+			await reminderSchema.delete();
+		}, ms(time));
 	},
     setCoolDown: async function(profile) {
 		profile.coolDown = false;

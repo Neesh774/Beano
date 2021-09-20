@@ -1,7 +1,6 @@
 const ms = require('ms');
 const functions = require('../../functions/messageFuncs');
 const config = require('../../config.json');
-
 module.exports = {
 	name: 'remindme',
 	description: 'Set a reminder',

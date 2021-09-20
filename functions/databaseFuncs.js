@@ -5,6 +5,8 @@ const token = require('../token.json');
 const rrSchema = require('../models/rrschema');
 const sSchema = require('../models/suggestschema');
 const sbSchema = require('../models/starboard');
+const rSchema = require('../models/reminder');
+const dayjs = require('dayjs');
 module.exports = {
     warn: async function(member, guild, channel, reason, client, message, interaction) {
 		let wModel;
@@ -124,6 +126,16 @@ module.exports = {
 			});
 		});
 		console.log('Cached all starboards!');
+		const reminders = await rSchema.find({});
+		reminders.forEach(async (r) => {
+			const until = parseFloat(r.date) - new Date().valueOf();
+			const member = await AC.members.fetch(r.memberId);
+			setTimeout(async () => {
+				member.send(`You asked me to remind you to \`${r.reminder}\``);
+				await r.delete();
+			}, until);
+		});
+		console.log('Cached all reminders!');
 	},
     createMember: async function(username, id) {
         const mS = new mSchema({
