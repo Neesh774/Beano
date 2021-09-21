@@ -174,4 +174,17 @@ module.exports = {
 			checkBirthday(client);
 		}, 1000 * 60 * 60 * 24);
 	},
+	bumper: async function(client, message) {
+		if (message.author.id != '302050872383242240') return;
+		if (!message.embeds[0]) return;
+		if (message.embeds[0].description.contains('Bump done :thumbsup:')) {
+			setTimeout(() => {
+				const embed = new Discord.MessageEmbed()
+					.setColor(config.embedColor)
+					.setTitle('Bump Ready!')
+					.setDescription('This server can be bumped now! Type `!d bump` to bump this server.');
+				message.channel.send(embed);
+			});
+		}
+	},
 };

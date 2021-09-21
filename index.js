@@ -141,6 +141,8 @@ client.on('messageCreate', async message => {
 	});
 	if (exeFile) message.delete().then(msg => msg.channel.send({ content: 'No EXE files allowed' }).then(m => setTimeout(() => m.delete(), 5000)));
 	await messageFuncs.sendAutoResponse(message, client);
+
+	await messageFuncs.bumper(client, message);
 	// Checks if the command starts with a prefix
 	if (!message.content.startsWith(prefix)) return;
 	// Makes sure bot wont respond to other bots including itself
