@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const hlSchema = mongoose.Schema({
     userID: String,
     phrase: String,
-    ignore: String,
+    ignore: Array,
 });
 
 hlSchema.index({ phrase: 'text' });

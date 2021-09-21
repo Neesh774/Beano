@@ -74,16 +74,19 @@ module.exports = {
 		await profile.save();
 	},
 	checkHighlight: async function(message, client) {
-		const members = await hlSchema.find({ $text: { $search: message.content, $diacriticSensitive: true, $caseSensitive: false } });
+		let members = await hlSchema.find({ $text: { $search: message.content, $diacriticSensitive: true, $caseSensitive: false } });
+		members = members.filter((obj, pos, arr) => {
+			return arr.map(mapObj => mapObj.phrase).indexOf(obj.phrase) === pos;
+		});
 		if (members.length > 0) {
 			members.forEach(async (schema) => {
 				const AC = await client.guilds.fetch(config.AC);
 				const member = await AC.members.fetch(schema.userID);
 				if (message.author.id == member.id) return;
-				if (message.channel.id == schema.ignore) return;
+				if (schema.ignore.contains(message.channel.id)) return;
 				const embed = new Discord.MessageEmbed()
 					.setColor(config.embedColor)
-					.setTitle('Highlight Triggered')
+					.setTitle(`Highlight Triggered - ${schema.phrase}`)
 					.setDescription(`**${message.author.username}:** ${message.content}`)
 					.addField('Jump', `[Jump!](https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
 					.setTimestamp();
@@ -175,16 +178,16 @@ module.exports = {
 		}, 1000 * 60 * 60 * 24);
 	},
 	bumper: async function(client, message) {
-		if (message.author.id != '302050872383242240') return;
-		if (!message.embeds[0]) return;
-		if (message.embeds[0].description.contains('Bump done :thumbsup:')) {
-			setTimeout(() => {
+		// if (message.author.id != '302050872383242240') return;
+		if (!message.embeds[0] || !message.embeds[0].description) return;
+		if (message.embeds[0].description.includes('Bump done')) {
+			setTimeout(async () => {
 				const embed = new Discord.MessageEmbed()
 					.setColor(config.embedColor)
 					.setTitle('Bump Ready!')
 					.setDescription('This server can be bumped now! Type `!d bump` to bump this server.');
-				message.channel.send(embed);
-			});
+				await message.channel.send({ embeds: [embed] });
+			}, 1000 * 60 * 60 * 2);
 		}
 	},
 };

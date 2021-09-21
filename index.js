@@ -119,6 +119,7 @@ client.on('messageCreate', async message => {
 	// Loads prefix from config.json
 	const prefix = (config.prefix);
 	// Makes sure bot wont respond to other bots including itself
+	await messageFuncs.bumper(client, message);
 	if (message.system || message.author.bot) return;
 	// Checks if the command is from a server and not a dm
 	if (!message.guild) return;
@@ -142,7 +143,6 @@ client.on('messageCreate', async message => {
 	if (exeFile) message.delete().then(msg => msg.channel.send({ content: 'No EXE files allowed' }).then(m => setTimeout(() => m.delete(), 5000)));
 	await messageFuncs.sendAutoResponse(message, client);
 
-	await messageFuncs.bumper(client, message);
 	// Checks if the command starts with a prefix
 	if (!message.content.startsWith(prefix)) return;
 	// Makes sure bot wont respond to other bots including itself

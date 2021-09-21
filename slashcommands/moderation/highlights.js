@@ -18,6 +18,13 @@ module.exports = {
         let description = '';
         for (let i = 0; i < schemas.length; i++) {
             description += `${i + 1}. ${schemas[i].phrase}\n`;
+            if (schemas[i].ignore[0]) {
+                description += 'Ignoring ';
+                schemas[i].ignore.forEach(ignore => {
+                    description += `${ignore}`;
+                });
+                description += '\n';
+            }
         }
         const embed = new Discord.MessageEmbed()
             .setTitle(`Highlights for ${user.username}`)

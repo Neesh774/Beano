@@ -26,7 +26,7 @@ module.exports = {
 		const phrase = interaction.options.getString('phrase');
         const user = interaction.user;
         const ignore = interaction.options.getChannel('ignore');
-        let schema = await hlSchema.findOne({ userID: user.id, phrase: phrase, ignore: ignore ? ignore.id : null });
+        let schema = await hlSchema.findOne({ userID: user.id, phrase: phrase });
         if (!schema) {
             schema = new hlSchema({
                 userID: user.id,
@@ -34,7 +34,21 @@ module.exports = {
                 ignore: ignore ? ignore.id : null,
             });
             await schema.save();
-            return interaction.editReply(`Added your highlight for \`${phrase}\``);
+            const reply = `Added your highlight for \`${phrase}\`` + ignore ? ` and ignored ${ignore.name}` : '';
+            return interaction.editReply(reply);
+        }
+        if (ignore && !schema.ignore.contains(ignore.id)) {
+            schema.ignore.push(ignore.id);
+            await schema.save();
+            return interaction.editReply(`Added ${ignore.name} to your ignore list for \`${phrase}\``);
+        }
+        if (schema && ignore) {
+            const index = schema.ignore.indexOf(ignore.id);
+            if (index > -1) {
+                schema.ignore.splice(index, 1);
+                await schema.save();
+                return interaction.editReply(`Removed ${ignore.name} from your ignore list for \`${phrase}\``);
+            }
         }
         if (schema) {
             await schema.delete();
