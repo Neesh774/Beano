@@ -178,7 +178,7 @@ module.exports = {
 		}, 1000 * 60 * 60 * 24);
 	},
 	bumper: async function(client, message) {
-		// if (message.author.id != '302050872383242240') return;
+		if (message.author.id != '302050872383242240') return;
 		if (!message.embeds[0] || !message.embeds[0].description) return;
 		if (message.embeds[0].description.includes('Bump done')) {
 			setTimeout(async () => {
