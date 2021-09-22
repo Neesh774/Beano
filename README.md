@@ -22,6 +22,8 @@ Beano is a general purpose discord bot I made for the [Arcade Cafe Server](https
 - ``flip`` will flip a coin.
 - ``meme`` will give you a random meme from the r/dankmemes subreddit.
 - ``mock <text>`` wiLl mOck tHe TeXt lIkE thIs.
+- ``catfact`` will give you a catfact!
+- ``animal`` will give you a picture of a cute animal from r/animals!
 ### Info
 - ``help [command]`` will DM you with a list of all Beano's commands, or give you information about any one command.
 - ``ping``will give you information about Beano's latency.
@@ -63,6 +65,7 @@ Beano is a general purpose discord bot I made for the [Arcade Cafe Server](https
 - ``timezones`` will give you information about the most popular timezones.
 - ``urban <word>`` will define a word from Urban Dictionary.
 - ``whois <user>`` will give you information about a certain user.
+- ``color <hex code || r, g, b>`` will visualize a color for you.
 ### Music
 - ``back`` will go to the previous song.
 - ``disconnect`` will disconnect Terra from the VC.
@@ -80,7 +83,7 @@ Beano is a general purpose discord bot I made for the [Arcade Cafe Server](https
 - ``pause`` will pause/resume the music player.
 
 ## Hosting
-If you want to host a copy of TerraBot yourself, you can do so by following these steps:
+If you want to host a copy of Beano yourself, you can do so by following these steps:
 - Create a bot account on Discord, and get the token.
 - Create a Discord server, and invite TerraBot to it.
 - Create a MongoDB collection, and get the URI.
