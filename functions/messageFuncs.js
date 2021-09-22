@@ -144,6 +144,14 @@ module.exports = {
 			ticketMessage: message.id,
 		});
 		await ticketSchema.save();
+		const logs = await AC.channels.fetch(config.logs);
+		const embed2 = new Discord.MessageEmbed()
+			.setColor(config.embedColor)
+			.setTitle('Ticket Created')
+			.setDescription(`${member.user.username}'s ticket has been created. ${ticketChannel.toString()}`)
+			.addField('User', `${member.user.toString()} | ${member.id}`)
+			.setTimestamp();
+		logs.send({ embeds: [embed2] });
 	},
 	deleteTicket: async function(interaction, channelId, client) {
 		const AC = await client.guilds.fetch(config.AC);
@@ -154,6 +162,14 @@ module.exports = {
 			await ticket.delete();
 		}
 		interaction.member.send('Your ticket was closed.');
+		const logs = await AC.channels.fetch(config.logs);
+		const embed2 = new Discord.MessageEmbed()
+			.setColor(config.embedColor)
+			.setTitle('Ticket Closed')
+			.setDescription(`${interaction.user.username}'s ticket was closed.`)
+			.addField('User', `${interaction.user.toString()} | ${interaction.member.id}`)
+			.setTimestamp();
+		logs.send({ embeds: [embed2] });
 	},
 	checkBirthday: async function(client) {
 		const members = await mSchema.find({ birthday: { $ne: null } });
@@ -181,6 +197,7 @@ module.exports = {
 		if (message.author.id != '302050872383242240') return;
 		if (!message.embeds[0] || !message.embeds[0].description) return;
 		if (message.embeds[0].description.includes('Bump done')) {
+			message.react('<Yay:835149753049808897>');
 			setTimeout(async () => {
 				const embed = new Discord.MessageEmbed()
 					.setColor(config.embedColor)
